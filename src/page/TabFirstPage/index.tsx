@@ -3,13 +3,13 @@ import {View} from "react-native";
 import TabFirstContainer from "../../container/TabFirstContainer";
 
 interface Props {
-
+    navigation: any;
 }
 
-const TabFirstPage = () => {
+const TabFirstPage = ({navigation}: Props) => {
     return(
         <>
-            {/* <TabFirstContainer/> */}
+            <TabFirstContainer navigation={navigation}/>
         </>
     )
 }

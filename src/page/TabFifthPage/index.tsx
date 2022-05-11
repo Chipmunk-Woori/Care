@@ -1,8 +1,17 @@
 import React from "react";
 import {View} from "react-native";
+import TabFifthContainer from "../../container/TabFifthContainer";
 
-const TabFifthPage = () => {
+interface Props {
+    navigation: any;
+}
 
+const TabFifthPage = ({navigation}: Props) => {
+    return(
+        <>
+            <TabFifthContainer navigation={navigation}/>
+        </>
+    )
 }
 
 export default TabFifthPage;
