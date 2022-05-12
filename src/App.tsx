@@ -20,6 +20,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import CommonSetting from './common/CommonSetting';
+
 import TabFirstPage from '../src/page/TabFirstPage';
 import TabSecondPage from './page/TabSecondPage';
 import TabThirdPage from './page/TabThirdPage';
@@ -123,7 +125,7 @@ const App = () => {
                     options={ ({route}: any) => ({
                         tabBarShowLabel: false,
                         tabBarStyle: {
-                            backgroundColor: 'green',
+                            backgroundColor: CommonSetting.color.bottomTab,
                             borderTopWidth: 0
                         },
                         tabBarIcon: ({focused}) => (
@@ -140,7 +142,7 @@ const App = () => {
                     options={ ({route}: any) => ({
                         tabBarShowLabel: false,
                         tabBarStyle: {
-                            backgroundColor: 'green',
+                            backgroundColor: CommonSetting.color.bottomTab,
                             borderTopWidth: 0
                         },
                         tabBarIcon: ({focused}) => (
@@ -157,7 +159,7 @@ const App = () => {
                     options={ ({route}: any) => ({
                         tabBarShowLabel: false,
                         tabBarStyle: {
-                            backgroundColor: 'green',
+                            backgroundColor: CommonSetting.color.bottomTab,
                             borderTopWidth: 0
                         },
                         tabBarIcon: ({focused}) => (
@@ -174,7 +176,7 @@ const App = () => {
                     options={ ({route}: any) => ({
                         tabBarShowLabel: false,
                         tabBarStyle: {
-                            backgroundColor: 'green',
+                            backgroundColor: CommonSetting.color.bottomTab,
                             borderTopWidth: 0
                         },
                         tabBarIcon: ({focused}) => (
@@ -191,7 +193,7 @@ const App = () => {
                     options={ ({route}: any) => ({
                         tabBarShowLabel: false,
                         tabBarStyle: {
-                            backgroundColor: 'green',
+                            backgroundColor: CommonSetting.color.bottomTab,
                             borderTopWidth: 0
                         },
                         tabBarIcon: ({focused}) => (
