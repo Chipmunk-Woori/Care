@@ -18,9 +18,10 @@ const TopTitle = ( {title, icon}: Props) => {
     ]
 
     const showIcon = () => {
-        let result = icon.map((item: any) => (
+        let result = icon.map((item: any, index: number) => (
             <TouchableOpacity
                 onPress={() => {item.func()}}
+                key={index}
             >
                 <IconImg
                     source = {item.img}

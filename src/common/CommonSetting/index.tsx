@@ -6,7 +6,7 @@ const CommonSetting = {
         text_light: 'black',
         text_dark: 'white',
 
-        point: '',
+        point: '#42a5f5',
 
         bottomTab: '#42a5f5',
         temp50: '#e3f2fd',
