@@ -8,6 +8,8 @@ const CommonSetting = {
 
         point: '#42a5f5',
 
+        gray: '#f5f4f4',
+
         bottomTab: '#42a5f5',
         temp50: '#e3f2fd',
         temp100: '#bbdefb',
