@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {View, Text, Dimensions, Image, StyleSheet, Pressable, Modal, Alert, TouchableOpacity} from "react-native";
+import {View, Text, Dimensions, Image, StyleSheet, TouchableOpacity, FlatList} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import TopTitle from '../../component/TopTitle';
@@ -20,6 +20,7 @@ const CalendarHeight = screenHeight - 45;
 const TabFirst = () => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
+    const [selectedCategory, setSelectedCategory] = useState(1);
 
     //상단 아이콘
     const topTitleIcon = [
@@ -71,6 +72,38 @@ const TabFirst = () => {
         dayNamesShort: ['일', '월', '화', '수', '목', '금', '토']
     };
     LocaleConfig.defaultLocale = 'fr';
+
+    //식단 기록
+    const [dietArr, setDietArr] = useState([]);
+
+    const dietScreen = () => {
+        return(
+            <View>
+
+            </View>
+        )
+    }
+
+    
+    const categoryScreen = () => {
+        if(selectedCategory === 1) {
+            return(
+                <Diet>
+                    <FlatList
+                        horizontal={true}
+                        keyExtractor={(item: any, index: number) => index.toString()}
+                        data={dietArr}
+                        renderItem={dietScreen}
+                    />
+                </Diet>
+            )
+        } else if(selectedCategory === 2) {
+            return(
+                <>
+                </>
+            )
+        }
+    }
 
     useEffect(() => {
         let today: (Date) = new Date();
@@ -225,12 +258,16 @@ const TabFirst = () => {
 
 
             <CategoryView> 
-                <CategoryBtn>
+                <CategoryBtn
+                    onPress={() => {setSelectedCategory(1)}}
+                >
                     <Text>
                         식단
                     </Text>
                 </CategoryBtn>
-                <CategoryBtn>
+                <CategoryBtn
+                    onPress={() => {setSelectedCategory(2)}}
+                >
                     <Text>
                         바디 운동
                     </Text>
@@ -238,6 +275,8 @@ const TabFirst = () => {
                
                 
             </CategoryView>
+
+            {categoryScreen()}
 
 
             
@@ -282,9 +321,17 @@ const CategoryView = styled.View`
 const CategoryBtn = styled.TouchableOpacity`
     height: 90%;
     width: 40%;
-    background-color: orange;
+    background-color: ${CommonSetting.color.temp100};
     margin-right: 10px;
     margin-left: 10px;
+    align-items: center;
+    justify-content: center;
+`
+const Diet = styled.View`
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: orange;
 `
 
 
