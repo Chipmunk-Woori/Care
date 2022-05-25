@@ -236,7 +236,8 @@ const TabFirst = () => {
 
 
 
-            <CategoryView>  
+            <CategoryView> 
+                 {/* 에러 해결하기 */}
                 {/* <SwitchSelector 
                     initial = {0}
                     options = {categoryOptions} 
