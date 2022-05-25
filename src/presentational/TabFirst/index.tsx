@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import TopTitle from '../../component/TopTitle';
 import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calendars';
-
+import SwitchSelector from 'react-native-switch-selector';
 
 
 
@@ -20,6 +20,11 @@ const CalendarHeight = screenHeight - 45;
 const TabFirst = () => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
+    const [selectedCategory, setSelectedCategory] = useState("1");
+    const categoryOptions = [
+        { label: "식단", value: "1", testID: "switch-one", accessibilityLabel: "switch-one" },
+        { label: "신체 & 운동", value: "2", testID: "switch-two", accessibilityLabel: "switch-two" }
+    ];
 
     //상단 아이콘
     const topTitleIcon = [
@@ -38,7 +43,7 @@ const TabFirst = () => {
     ]
 
     //달력
-    LocaleConfig.locales['fr'] = {
+    LocaleConfig.locales['kr'] = {
         monthNames: [
             '1월',
             '2월',
@@ -70,8 +75,16 @@ const TabFirst = () => {
         dayNames: ['일', '월', '화', '수', '목', '금', '토'],
         dayNamesShort: ['일', '월', '화', '수', '목', '금', '토']
     };
-    LocaleConfig.defaultLocale = 'fr';
+    LocaleConfig.defaultLocale = 'kr';
 
+
+
+    const onPressCategory = (value: any) => {
+        console.log(value);
+        setSelectedCategory(value);
+    }
+
+    
     useEffect(() => {
         let today: (Date) = new Date();
         let year: (number | string) = today.getFullYear();
@@ -223,21 +236,23 @@ const TabFirst = () => {
 
 
 
-
-            <CategoryView> 
-                <CategoryBtn>
-                    <Text>
-                        식단
-                    </Text>
-                </CategoryBtn>
-                <CategoryBtn>
-                    <Text>
-                        바디 운동
-                    </Text>
-                </CategoryBtn>
-               
-                
+            <CategoryView>  
+                {/* <SwitchSelector 
+                    initial = {0}
+                    options = {categoryOptions} 
+                    onPress = { (value: any) => {onPressCategory(value)} }
+                    textColor = {'black'}
+                    selectedColor = {'black'}
+                    buttonColor = {'white'}
+                    backgroundColor = {'rgba(211, 211, 211, 0.5)'}
+                    borderRadius = {5}
+                    buttonMargin = {3}
+                    height = {27}
+                /> */}
             </CategoryView>
+                       
+
+         
 
 
             
@@ -273,18 +288,12 @@ const ArrowBtn = styled.Image`
 `
 const CategoryView = styled.View`
     width: 100%;
-    height: 7%;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 10%;
     margin-top: 10px;
-    background-color: ${CommonSetting.color.gray};
     justify-content: center;
-    flex-direction: row;
-`
-const CategoryBtn = styled.TouchableOpacity`
-    height: 90%;
-    width: 40%;
-    background-color: orange;
-    margin-right: 10px;
-    margin-left: 10px;
+    
 `
 
 
