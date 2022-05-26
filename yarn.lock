@@ -266,9 +266,9 @@
     js-tokens "^4.0.0"
 
 "@babel/parser@^7.1.0", "@babel/parser@^7.13.16", "@babel/parser@^7.14.0", "@babel/parser@^7.14.7", "@babel/parser@^7.16.7", "@babel/parser@^7.18.0", "@babel/parser@^7.7.0":
-  version "7.18.0"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.18.0.tgz#10a8d4e656bc01128d299a787aa006ce1a91e112"
-  integrity sha512-AqDccGC+m5O/iUStSJy3DGRIUFu7WbY/CppZYwrEUB4N0tZlnI8CSTsgL7v5fHVFmUbRv2sd+yy27o8Ydt4MGg==
+  version "7.18.3"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.18.3.tgz#39e99c7b0c4c56cef4d1eed8de9f506411c2ebc2"
+  integrity sha512-rL50YcEuHbbauAFAysNsJA4/f89fGTOBRNs9P81sniKnKAr4xULe5AecolcsKbi88xu0ByWYDj/S1AJ3FSFuSQ==
 
 "@babel/plugin-proposal-class-properties@^7.0.0", "@babel/plugin-proposal-class-properties@^7.13.0":
   version "7.17.12"
@@ -712,9 +712,9 @@
     source-map-support "^0.5.16"
 
 "@babel/runtime@^7.12.5", "@babel/runtime@^7.8.4":
-  version "7.18.2"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.2.tgz#674575748fa99cf03694e77fc00de8e5117b42a0"
-  integrity sha512-mTV1PibQHr88R1p4nH/uhR/TJ0mXGEgKTx6Mnd1cn/DSA9r8fqbd+d31xujI2C1pRWtxjy+HAcmtB+MEcF4VNg==
+  version "7.18.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.3.tgz#c7b654b57f6f63cf7f8b418ac9ca04408c4579f4"
+  integrity sha512-38Y8f7YUhce/K7RMwTp7m0uCumpv9hZkitCbBClqQIow1qSbCvGkcegKOXpEWCQLfWmevgRiWokZ1GkpfhbZug==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -2326,9 +2326,9 @@ camelize@^1.0.0:
   integrity sha512-W2lPwkBkMZwFlPCXhIlYgxu+7gC/NUlCtdK652DAJ1JdgV0sTrvuPFshNPrFa1TY2JOkLhgdeEBplB4ezEa+xg==
 
 caniuse-lite@^1.0.30001332:
-  version "1.0.30001342"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001342.tgz#87152b1e3b950d1fbf0093e23f00b6c8e8f1da96"
-  integrity sha512-bn6sOCu7L7jcbBbyNhLg0qzXdJ/PMbybZTH/BA6Roet9wxYRm6Tr9D0s0uhLkOZ6MSG+QU6txUgdpr3MXIVqjA==
+  version "1.0.30001343"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001343.tgz#8e1107e30d9a4d2f63782b48ae0a3ce34e2f9c2a"
+  integrity sha512-8KeCrAtPMabo/XW14B+R9sZYoClx1n0b+WYgwDKZPtWR3TcdvWzdSy7mPyFEmR5WU1St9v1PW6sdO5dkFOEzfA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -2424,12 +2424,12 @@ clone-deep@^4.0.1:
 clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
-  integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
+  integrity sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==
 
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
-  integrity sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=
+  integrity sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==
 
 collect-v8-coverage@^1.0.0:
   version "1.0.1"
@@ -2820,9 +2820,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.4.118:
-  version "1.4.138"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.138.tgz#3ec41ca589aaf505dfe2034fde913329af801730"
-  integrity sha512-IOyp2Seq3w4QLln+yZWcMF3VXhhduz4bwg9gfI+CnP5TkzwNXQ8FCZuwwPsnes73AfWdf5J2n2OXdUwDUspDPQ==
+  version "1.4.139"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.139.tgz#e634b69769ab4a54626bbd9e1475de872839c89a"
+  integrity sha512-lYxzcUCjWxxVug+A7UxBCUiVr13TCjfZFYJS9Lq1VpU/ErwV4a6zUQo9dfojuGpw/L/x9REGuBl6ICQPGgbs3g==
 
 emittery@^0.7.1:
   version "0.7.2"
@@ -3407,9 +3407,9 @@ flatted@^3.1.0:
   integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
 
 flow-parser@0.*:
-  version "0.178.1"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.178.1.tgz#4efe62b3c551c615411bd4a75031c881ff53a7da"
-  integrity sha512-TOvOfZVOhCsKAVU2E4QgFD5vmmF/JWl4bX77H4aYoq8No1mZdtUV8GW6wv03l8N3dmlRqAC5rZcDQ5e8aLDBOg==
+  version "0.179.0"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.179.0.tgz#595caab8b082b4d424735c97a53216a91c9eb19a"
+  integrity sha512-M4dEgnvsGFa1lUTK05RFW+cwle8tkTHioFm6gGWdeGpDJjjhmvyaN8vLIqb8sAHI05TQxARsnUC3U2chzQP1Dw==
 
 flow-parser@^0.121.0:
   version "0.121.0"
@@ -5903,7 +5903,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.5.10, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.5.10, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6034,13 +6034,6 @@ react-native-swipe-gestures@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
-
-react-native-switch-selector@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-switch-selector/-/react-native-switch-selector-2.2.1.tgz#551ff32c018281904b1d5df79f5192c788195d87"
-  integrity sha512-HeUGoPD+rDV9F0CWJnIjZaK1JJS95dnxxVzTzufeLYCtA/iFKxhy+PS8kAyXTwfrTSgFFAmURgcpkAcAMqDg8Q==
-  dependencies:
-    prop-types "^15.7.2"
 
 react-native@0.68.1:
   version "0.68.1"

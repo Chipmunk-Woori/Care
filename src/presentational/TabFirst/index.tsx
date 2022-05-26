@@ -4,7 +4,6 @@ import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import TopTitle from '../../component/TopTitle';
 import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calendars';
-import SwitchSelector from 'react-native-switch-selector';
 
 
 
@@ -236,21 +235,9 @@ const TabFirst = () => {
 
 
 
-            <CategoryView> 
-                 {/* 에러 해결하기 */}
-                {/* <SwitchSelector 
-                    initial = {0}
-                    options = {categoryOptions} 
-                    onPress = { (value: any) => {onPressCategory(value)} }
-                    textColor = {'black'}
-                    selectedColor = {'black'}
-                    buttonColor = {'white'}
-                    backgroundColor = {'rgba(211, 211, 211, 0.5)'}
-                    borderRadius = {5}
-                    buttonMargin = {3}
-                    height = {27}
-                /> */}
-            </CategoryView>
+            <CategoryBackView> 
+                
+            </CategoryBackView>
                        
 
          
@@ -287,17 +274,22 @@ const ArrowBtn = styled.Image`
     height: 20px;
     left: 85%;
 `
-const CategoryView = styled.View`
+const CategoryBackView = styled.View`
     width: 100%;
     padding-left: 20px;
     padding-right: 20px;
     height: 10%;
     margin-top: 10px;
     justify-content: center;
-    
+    background-color: beige;
 `
-
-
+const CategoryView = styled.View`
+    width: 90%;
+    height: 95%;
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: 'gray';
+`
 
 const styles = StyleSheet.create({
     centeredView: {
