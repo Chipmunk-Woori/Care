@@ -16,7 +16,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationBuilder } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -35,7 +35,7 @@ const Tab = createBottomTabNavigator();
 //1
 const TabFirstStack = createNativeStackNavigator();
 
-const TabFirstStackScreen = ({navigation}: any) => {
+const TabFirstStackScreen = ({navigation, route}: any) => {
     return(
         <TabFirstStack.Navigator>
             <TabFirstStack.Screen
@@ -50,7 +50,7 @@ const TabFirstStackScreen = ({navigation}: any) => {
 //2
 const TabSecondStack = createNativeStackNavigator();
 
-const TabSecondStackScreen = ({navigation}: any) => {
+const TabSecondStackScreen = ({navigation, route}: any) => {
     return(
         <TabSecondStack.Navigator>
             <TabSecondStack.Screen
@@ -65,7 +65,7 @@ const TabSecondStackScreen = ({navigation}: any) => {
 //3
 const TabThirdStack = createNativeStackNavigator();
 
-const TabThirdStackScreen = ({navigation}: any) => {
+const TabThirdStackScreen = ({navigation, route}: any) => {
     return(
         <TabThirdStack.Navigator>
             <TabThirdStack.Screen 
@@ -81,7 +81,7 @@ const TabThirdStackScreen = ({navigation}: any) => {
 //4
 const TabFourthStack = createNativeStackNavigator();
 
-const TabFourthStackScreen = ({navigation}: any) => {
+const TabFourthStackScreen = ({navigation, route}: any) => {
     return(
         <TabFourthStack.Navigator>
             <TabFourthStack.Screen
@@ -96,7 +96,7 @@ const TabFourthStackScreen = ({navigation}: any) => {
 //5
 const TabFifthStack = createNativeStackNavigator();
 
-const TabFifthStackScreen = ({navigation}: any) => {
+const TabFifthStackScreen = ({navigation, route}: any) => {
     return(
         <TabFifthStack.Navigator>
             <TabFifthStack.Screen
@@ -111,6 +111,8 @@ const TabFifthStackScreen = ({navigation}: any) => {
 
 
 const App = () => {
+
+
     return (
          <NavigationContainer>
             <Tab.Navigator

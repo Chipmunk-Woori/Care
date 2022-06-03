@@ -1,6 +1,7 @@
 import React from "react";
-import {View} from "react-native";
+import {View, StatusBar} from "react-native";
 import TabFirst from '../../presentational/TabFirst';
+import StatusBarDefault from "../../component/StatusBarDefult";
 
 interface Props {
     navigation: any;
@@ -9,6 +10,7 @@ interface Props {
 const TabFirstContainer = ({navigation}: Props) => {
     return(
         <>
+            <StatusBarDefault />
             <TabFirst />
         </>
     )

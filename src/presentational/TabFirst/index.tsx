@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import TopTitle from '../../component/TopTitle';
 import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calendars';
+import StatusBarDefault from "../../component/StatusBarDefult";
 
 
 
@@ -118,6 +119,8 @@ const TabFirst = () => {
 
     return(
         <Container>
+
+            
 
             <TopTitle
                 title={'2022년 5월'}
