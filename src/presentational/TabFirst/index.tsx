@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {View, Text, Dimensions, Image, StyleSheet, Pressable, Modal, Alert, TouchableOpacity} from "react-native";
+import React, {useEffect, useRef, useState} from "react";
+import {View, Text, Dimensions, Image, StyleSheet, Pressable, Modal, Alert, TouchableOpacity, FlatList} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import TopTitle from '../../component/TopTitle';
 import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calendars';
-import StatusBarDefault from "../../component/StatusBarDefult";
+import BasicText from "../../component/BasicText";
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+
 
 
 
@@ -12,34 +14,53 @@ interface Props {
 
 }
 
-
 const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
 const CalendarHeight = screenHeight - 45;
 
+
 const TabFirst = () => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
-    const [selectedCategory, setSelectedCategory] = useState("1");
-    const categoryOptions = [
-        { label: "식단", value: "1", testID: "switch-one", accessibilityLabel: "switch-one" },
-        { label: "신체 & 운동", value: "2", testID: "switch-two", accessibilityLabel: "switch-two" }
-    ];
+    const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
+    let tempRef = useRef(null);
 
     //상단 아이콘
     const topTitleIcon = [
         {
-            img: require('../../assets/TabSecond.png'),
+            img: require('../../assets/upload.png'),
             func: () => {console.log('첫번째')}
         },
         {
-            img: require('../../assets/TabThird.png'),
+            img: require('../../assets/files.png'),
             func: () => {console.log('두번째')}
         },
         {
-            img: require('../../assets/TabFourth.png'),
+            img: require('../../assets/palette.png'),
             func: () => {console.log('세번째')}
         }
+    ]
+
+    //'식단' 내용
+    const firstCategoryContents = [
+        {
+            title : '주간 리포트',
+            icon : require('../../assets/report.png'),
+            iconBackColor : 'rgba(152,153,169,1)',
+            detail : '6월 1주차' 
+        },
+        {
+            title : '오늘의 운동',
+            icon : require('../../assets/check.png'),
+            iconBackColor : 'rgba(90,103,245,1)',
+            detail : '8시간 남음' 
+        },
+        {
+            title : '오픈 그룹',
+            icon : require('../../assets/group.png'),
+            iconBackColor : 'rgba(251,251,255,1)',
+            detail : '찾기' 
+        },
     ]
 
     //달력
@@ -78,13 +99,71 @@ const TabFirst = () => {
     LocaleConfig.defaultLocale = 'kr';
 
 
-
-    const onPressCategory = (value: any) => {
-        console.log(value);
-        setSelectedCategory(value);
+    //카테고리 내용 보여줌
+    const categoryContents = () => {
+        if (selectedCategory === 1) {
+            return(
+                <View>
+                    <FlatList
+                        data={firstCategoryContents}
+                        renderItem={dietBtn}
+                        keyExtractor={ (item, index) => index.toString()}
+                        horizontal={true}
+                    />
+                </View>
+            )
+        } else if (selectedCategory === 2) {
+            return(
+                <View>
+                    
+                </View>
+            )
+        }
     }
 
-    
+
+
+    const dietBtn = ({item, index}: any) => {
+        return(
+            <DietBtnView>
+                <RowView style={{alignItems:'center'}}>
+                    <DietBtnIconView style={{backgroundColor: item.iconBackColor}}>
+                        <DietBtnIcon
+                            source={item.icon}
+                        />
+                    </DietBtnIconView>
+                    
+                    <View>
+                        <BasicText>
+                            {item.title}
+                        </BasicText>
+                        <DietDetailText>
+                            {item.detail}
+                        </DietDetailText>
+                    </View>
+                </RowView>
+
+                <NextIcon
+                    source={require('../../assets/next.png')} 
+                />
+            </DietBtnView>
+        )
+    }
+
+    let tempDataArr = ['a', 'b'];
+
+    const tempFunction = ({item}: any) => {
+       
+       
+        return(
+            <Text>{item}</Text>
+        )
+        
+        
+    }
+
+
+
     useEffect(() => {
         let today: (Date) = new Date();
         let year: (number | string) = today.getFullYear();
@@ -118,9 +197,7 @@ const TabFirst = () => {
     },[])
 
     return(
-        <Container>
-
-            
+        <Container style={{paddingHorizontal: CommonSetting.screenPaddingHorizontal}}>
 
             <TopTitle
                 title={'2022년 5월'}
@@ -189,7 +266,7 @@ const TabFirst = () => {
 
            
                 {/* <CalendarContainer> */}
-                    <CalendarList
+                    {/* <CalendarList
                         horizontal={true}
                         pagingEnabled={true}
                         calendarWidth={screenWidth}
@@ -232,21 +309,48 @@ const TabFirst = () => {
                             textDayHeaderFontSize: 13,
                             // textDisabledColor: '#d9e1e8',
                         }}
-                    />
+                    /> */}
                 {/* </CalendarContainer> */}
            
 
-
+            <View style={{backgroundColor:'rgba(64, 64, 77, 0.5)', height: 60, marginBottom: 15}}/>
 
             <CategoryBackView> 
-                
+
+                <CategoryView
+                    onPress={() => {setSelectedCategory(1)}}
+                >
+                    <CategoryText>
+                        식단
+                    </CategoryText>
+                </CategoryView>
+
+                <CategoryView
+                    onPress={() => {setSelectedCategory(2)}}
+                >
+                    <CategoryText>
+                        신체 & 운동
+                    </CategoryText>
+                </CategoryView>
+
             </CategoryBackView>
-                       
-
-         
 
 
-            
+
+            {categoryContents()}
+
+            <View style={{width: 250, height: 160}}>
+                {/* <Carousel
+                    ref={(ref:any) => { tempRef = ref }}
+                    data={tempDataArr}
+                    renderItem={tempFunction}
+                    sliderWidth={200}
+                    itemWidth={150}
+                    sliderHeight={200}
+                    itemHeight={200}
+                /> */}
+            </View>
+
             
         </Container>
     )
@@ -255,13 +359,16 @@ const TabFirst = () => {
 const Container = styled.ScrollView`
     width: 100%;
     height: 100%;
-    background-color: ${CommonSetting.color.background_light};
+    background-color: ${CommonSetting.color.background_dark};
+`
+const RowView = styled.View`
+    flex-direction: row;
 `
 const CalendarContainer = styled.View`
     width: 100%;
     height: ${CalendarHeight}px;
-    background-color: ${CommonSetting.color.background_light};
-    top: 0px
+    background-color: ${CommonSetting.color.background_dark};
+    top: 0px;
 `
 const CalendarBtn = styled.TouchableOpacity`
     width: 30%;
@@ -279,20 +386,65 @@ const ArrowBtn = styled.Image`
 `
 const CategoryBackView = styled.View`
     width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    height: 10%;
-    margin-top: 10px;
-    justify-content: center;
-    background-color: beige;
-`
-const CategoryView = styled.View`
-    width: 90%;
-    height: 95%;
-    border-radius: 20px;
+    height: 40px;
+    background-color: rgba(64, 64, 77, 1);
+    border-radius: ${CommonSetting.btnBorderRadius}px;
     border-width: 1px;
-    border-color: 'gray';
+    border-color: rgba(64, 64, 77, 1);
+    padding: 1.5px;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 15px;
 `
+const CategoryView = styled.TouchableOpacity`
+    height: 100%;
+    width: 49%;
+    background-color: ${CommonSetting.color.background_dark};
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    align-items: center;
+    justify-content: center;
+`
+const CategoryText = styled.Text`
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+`
+const DietBtnView = styled.TouchableOpacity`
+    background-color: rgba(47,49,61,1);
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    height: 55px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+    margin-right: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+`
+const DietBtnIconView = styled.View`
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+`
+const DietBtnIcon = styled.Image`
+    width: 15px;
+    height: 15px;
+`
+const DietDetailText = styled.Text`
+    color: #dadada;
+    font-size: 13px;
+    margin-top: 3px;
+`
+const NextIcon = styled.Image`
+    width: 15px;
+    height: 15px;
+`
+
 
 const styles = StyleSheet.create({
     centeredView: {

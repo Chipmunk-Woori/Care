@@ -45,15 +45,15 @@ const TopTitle = ( {title, icon}: Props) => {
 }
 
 const Container = styled.View`
-    background-color: ${CommonSetting.color.point};
+    background-color: ${CommonSetting.color.background_dark};
     width: 100%;
     height: 45px;
     margin-top: 50px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-left: 20px;
-    padding-right: 20px;
+    /* padding-left: ${CommonSetting.screenPaddingHorizontal};
+    padding-right: ${CommonSetting.screenPaddingHorizontal}; */
 `
 const Title = styled.Text`
     color: ${CommonSetting.color.text_light};

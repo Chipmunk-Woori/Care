@@ -85,6 +85,7 @@ const TabSecond = () => {
     ]
 
     const returnGroup = ({item, index}: any) => {
+
         return(
             <NewGroup>
                 <RowView style={{alignItems: 'center'}}>
@@ -289,7 +290,7 @@ const TabSecond = () => {
                     data={groupArr}
                     renderItem={returnGroup}
                     keyExtractor={ (item, index) => index.toString()}
-                    // horizontal={true}
+                    horizontal={true}
                 />
 
 
