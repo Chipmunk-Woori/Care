@@ -1,5 +1,5 @@
 import React from "react";
-import {View} from "react-native";
+import {StatusBar, View} from "react-native";
 import TabSecond from '../../presentational/TabSecond';
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 const TabSecondContainer = ({navigation}: Props) => {
     return(
         <>
+            <StatusBar barStyle={'light-content'} />
             <TabSecond/>
         </>
     )

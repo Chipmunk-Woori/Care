@@ -10,7 +10,6 @@ const StatusBarDefult = () => {
     return(
         <StatusBar
             barStyle = {"dark-content"}
-            // backgroundColor = {CommonSetting.color.background_dark}
         />
     )
 }
