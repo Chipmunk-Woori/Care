@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useRef, useState, useEffect} from "react";
 import {View, Text, SafeAreaView, TouchableOpacity, ScrollView, Dimensions, Image, FlatList} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 interface Props {
 
@@ -14,8 +15,14 @@ const ScreenWidth = Dimensions.get('window').width;
 const GuideViewHeight = ScreenHeight * 0.28;
 const BtnViewHeight = ScreenHeight * 0.085;
 const NewGroupWidth = ScreenWidth - ScreenWidth * 0.11;
+const groupsHeight = BtnViewHeight * 3 + 10;
 
 const TabSecond = () => {
+
+    let carouselRef = useRef(null);
+
+    //groupArr을 3개씩 배열로 묶은 배열 //item이 4개일 경우 : totalArr = [ [{},{},{}], [{}] ];
+    const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
 
     const groupArr = [
         {
@@ -84,56 +91,222 @@ const TabSecond = () => {
         },
     ]
 
-    const returnGroup = ({item, index}: any) => {
+    
+    const groupSingleView = (index: any) => {
 
-        return(
-            <NewGroup>
-                <RowView style={{alignItems: 'center'}}>
-                    <GroupIconView style={{backgroundColor: item.iconBackgroundColor}}>
-                        <GroupIcon>
-                            {item.icon}
-                        </GroupIcon>
-                    </GroupIconView>
+            let item = groupArr[index];
 
-                    <View style={{justifyContent: 'space-between'}}>
-                        <RowView style={{marginBottom: 11}}>
-                            <GroupTitle>
-                                {item.title}
-                            </GroupTitle>
-                            <GroupMember>
-                                · {item.numberOfMember}/{item.numberOfLimit}명
-                            </GroupMember>
+            if (item) {
+                return(
+                    
+                    <NewGroup>
+                        <RowView style={{alignItems: 'center'}}>
+                            <GroupIconView style={{backgroundColor: item.iconBackgroundColor}}>
+                                <GroupIcon>
+                                    {item.icon}
+                                </GroupIcon>
+                            </GroupIconView>
+    
+                            <View style={{justifyContent: 'space-between'}}>
+                                <RowView style={{marginBottom: 11}}>
+                                    <GroupTitle>
+                                        {item.title}
+                                    </GroupTitle>
+                                    <GroupMember>
+                                        · {item.numberOfMember}/{item.numberOfLimit}명
+                                    </GroupMember>
+                                </RowView>
+    
+                                <RowView>
+                                    <GroupDetail style={{backgroundColor: CommonSetting.color.lightBtn}}>
+                                        <GroupDetailText>
+                                            D-60
+                                        </GroupDetailText>
+                                    </GroupDetail>
+                                    <GroupDetail>
+                                        <GroupDetailText>
+                                            {item.strength}
+                                        </GroupDetailText>
+                                    </GroupDetail>
+                                    <GroupDetail>
+                                        <GroupDetailText>
+                                            🔥💧👟
+                                        </GroupDetailText>
+                                    </GroupDetail>
+                                </RowView>
+                            </View>
+    
                         </RowView>
+    
+                        <JoinBtn>
+                            <JoinText>
+                                참여
+                            </JoinText>
+                        </JoinBtn>
+                    </NewGroup>
 
-                        <RowView>
-                            <GroupDetail style={{backgroundColor: CommonSetting.color.lightBtn}}>
-                                <GroupDetailText>
-                                    D-60
-                                </GroupDetailText>
-                            </GroupDetail>
-                            <GroupDetail>
-                                <GroupDetailText>
-                                    {item.strength}
-                                </GroupDetailText>
-                            </GroupDetail>
-                            <GroupDetail>
-                                <GroupDetailText>
-                                    🔥💧👟
-                                </GroupDetailText>
-                            </GroupDetail>
-                        </RowView>
-                    </View>
+                )
+            } else {
+                console.log('item이 없음')
+                return <NewGroup style={{backgroundColor:'skyblue'}}/>
+            }
+        
 
-                </RowView>
 
-                <JoinBtn>
-                    <JoinText>
-                        참여
-                    </JoinText>
-                </JoinBtn>
-            </NewGroup>
-        )
+        
     }
+
+
+    const trygroupSingleView = (item: any) => {
+
+        // console.log(item.icon)
+
+
+        if (item) {
+            return(
+                
+                <NewGroup>
+                    <RowView style={{alignItems: 'center'}}>
+                        <GroupIconView style={{backgroundColor: item.iconBackgroundColor}}>
+                            <GroupIcon>
+                                {item.icon}
+                            </GroupIcon>
+                        </GroupIconView>
+
+                        <View style={{justifyContent: 'space-between'}}>
+                            <RowView style={{marginBottom: 11}}>
+                                <GroupTitle>
+                                    {item.title}
+                                </GroupTitle>
+                                <GroupMember>
+                                    · {item.numberOfMember}/{item.numberOfLimit}명
+                                </GroupMember>
+                            </RowView>
+
+                            <RowView>
+                                <GroupDetail style={{backgroundColor: CommonSetting.color.lightBtn}}>
+                                    <GroupDetailText>
+                                        D-60
+                                    </GroupDetailText>
+                                </GroupDetail>
+                                <GroupDetail>
+                                    <GroupDetailText>
+                                        {item.strength}
+                                    </GroupDetailText>
+                                </GroupDetail>
+                                <GroupDetail>
+                                    <GroupDetailText>
+                                        🔥💧👟
+                                    </GroupDetailText>
+                                </GroupDetail>
+                            </RowView>
+                        </View>
+
+                    </RowView>
+
+                    <JoinBtn>
+                        <JoinText>
+                            참여
+                        </JoinText>
+                    </JoinBtn>
+                </NewGroup>
+
+            )
+        } else {
+            console.log('item이 없음')
+            return <NewGroup style={{backgroundColor:'skyblue'}}/>
+        }
+    
+
+
+    
+}
+
+   
+
+    const groupsView = ({item, index}: any) => {
+
+            let lastIndex = groupArr.length -1;
+            let nextIndex;
+            if (index < lastIndex) {
+              nextIndex = index + 1;
+            }
+    
+            return (
+                index % 3 == 0 &&
+                (<>
+                    {groupSingleView(index)}
+                    {groupSingleView(index+1)}
+                    {groupSingleView(index+2)}
+                </>)
+            )
+        
+    }
+
+
+    //세 묶음씩 묶어서
+    //그 묶음을 맵으로 돌리면서
+    //<View> {} {} {} </View>
+    //여기 하는 중
+    const tryFunc = ({item, index}: any) => {
+
+        let value = null;
+
+        newGroupArr.map((i:any) => { //[{},{},{}]
+            value = i.map((ii:any) => { //{}
+
+                return (
+                    <>
+                        {trygroupSingleView(ii)}
+                    </>
+                )
+            })
+
+        })
+
+        return value
+    }
+
+
+    useEffect(() => {
+
+        let totalArr :any[] = [];
+        let lastIndex = groupArr.length -1;
+
+        groupArr.map( (item: any, index: any) => {
+
+            if (index % 3 == 0) {
+                let singleArr = [];
+
+                
+                if(index <= lastIndex) {
+                    let first = groupArr[index];
+                    singleArr.push(first)
+                }
+                
+                
+                if(index+1 <= lastIndex) {
+                    let second = groupArr[index+1];
+                    singleArr.push(second)
+                }
+                
+                if(index+2 <= lastIndex) {
+                    let third = groupArr[index+2];
+                    singleArr.push(third)
+                }
+
+                totalArr.push(singleArr)
+
+            }
+
+        })
+
+       
+        setNewGroupArr(totalArr);
+        
+
+
+    },[])
 
 
     return(
@@ -286,13 +459,19 @@ const TabSecond = () => {
                     </JoinBtn>
                 </NewGroup> */}
 
-                <FlatList
-                    data={groupArr}
-                    renderItem={returnGroup}
-                    keyExtractor={ (item, index) => index.toString()}
-                    horizontal={true}
-                />
+               
+                    <Carousel
+                        ref={(ref:any) => { carouselRef = ref }}
+                        data={groupArr}
+                        renderItem={tryFunc}
+                        sliderWidth={ScreenWidth}
+                        itemWidth={ScreenWidth}
+                        sliderHeight={groupsHeight}
+                        itemHeight={groupsHeight}
+                        // containerCustomStyle={{backgroundColor:'yellow'}}
+                    />
 
+               
 
             </ScrollView>
 

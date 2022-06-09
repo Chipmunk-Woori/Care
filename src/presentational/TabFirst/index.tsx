@@ -23,7 +23,7 @@ const TabFirst = () => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
-    let tempRef = useRef(null);
+    
 
     //상단 아이콘
     const topTitleIcon = [
@@ -150,17 +150,7 @@ const TabFirst = () => {
         )
     }
 
-    let tempDataArr = ['a', 'b'];
 
-    const tempFunction = ({item}: any) => {
-       
-       
-        return(
-            <Text>{item}</Text>
-        )
-        
-        
-    }
 
 
 
@@ -339,17 +329,7 @@ const TabFirst = () => {
 
             {categoryContents()}
 
-            <View style={{width: 250, height: 160}}>
-                {/* <Carousel
-                    ref={(ref:any) => { tempRef = ref }}
-                    data={tempDataArr}
-                    renderItem={tempFunction}
-                    sliderWidth={200}
-                    itemWidth={150}
-                    sliderHeight={200}
-                    itemHeight={200}
-                /> */}
-            </View>
+            
 
             
         </Container>
