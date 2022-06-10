@@ -189,157 +189,159 @@ const TabFirst = () => {
     return(
         <Container style={{paddingHorizontal: CommonSetting.screenPaddingHorizontal}}>
 
-            <TopTitle
-                title={'2022년 5월'}
-                icon={topTitleIcon}
-            />
-
-            <CalendarBtn
-                onPress={() => {}}
-            > 
-                <ArrowBtn
-                    source={require('../../assets/arrow_down.png')}
+            <PaddingView>
+                <TopTitle
+                    title={'2022년 5월'}
+                    icon={topTitleIcon}
                 />
-            </CalendarBtn>
-            
 
-            {/* <Calendar
-                // minDate={todayDate}
-                monthFormat={'yyyy년 MM월'}
-                markingType={'custom'}
-                markedDates={pressedDate}
-                onDayPress={day => {
-                    let temp = {
-                        [day.dateString] : {
-                            selected: true,
-                            marked: true,
-                            customStyles: {
-                                container: {
-                                    backgroundColor: CommonSetting.color.point,
-                                    borderRadius: 20,
-                                    borderColor: CommonSetting.color.point,
-                                    borderWidth: 1,
-                                    alignItems: 'center',
-                                    justifyContents: 'center',
-                                },
-                                text: {
-                                    color: '#ffffff',
-                                }
-                            }
-                        }
-                    }
-                    setPressedDate(temp);
-                }}
+                <CalendarBtn
+                    onPress={() => {}}
+                > 
+                    <ArrowBtn
+                        source={require('../../assets/arrow_down.png')}
+                    />
+                </CalendarBtn>
                 
-                theme={{
-                    backgroundColor: '#ffffff',
-                    calendarBackground: 'rgba(255, 255, 255, 0.5)',
-                    textSectionTitleColor: '#666666',
-                    selectedDayBackgroundColor: '#ffffff',
-                    selectedDayTextColor: CommonSetting.color.point,
-                    todayTextColor: '#666666',
-                    dayTextColor: '#666666',
-                    textDisabledColor: '#bbbbbb',
-                    arrowColor: CommonSetting.color.point,
-                    monthTextColor: '#333333',
-                    indicatorColor: 'blue',
-                    textDayFontWeight: '400',
-                    textMonthFontWeight: 'bold',
-                    textDayHeaderFontWeight: 'bold',
-                    textDayFontSize: 16,
-                    textMonthFontSize: 19,
-                    textDayHeaderFontSize: 16,
-                }}
-                enableSwipeMonths={true}
-                disableAllTouchEventsForDisabledDays={true}
-            /> */}
 
-           
-                {/* <CalendarContainer> */}
-                    {/* <CalendarList
-                        horizontal={true}
-                        pagingEnabled={true}
-                        calendarWidth={screenWidth}
-                        monthFormat={''}
-                        markingType={'custom'}
-                        markedDates={pressedDate}
-                        onDayPress={day => {
-                            let temp = {
-                                [day.dateString] : {
-                                    selected: true,
-                                    // marked: true,
-                                    customStyles: {
-                                        container: {
-                                            backgroundColor: CommonSetting.color.point,
-                                            borderRadius: 15,
-                                            borderColor: CommonSetting.color.point,
-                                            borderWidth: 1,
-                                            alignItems: 'center',
-                                            justifyContents: 'center',
-                                        },
-                                        text: {
-                                            color: '#ffffff',
-                                        }
+                {/* <Calendar
+                    // minDate={todayDate}
+                    monthFormat={'yyyy년 MM월'}
+                    markingType={'custom'}
+                    markedDates={pressedDate}
+                    onDayPress={day => {
+                        let temp = {
+                            [day.dateString] : {
+                                selected: true,
+                                marked: true,
+                                customStyles: {
+                                    container: {
+                                        backgroundColor: CommonSetting.color.point,
+                                        borderRadius: 20,
+                                        borderColor: CommonSetting.color.point,
+                                        borderWidth: 1,
+                                        alignItems: 'center',
+                                        justifyContents: 'center',
+                                    },
+                                    text: {
+                                        color: '#ffffff',
                                     }
                                 }
                             }
-                            setPressedDate(temp);
-                        }}
-                        theme={{
-                            backgroundColor: '#ffffff',
-                            textSectionTitleColor: '#666666', //요일 색
-                            selectedDayTextColor: '#ffffff',
-                            todayTextColor: '#666666',
-                            dayTextColor: '#666666', 
-                            monthTextColor: '#ffffff',
-                            textDisabledColor: '#bbbbbb',
-                            textDayFontWeight: '400',
-                            textDayFontSize: 13,
-                            textMonthFontSize: 0,
-                            textDayHeaderFontSize: 13,
-                            // textDisabledColor: '#d9e1e8',
-                        }}
-                    /> */}
-                {/* </CalendarContainer> */}
-           
-
-            <View style={{backgroundColor:'rgba(64, 64, 77, 0.5)', height: 60, marginBottom: 15}}/>
-
-            <CategoryBackView> 
-
-                <CategoryView
-                    onPress={() => {setSelectedCategory(1)}}
-                >
-                    <CategoryText>
-                        식단
-                    </CategoryText>
-                </CategoryView>
-
-                <CategoryView
-                    onPress={() => {setSelectedCategory(2)}}
-                >
-                    <CategoryText>
-                        신체 & 운동
-                    </CategoryText>
-                </CategoryView>
-
-            </CategoryBackView>
-
-
-
-            {categoryContents()}
+                        }
+                        setPressedDate(temp);
+                    }}
+                    
+                    theme={{
+                        backgroundColor: '#ffffff',
+                        calendarBackground: 'rgba(255, 255, 255, 0.5)',
+                        textSectionTitleColor: '#666666',
+                        selectedDayBackgroundColor: '#ffffff',
+                        selectedDayTextColor: CommonSetting.color.point,
+                        todayTextColor: '#666666',
+                        dayTextColor: '#666666',
+                        textDisabledColor: '#bbbbbb',
+                        arrowColor: CommonSetting.color.point,
+                        monthTextColor: '#333333',
+                        indicatorColor: 'blue',
+                        textDayFontWeight: '400',
+                        textMonthFontWeight: 'bold',
+                        textDayHeaderFontWeight: 'bold',
+                        textDayFontSize: 16,
+                        textMonthFontSize: 19,
+                        textDayHeaderFontSize: 16,
+                    }}
+                    enableSwipeMonths={true}
+                    disableAllTouchEventsForDisabledDays={true}
+                /> */}
 
             
+                    {/* <CalendarContainer> */}
+                        {/* <CalendarList
+                            horizontal={true}
+                            pagingEnabled={true}
+                            calendarWidth={screenWidth}
+                            monthFormat={''}
+                            markingType={'custom'}
+                            markedDates={pressedDate}
+                            onDayPress={day => {
+                                let temp = {
+                                    [day.dateString] : {
+                                        selected: true,
+                                        // marked: true,
+                                        customStyles: {
+                                            container: {
+                                                backgroundColor: CommonSetting.color.point,
+                                                borderRadius: 15,
+                                                borderColor: CommonSetting.color.point,
+                                                borderWidth: 1,
+                                                alignItems: 'center',
+                                                justifyContents: 'center',
+                                            },
+                                            text: {
+                                                color: '#ffffff',
+                                            }
+                                        }
+                                    }
+                                }
+                                setPressedDate(temp);
+                            }}
+                            theme={{
+                                backgroundColor: '#ffffff',
+                                textSectionTitleColor: '#666666', //요일 색
+                                selectedDayTextColor: '#ffffff',
+                                todayTextColor: '#666666',
+                                dayTextColor: '#666666', 
+                                monthTextColor: '#ffffff',
+                                textDisabledColor: '#bbbbbb',
+                                textDayFontWeight: '400',
+                                textDayFontSize: 13,
+                                textMonthFontSize: 0,
+                                textDayHeaderFontSize: 13,
+                                // textDisabledColor: '#d9e1e8',
+                            }}
+                        /> */}
+                    {/* </CalendarContainer> */}
+            
 
+                <View style={{backgroundColor:'rgba(64, 64, 77, 0.5)', height: 60, marginBottom: 15}}/>
+
+                <CategoryBackView> 
+
+                    <CategoryView
+                        onPress={() => {setSelectedCategory(1)}}
+                    >
+                        <CategoryText>
+                            식단
+                        </CategoryText>
+                    </CategoryView>
+
+                    <CategoryView
+                        onPress={() => {setSelectedCategory(2)}}
+                    >
+                        <CategoryText>
+                            신체 & 운동
+                        </CategoryText>
+                    </CategoryView>
+
+                </CategoryBackView>
+
+                {categoryContents()}
+ 
+            </PaddingView>
             
         </Container>
     )
 }
 
-const Container = styled.ScrollView`
+const Container = styled.SafeAreaView`
     width: 100%;
     height: 100%;
     background-color: ${CommonSetting.color.background_dark};
+`
+const PaddingView = styled.View`
+    padding-left: ${CommonSetting.screenPaddingHorizontal};
+    padding-right: ${CommonSetting.screenPaddingHorizontal};
 `
 const RowView = styled.View`
     flex-direction: row;

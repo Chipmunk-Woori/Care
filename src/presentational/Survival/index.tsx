@@ -10,22 +10,18 @@ interface Props {
 
 }
 
-const ScreenHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('window').width;
-const GuideViewHeight = ScreenHeight * 0.28;
-const BtnViewHeight = ScreenHeight * 0.085;
-const NewGroupWidth = ScreenWidth - ScreenWidth * 0.11;
-const groupsHeight = BtnViewHeight * 3 + 10;
-
-const TabSecond = () => {
-
-    return (
-       <>
-       </>
+const Survival = () => {
+    return(
+        <Container>
+        </Container>
     )
 }
 
+const Container = styled.SafeAreaView`
+    width: 100%;
+    height: 100%;
+    background-color: ${CommonSetting.color.background_dark};
+    background-color: lavender;
+`
 
-
-
-export default TabSecond;
+export default Survival;

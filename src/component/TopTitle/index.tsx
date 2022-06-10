@@ -48,7 +48,6 @@ const Container = styled.View`
     background-color: ${CommonSetting.color.background_dark};
     width: 100%;
     height: 45px;
-    margin-top: 50px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

@@ -1,3 +1,5 @@
+import { Dimensions } from "react-native";
+
 const CommonSetting = {
     color : {
         background_light: 'white',
@@ -6,13 +8,11 @@ const CommonSetting = {
         text_light: 'white',
         text_dark: 'black',
 
-        borderRadius: '#6d6d81',
+        borderColor: '#6d6d81',
 
         darkBtn: 'rgba(47,49,61,1)', //TabSecond
         lightBtn: 'rgba(43,46,75,1)', //TabSecond
         lightBtnIcon: 'rgba(61,65,117,1)', //TabSecond
-
-        
 
         point: '#42a5f5',
 
@@ -27,7 +27,9 @@ const CommonSetting = {
         temp900: '#0d47a1'
     },
     btnBorderRadius: 8,
-    screenPaddingHorizontal: '5%'
+    screenPaddingHorizontal: '5%',
+    screenHeight: Dimensions.get('window').height,
+    screenWidth: Dimensions.get('window').width
 }
 
 export default CommonSetting;

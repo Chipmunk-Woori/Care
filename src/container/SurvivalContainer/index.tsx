@@ -5,27 +5,18 @@ import CommonSetting from '../../common/CommonSetting';
 import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Survival from '../../presentational/Survival';
 
 interface Props {
-
+    navigation: any;
 }
 
-const ScreenHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('window').width;
-const GuideViewHeight = ScreenHeight * 0.28;
-const BtnViewHeight = ScreenHeight * 0.085;
-const NewGroupWidth = ScreenWidth - ScreenWidth * 0.11;
-const groupsHeight = BtnViewHeight * 3 + 10;
-
-const TabSecond = () => {
-
-    return (
-       <>
-       </>
+const SurvivalContainer = ({navigation}: Props) => {
+    return(
+        <>
+            <Survival />
+        </>
     )
 }
 
-
-
-
-export default TabSecond;
+export default SurvivalContainer;

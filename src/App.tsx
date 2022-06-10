@@ -28,6 +28,10 @@ import TabThirdPage from './page/TabThirdPage';
 import TabFourthPage from './page/TabFourthPage';
 import TabFifthPage from './page/TabFifthPage';
 
+import GroupPage from './page/GroupPage';
+import TerminatedPage from './page/TerminatedPage';
+import SurvivalPage from './page/SurvivalPage';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,6 +60,21 @@ const TabSecondStackScreen = ({navigation, route}: any) => {
             <TabSecondStack.Screen
                 name="TabSecond"
                 component={TabSecondPage}
+                options={{headerShown: false}}
+            />
+            <TabSecondStack.Screen
+                name="Group"
+                component={GroupPage}
+                options={{headerShown: false}}
+            />
+            <TabSecondStack.Screen
+                name="Terminated"
+                component={TerminatedPage}
+                options={{headerShown: false}}
+            />
+            <TabSecondStack.Screen
+                name="Survival"
+                component={SurvivalPage}
                 options={{headerShown: false}}
             />
         </TabSecondStack.Navigator>

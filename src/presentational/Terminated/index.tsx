@@ -10,22 +10,11 @@ interface Props {
 
 }
 
-const ScreenHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('window').width;
-const GuideViewHeight = ScreenHeight * 0.28;
-const BtnViewHeight = ScreenHeight * 0.085;
-const NewGroupWidth = ScreenWidth - ScreenWidth * 0.11;
-const groupsHeight = BtnViewHeight * 3 + 10;
-
-const TabSecond = () => {
-
-    return (
-       <>
-       </>
+const Terminated = () => {
+    return(
+        <>
+        </>
     )
 }
 
-
-
-
-export default TabSecond;
+export default Terminated;
