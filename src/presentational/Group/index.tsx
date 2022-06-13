@@ -6,6 +6,7 @@ import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
+
 interface Props {
 
 }
@@ -266,7 +267,7 @@ const Group = () => {
             </HeaderView> */}
 
 
-            <ScrollView style={{paddingHorizontal: CommonSetting.screenPaddingHorizontal}}>
+            <Scroll>
                 <GuideView>
                     <Image
                         style={{width: 65, height: 65}}
@@ -353,7 +354,7 @@ const Group = () => {
 
                
 
-            </ScrollView>
+            </Scroll>
 
         </Container>
     )
@@ -362,7 +363,12 @@ const Group = () => {
 const Container = styled.SafeAreaView`
     width: 100%;
     height: 100%;
-    background-color: ${CommonSetting.color.background_dark}
+    background-color: ${CommonSetting.color.background_dark};
+`
+const Scroll = styled.ScrollView`
+    padding-left: ${CommonSetting.screenPaddingHorizontal};
+    padding-right: ${CommonSetting.screenPaddingHorizontal};
+    margin-bottom: 100px;
 `
 const HeaderView = styled.View`
     width: 100%;

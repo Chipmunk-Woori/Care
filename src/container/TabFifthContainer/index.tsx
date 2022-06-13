@@ -1,5 +1,5 @@
 import React from "react";
-import {View} from "react-native";
+import {View, StatusBar} from "react-native";
 import TabFifth from '../../presentational/TabFifth';
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 const TabFifthContainer = ({navigation}: Props) => {
     return(
         <>
+            <StatusBar barStyle={'light-content'} />
             <TabFifth/>
         </>
     )

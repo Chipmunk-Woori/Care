@@ -7,6 +7,8 @@ import TitleText from "../../component/TitleText";
 import GroupPage from "../../page/GroupPage";
 import TabSecond from '../../presentational/TabSecond';
 import Group from '../../presentational/Group';
+import Survival from '../../presentational/Survival';
+import Terminated from '../../presentational/Terminated';
 
 interface Props {
     navigation: any;
@@ -23,7 +25,7 @@ const TabSecondContainer = ({navigation}: Props) => {
     const headerBtnArr = [
         {
             title : '그룹',
-            screen : 'Group'
+            screen : <Group/>
         },
         {
             title : '서바이벌',
@@ -57,6 +59,19 @@ const TabSecondContainer = ({navigation}: Props) => {
         return temp;
     }
 
+    const headerScreen = () => {
+
+        // ----(1)
+        if (selectedHeader === '그룹') {
+            return <Group />
+        } else if (selectedHeader === '서바이벌') {
+            return <Survival />
+        } else if (selectedHeader === '종료된') {
+            return <Terminated />
+        }
+        
+    }
+
 
 
     useEffect(() => {
@@ -86,10 +101,8 @@ const TabSecondContainer = ({navigation}: Props) => {
                 </PaddingView>
             </Container>
 
-            {
-                selectedHeader === '그룹' && 
-                <Group />
-            }
+
+            {headerScreen()}
             
         </>
     )
@@ -97,7 +110,7 @@ const TabSecondContainer = ({navigation}: Props) => {
 
 const Container = styled.SafeAreaView`
     width: 100%;
-    height: 100%;
+    height: 100px;
     background-color: ${CommonSetting.color.background_dark};
 `
 const PaddingView = styled.View`

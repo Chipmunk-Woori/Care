@@ -10,6 +10,22 @@ interface Props {
 
 const TopTitle = ( {title, icon}: Props) => {
 
+    // 상단 아이콘
+    // const topTitleIcon = [
+    //     {
+    //         img: require('../../assets/upload.png'),
+    //         func: () => {console.log('첫번째')}
+    //     },
+    //     {
+    //         img: require('../../assets/files.png'),
+    //         func: () => {console.log('두번째')}
+    //     },
+    //     {
+    //         img: require('../../assets/palette.png'),
+    //         func: () => {console.log('세번째')}
+    //     }
+    // ]
+
     const iconExample = [
         {
             img: '',
@@ -38,7 +54,7 @@ const TopTitle = ( {title, icon}: Props) => {
                 {title}
             </Title>
             <IconView>
-                {showIcon()}
+                {icon && showIcon()}
             </IconView>
         </Container>
     )
@@ -51,8 +67,6 @@ const Container = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    /* padding-left: ${CommonSetting.screenPaddingHorizontal};
-    padding-right: ${CommonSetting.screenPaddingHorizontal}; */
 `
 const Title = styled.Text`
     color: ${CommonSetting.color.text_light};
