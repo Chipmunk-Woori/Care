@@ -352,6 +352,12 @@ const Group = () => {
                     // containerCustomStyle={{backgroundColor:'yellow'}}
                 />
 
+                <FindBtn>
+                    <BasicText>
+                        오픈 그룹 찾기
+                    </BasicText>
+                </FindBtn>
+
                
 
             </Scroll>
@@ -368,7 +374,7 @@ const Container = styled.SafeAreaView`
 const Scroll = styled.ScrollView`
     padding-left: ${CommonSetting.screenPaddingHorizontal};
     padding-right: ${CommonSetting.screenPaddingHorizontal};
-    margin-bottom: 100px;
+    margin-bottom: 130px;
 `
 const HeaderView = styled.View`
     width: 100%;
@@ -515,6 +521,16 @@ const GroupIconView = styled.View`
 `
 const GroupIcon = styled.Text`
     font-size: 20px;
+`
+const FindBtn = styled.TouchableOpacity`
+    width: 100%;
+    height: 40px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    border-color: ${CommonSetting.color.borderColor};
+    border-width: 1px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
 `
 
 
