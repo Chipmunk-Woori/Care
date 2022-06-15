@@ -28,6 +28,7 @@ import TabThirdPage from './page/TabThirdPage';
 import TabFourthPage from './page/TabFourthPage';
 import TabFifthPage from './page/TabFifthPage';
 
+import MakeGroupPage from './page/MakeGroupPage';
 import GroupPage from './page/GroupPage';
 import TerminatedPage from './page/TerminatedPage';
 import SurvivalPage from './page/SurvivalPage';
@@ -74,9 +75,14 @@ const TabSecondStackScreen = ({navigation, route}: any) => {
             />
             <TabSecondStack.Screen
                 name="Survival"
-                component={SurvivalPage}
+               component={SurvivalPage}
                 options={{headerShown: false}}
-            />
+            /> 
+            <TabSecondStack.Screen
+                name="MakeGroup"
+               component={MakeGroupPage}
+                options={{headerShown: false}}
+            /> 
         </TabSecondStack.Navigator>
     )
 }

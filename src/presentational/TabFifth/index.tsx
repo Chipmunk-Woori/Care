@@ -131,14 +131,14 @@ const TabFifth = () => {
                             </SubText>
                         </View>
 
-                        <RowView>
+                        <RowTouch>
                             <NextText>
                                 자세히
                             </NextText>
                             <NextIcon
                                 source={require('../../assets/next.png')} 
                             />
-                        </RowView>
+                        </RowTouch>
                     </StatsTitleView>
                 </StatsView>
 
@@ -157,6 +157,9 @@ const PaddingView = styled.ScrollView`
     padding-right: ${CommonSetting.screenPaddingHorizontal};
 `
 const RowView = styled.View`
+    flex-direction: row;
+`
+const RowTouch = styled.TouchableOpacity`
     flex-direction: row;
 `
 const MyInfo = styled.View`

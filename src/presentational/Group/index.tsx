@@ -8,7 +8,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 
 interface Props {
-
+    moveTo: (screen: any) => void;
 }
 
 const ScreenHeight = Dimensions.get('window').height;
@@ -18,7 +18,7 @@ const BtnViewHeight = ScreenHeight * 0.085;
 const NewGroupWidth = ScreenWidth - ScreenWidth * 0.11;
 const groupsHeight = BtnViewHeight * 3 + 10;
 
-const Group = () => {
+const Group = ({moveTo}: Props) => {
 
     let carouselRef = useRef(null);
     const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
@@ -284,7 +284,9 @@ const Group = () => {
                 </GuideView>
 
                 <View style={{marginBottom: 25}}>
-                    <BtnView>
+                    <BtnView
+                        onPress={() => {moveTo('MakeGroup')}}
+                    >
                         <RowView style={{alignItems: 'center'}}>
                             <BtnIconView>
                                 <BtnIcon

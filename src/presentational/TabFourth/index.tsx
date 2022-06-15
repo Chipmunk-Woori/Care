@@ -71,6 +71,7 @@ const TabFourth = () => {
     useEffect(() => {
         const countdown = setInterval(() => {
             if (seconds > 0) {
+                
                 setSeconds(seconds - 1)
             } else if (seconds === 0) {
                 if (minutes === 0) {
@@ -89,7 +90,7 @@ const TabFourth = () => {
         }, 1000)
 
         return () => clearInterval(countdown)
-    },[])
+    },[seconds])
 
 
     return(
@@ -97,12 +98,10 @@ const TabFourth = () => {
             <PaddingView>
 
                 <TopTitle
-                    title={'남은 시간 11:49:23'}
+                    title={`남은 시간 ${hours}:${minutes}:${seconds}`}
                 />
 
-                <Text style={{color:'white'}}>
-                    {hours}:{minutes}:{seconds}
-                </Text>
+                
 
                 <DayView>
                     {dayView()}
@@ -145,4 +144,25 @@ const TodayView = styled.View`
     height: 20px;
     align-items: center;
     justify-content: center;
+`
+const HeaderContainer = styled.View`
+    background-color: ${CommonSetting.color.background_dark};
+    width: 100%;
+    height: 45px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`
+const Title = styled.Text`
+    color: ${CommonSetting.color.text_light};
+    font-size: 18px;
+    font-weight: bold;
+`
+const IconView = styled.View`
+    flex-direction: row;
+`
+const IconImg = styled.Image`
+    width: 21px;
+    height: 21px;
+    margin-left: 20px;
 `

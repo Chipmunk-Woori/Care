@@ -25,7 +25,7 @@ const TabSecondContainer = ({navigation}: Props) => {
     const headerBtnArr = [
         {
             title : '그룹',
-            screen : <Group/>
+            screen : 'Group'
         },
         {
             title : '서바이벌',
@@ -63,7 +63,7 @@ const TabSecondContainer = ({navigation}: Props) => {
 
         // ----(1)
         if (selectedHeader === '그룹') {
-            return <Group />
+            return <Group moveTo={moveTo}/>
         } else if (selectedHeader === '서바이벌') {
             return <Survival />
         } else if (selectedHeader === '종료된') {
@@ -72,6 +72,9 @@ const TabSecondContainer = ({navigation}: Props) => {
         
     }
 
+    const moveTo = (screen: any) => {
+        navigation.push(screen);
+    }
 
 
     useEffect(() => {
