@@ -11,7 +11,7 @@ const CommonSetting = {
         borderColor: '#6d6d81',
 
         darkBtn: 'rgba(47,49,61,1)', //TabSecond
-        lightBtn: 'rgba(43,46,75,1)', //TabSecond
+        lightBtn: '#3d4166', //TabSecond
         lightBtnIcon: 'rgba(61,65,117,1)', //TabSecond
 
         point: '#42a5f5',
