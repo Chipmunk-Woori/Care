@@ -49,7 +49,6 @@ const MakeGroup = ({goBack} :Props) => {
 
 
     const toggleSwitch = () => setOpenSwitch(previousState => !previousState);
-    
 
     const onPressCheck = (item :any) => {
         
@@ -114,6 +113,25 @@ const MakeGroup = ({goBack} :Props) => {
                 )
             })
         )
+    }
+
+    const storeData = async () => {
+        try {
+            await AsyncStorage.setItem('testSet', '👻 value 👻')
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('testSet')
+            if (value !== null) {
+                console.log(value)
+            }
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     return(
@@ -296,6 +314,28 @@ const MakeGroup = ({goBack} :Props) => {
                 <View style={{height:60}}/>
 
             </PaddingView>
+
+
+            <MakingBtnBack>
+                <MakingBtn onPress={() => {
+                    storeData()
+                }}>
+                    <MakingText>
+                       (데이터 저장)
+                    </MakingText>
+                </MakingBtn>
+            </MakingBtnBack>
+
+
+            <MakingBtnBack>
+                <MakingBtn onPress={() => {
+                    getData()
+                }}>
+                    <MakingText>
+                        만들기 (데이터 읽기)
+                    </MakingText>
+                </MakingBtn>
+            </MakingBtnBack>
         </Container>
     )
 }
@@ -489,6 +529,25 @@ const BodyConditonView = styled.TouchableOpacity`
 const NextIcon = styled.Image`
     width: 15px;
     height: 15px;
+`
+const MakingBtnBack = styled.View`
+    padding-left: ${CommonSetting.screenPaddingHorizontal};
+    padding-right: ${CommonSetting.screenPaddingHorizontal};
+    padding-top: 5px;
+    padding-bottom: 5px;
+`
+const MakingBtn = styled.TouchableOpacity`
+    width: 100%;
+    height: 47px;
+    background-color: rgb(48,48,62);
+    align-items: center;
+    justify-content: center;
+    border-radius: ${CommonSetting.btnBorderRadius};
+`
+const  MakingText = styled.Text`
+    font-size: 15px;
+    font-weight: 500;
+    color: white
 `
 
 

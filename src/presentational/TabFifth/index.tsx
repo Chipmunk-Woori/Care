@@ -79,7 +79,35 @@ const TabFifth = () => {
                 />
                 
                 <MyInfo>
+                    <NicknameView>
+                        <NicknameHeadView>
+                            <NicknameHead>
 
+                            </NicknameHead>
+                        </NicknameHeadView>
+                        <Nickname>
+                            <View>
+                                <NicknameText>
+                                    맛밤
+                                </NicknameText>
+                                <MgText>
+                                    30mg
+                                </MgText>
+                            </View>
+                            <NextImg
+                                source={require('../../assets/next_dark.png')}
+                            />
+                        </Nickname>
+                    </NicknameView>
+
+                    <ReportDays>
+                        <ReportDaysTitle>
+                            연속 기록
+                        </ReportDaysTitle>
+                        <ReportDaysDay>
+                            1일
+                        </ReportDaysDay>
+                    </ReportDays>
                 </MyInfo>
 
                 <MyInfoBtnView>
@@ -161,13 +189,6 @@ const RowView = styled.View`
 `
 const RowTouch = styled.TouchableOpacity`
     flex-direction: row;
-`
-const MyInfo = styled.View`
-    width: 100%;
-    height: ${ScreenHeight*0.21}px;
-    background-color: rgb(232,233,250);
-    border-radius: ${CommonSetting.btnBorderRadius}px;
-    margin-top: 13px;
 `
 const DietBtnView = styled.TouchableOpacity`
     background-color: rgba(47,49,61,1);
@@ -272,6 +293,80 @@ const SubText = styled.Text`
     font-size: 12px;
     color: ${CommonSetting.color.gray};
     margin-Top: 5px;
+`
+const MyInfo = styled.TouchableOpacity`
+    width: 100%;
+    height: ${ScreenHeight*0.21}px;
+    background-color: rgb(232,233,250);
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    margin-top: 13px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    justify-content: space-between;
+`
+const NicknameView = styled.View`
+    width: 100%;
+    height: 50%;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+`
+const NicknameHeadView = styled.View`
+    width: 22%;
+`
+const NicknameHead = styled.View`
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 13px;
+    background-color: white;
+`
+const Nickname = styled.View`
+    width: 78%;
+    height: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 8px;
+`
+const NicknameText = styled.Text`
+    color: rgb(48,50,68);
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+`
+const MgText = styled.Text`
+    color: rgb(151,151,170);
+    font-size: 15px;
+    font-weight: 500;
+`
+const ReportDays = styled.View`
+    width: 100%;
+    height: 45%;
+    align-items: center;
+    background-color: white;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    align-items: center;
+    justify-content: center;
+`
+const ReportDaysTitle = styled.Text`
+    color: rgb(151,151,170);
+    font-size: 15px;
+    margin-bottom: 5px;
+`
+const ReportDaysDay = styled.Text`
+    color: rgb(48,50,68);
+    font-size: 20px;
+    font-weight: 600;
+`
+const NextImg = styled.Image`
+    width: 13px;
+    height: 13px;
 `
 
 
