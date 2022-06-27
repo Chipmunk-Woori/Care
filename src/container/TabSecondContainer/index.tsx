@@ -9,6 +9,9 @@ import TabSecond from '../../presentational/TabSecond';
 import Group from '../../presentational/Group';
 import Survival from '../../presentational/Survival';
 import Terminated from '../../presentational/Terminated';
+import NewGroups from "../../common/NewGroups.json";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import GroupContainer from "../GroupContainer";
 
 interface Props {
     navigation: any;
@@ -39,9 +42,10 @@ const TabSecondContainer = ({navigation}: Props) => {
 
     const headerBtnView = () => {
         
-        let temp = headerBtnArr.map((item: any) => {
+        let temp = headerBtnArr.map((item: any, index:any) => {
             return (
                 <HeaderBtn
+                    key={index.toString()}
                     style={selectedHeader === item.title && styles.selected}
                     onPress={() => {
                         setSelectedHeader(item.title)
@@ -61,9 +65,8 @@ const TabSecondContainer = ({navigation}: Props) => {
 
     const headerScreen = () => {
 
-        // ----(1)
         if (selectedHeader === '그룹') {
-            return <Group moveTo={moveTo}/>
+            return <GroupContainer navigation={navigation}/>
         } else if (selectedHeader === '서바이벌') {
             return <Survival />
         } else if (selectedHeader === '종료된') {
@@ -77,10 +80,24 @@ const TabSecondContainer = ({navigation}: Props) => {
     }
 
 
+    const storeNewGroups = async () => {
+        try {
+            const jsonValue = JSON.stringify(NewGroups);
+            await AsyncStorage.setItem('newGroups', jsonValue);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    
+
     useEffect(() => {
         let init = headerBtnArr[0].title;
         setSelectedHeader(init);
+
+        storeNewGroups()
     }, [])
+
+    
 
     return (
         <>

@@ -9,6 +9,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 interface Props {
     moveTo: (screen: any) => void;
+    newGroups: any;
 }
 
 const ScreenHeight = Dimensions.get('window').height;
@@ -18,7 +19,7 @@ const BtnViewHeight = ScreenHeight * 0.085;
 const NewGroupWidth = ScreenWidth - ScreenWidth * 0.11;
 const groupsHeight = BtnViewHeight * 3 + 10;
 
-const Group = ({moveTo}: Props) => {
+const Group = ({moveTo, newGroups}: Props) => {
 
     let carouselRef = useRef(null);
     const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
@@ -198,42 +199,51 @@ const Group = ({moveTo}: Props) => {
     }
 
 
+   
+
+
     useEffect(() => {
 
-        let totalArr :any[] = [];
-        let lastIndex = groupArr.length -1;
+        if (newGroups) {
+            let totalArr :any[] = [];
+            let lastIndex = newGroups.length -1;
 
-        groupArr.map( (item: any, index: any) => {
 
-            if (index % 3 == 0) {
-                let singleArr = [];
+            newGroups.map( (item: any, index: any) => {
 
-                
-                if(index <= lastIndex) {
-                    let first = groupArr[index];
-                    singleArr.push(first)
+                if (index % 3 == 0) {
+                    let singleArr = [];
+
+                    
+                    if(index <= lastIndex) {
+                        let first = newGroups[index];
+                        singleArr.push(first)
+                    }
+                    
+                    
+                    if(index+1 <= lastIndex) {
+                        let second = newGroups[index+1];
+                        singleArr.push(second)
+                    }
+                    
+                    if(index+2 <= lastIndex) {
+                        let third = newGroups[index+2];
+                        singleArr.push(third)
+                    }
+
+                    totalArr.push(singleArr)
+
                 }
-                
-                
-                if(index+1 <= lastIndex) {
-                    let second = groupArr[index+1];
-                    singleArr.push(second)
-                }
-                
-                if(index+2 <= lastIndex) {
-                    let third = groupArr[index+2];
-                    singleArr.push(third)
-                }
 
-                totalArr.push(singleArr)
-
-            }
-
-        })
-       
-        setNewGroupArr(totalArr);
+            })
         
-    },[])
+            setNewGroupArr(totalArr);
+
+        }
+
+        
+    },[newGroups])
+
 
 
 

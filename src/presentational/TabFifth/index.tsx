@@ -29,9 +29,9 @@ const TabFifth = () => {
         }
     ]
 
-    const MyInfoBtn = (item: any) => {
+    const MyInfoBtn = (item: any, index: any) => {
         return(
-            <DietBtnView>
+            <DietBtnView key={index.toString()}>
                 <RowView>
                     <DietBtnIconView>
                         <DietBtnIcon
@@ -58,9 +58,9 @@ const TabFifth = () => {
 
     const MyInfoView = () => {
 
-        let temp = MyInfoBtnContents.map((item) => {
+        let temp = MyInfoBtnContents.map((item, index) => {
             return(
-                MyInfoBtn(item)
+                MyInfoBtn(item, index)
             )
         })
 

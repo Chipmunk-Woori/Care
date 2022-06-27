@@ -50,10 +50,10 @@ const TabFourth = () => {
 
     const dayView = () => {
 
-        let result =dayArr.map((item: any) => {
+        let result =dayArr.map((item :any, index :any) => {
 
             return (
-                <TodayView>
+                <TodayView key={index.toString()}>
                     <DayText>
                         {item}
                     </DayText>

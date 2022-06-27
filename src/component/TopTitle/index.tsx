@@ -37,7 +37,7 @@ const TopTitle = ( {title, icon}: Props) => {
         let result = icon.map((item: any, index: number) => (
             <TouchableOpacity
                 onPress={() => {item.func()}}
-                key={index}
+                key={index.toString()}
             >
                 <IconImg
                     source = {item.img}

@@ -103,9 +103,9 @@ const MakeGroup = ({goBack} :Props) => {
     const strengthView = () => {
         
         return(
-            strengthOptions.map((item) => {
+            strengthOptions.map((item:any, index:any) => {
                 return (
-                   <OptionView>
+                   <OptionView key={index.toString()}>
                         <OptionText>
                             {item}
                         </OptionText>
@@ -316,23 +316,13 @@ const MakeGroup = ({goBack} :Props) => {
             </PaddingView>
 
 
-            <MakingBtnBack>
-                <MakingBtn onPress={() => {
-                    storeData()
-                }}>
-                    <MakingText>
-                       (데이터 저장)
-                    </MakingText>
-                </MakingBtn>
-            </MakingBtnBack>
-
 
             <MakingBtnBack>
                 <MakingBtn onPress={() => {
                     getData()
                 }}>
                     <MakingText>
-                        만들기 (데이터 읽기)
+                        만들기
                     </MakingText>
                 </MakingBtn>
             </MakingBtnBack>

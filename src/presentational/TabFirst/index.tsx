@@ -6,6 +6,7 @@ import TopTitle from '../../component/TopTitle';
 import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calendars';
 import BasicText from "../../component/BasicText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+// import ImagePicker from 'react-native-image-crop-picker';
 
 
 
@@ -38,7 +39,11 @@ const TabFirst = () => {
         {
             img: require('../../assets/palette.png'),
             func: () => {console.log('세번째')}
-        }
+        },
+        {
+            img: require('../../assets/TabThird.png'),
+            func: () => {}
+        },
     ]
 
     //'식단' 내용
