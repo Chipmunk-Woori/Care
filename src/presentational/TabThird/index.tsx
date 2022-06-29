@@ -1,10 +1,16 @@
 import React from "react";
-import {View, Text} from "react-native";
+import {View, Text, Dimensions} from "react-native";
 import styled from 'styled-components/native';
+import CommonSetting from '../../common/CommonSetting';
+import BasicText from '../../component/BasicText';
+import TitleText from "../../component/TitleText";
 
 interface Props {
 
 }
+
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
 
 const TabThird = () => {
     return(
@@ -14,9 +20,10 @@ const TabThird = () => {
     )
 }
 
-const Container = styled.View`
-    flex: 1;
-    background-color: rgba(255, 255, 255, 0.5);
+const Container = styled.SafeAreaView`
+    width: ${ScreenWidth};
+    height: ${ScreenHeight};
+    background-color: ${CommonSetting.color.background_dark};
 `
 
 export default TabThird;

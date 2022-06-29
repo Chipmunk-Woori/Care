@@ -23,112 +23,15 @@ const Group = ({moveTo, newGroups}: Props) => {
 
     let carouselRef = useRef(null);
     const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
-
-    const groupArr = [
-        {
-            icon : '🥗',
-            title : '두 달 동안 건강한 식사',
-            iconBackgroundColor : '#e4f4de',
-            introduction : '가공되지않은 음식 위주로 먹기',
-            rull : '',
-            record : ['식단', '운동', '물', '걸음'],
-            open : 'true',
-            numberOfLimit : 10,
-            numberOfMember : 8,
-            period : 30,
-            endDate : '2022.07.30',
-            strength : '가볍게',
-            physicalCondition : '',
-            goals : ''
-        },
-        {
-            icon : '🍊',
-            title : '오렌지 다이어트',
-            iconBackgroundColor : 'rgba(244,222,225,1)',
-            introduction : '저녁 대신 오렌지 먹기',
-            rull : '',
-            record : ['식단', '운동', '물', '걸음'],
-            open : 'true',
-            numberOfLimit : 20,
-            numberOfMember : 5,
-            period : 14,
-            endDate : '2022.06.21',
-            strength : '적당히',
-            physicalCondition : '',
-            goals : ''
-        },
-        {
-            icon : '✈️',
-            title : '가보자고',
-            iconBackgroundColor : '#c1e2eb',
-            introduction : '저녁 대신 오렌지 먹기',
-            rull : '',
-            record : ['식단', '운동', '물', '걸음'],
-            open : 'true',
-            numberOfLimit : 20,
-            numberOfMember : 5,
-            period : 14,
-            endDate : '2022.06.21',
-            strength : '적당히',
-            physicalCondition : '',
-            goals : ''
-        },
-        {
-            icon : '💙',
-            title : '하루에 물 2L',
-            iconBackgroundColor : '#c1e2eb',
-            introduction : '저녁 대신 오렌지 먹기',
-            rull : '',
-            record : ['식단', '운동', '물', '걸음'],
-            open : 'true',
-            numberOfLimit : 20,
-            numberOfMember : 5,
-            period : 14,
-            endDate : '2022.06.21',
-            strength : '적당히',
-            physicalCondition : '',
-            goals : ''
-        },
-        {
-            icon : '📆',
-            title : '딱 한 달 다이어트',
-            iconBackgroundColor : 'rgba(244,222,225,1)',
-            introduction : '한 달 동안 식단+운동',
-            rull : '',
-            record : ['식단', '운동'],
-            open : 'true',
-            numberOfLimit : 10,
-            numberOfMember : 4,
-            period : 30,
-            endDate : '2022.07.10',
-            strength : '약간 세게',
-            physicalCondition : '',
-            goals : ''
-        },
-        {
-            icon : '🏋🏻',
-            title : '공복유산소',
-            iconBackgroundColor : '#c1e2eb',
-            introduction : '주 3회 아침 공복유산소',
-            rull : '',
-            record : ['식단', '운동'],
-            open : 'true',
-            numberOfLimit : 30,
-            numberOfMember : 16,
-            period : 30,
-            endDate : '2022.07.21',
-            strength : '적당히',
-            physicalCondition : '',
-            goals : ''
-        },
-    ]
+    const tempData = ['MyGroup', 'Group'];
 
 
-    const groupSingleView = (item: any) => {
+
+    const groupSingleView = (item: any, index: any) => {
 
         if (item) {
             return(
-                <NewGroup>
+                <NewGroup key={index.toString()}>
                     <RowView style={{alignItems: 'center'}}>
                         <GroupIconView style={{backgroundColor: item.iconBackgroundColor}}>
                             <GroupIcon>
@@ -187,8 +90,8 @@ const Group = ({moveTo, newGroups}: Props) => {
         let singleView = null;
         let totalView :any[] = [];
 
-        item.map((i:any) => {
-            singleView = groupSingleView(i);
+        item.map((i:any, index:any) => {
+            singleView = groupSingleView(i, index);
             totalView.push(singleView);
         })
 
@@ -199,15 +102,11 @@ const Group = ({moveTo, newGroups}: Props) => {
     }
 
 
-   
-
-
     useEffect(() => {
 
         if (newGroups) {
             let totalArr :any[] = [];
             let lastIndex = newGroups.length -1;
-
 
             newGroups.map( (item: any, index: any) => {
 
@@ -241,146 +140,145 @@ const Group = ({moveTo, newGroups}: Props) => {
 
         }
 
-        
     },[newGroups])
 
+
+    const renderScreen = ({item, index}: any) => {
+        if (index == 0) {
+            return firstScreen()
+        } else {
+            return (
+                <Container/>
+            )
+        }
+    }
+
+    const firstScreen = () => {
+        return(
+            <Container>
+    
+                <Scroll>
+                    <GuideView>
+                        <Image
+                            style={{width: 65, height: 65}}
+                            source={require('../../assets/group.png')}
+                        />
+                        <GuideText>
+                            친구랑 기록을 실시간 공유해요
+                        </GuideText>
+                        <GuideBtn style={{borderColor: CommonSetting.color.borderColor}}>
+                            <BasicText>
+                                그룹 가이드 보기
+                            </BasicText>
+                        </GuideBtn>
+                    </GuideView>
+    
+                    <View style={{marginBottom: 25}}>
+                        <BtnView
+                            onPress={() => {moveTo('MakeGroup')}}
+                        >
+                            <RowView style={{alignItems: 'center'}}>
+                                <BtnIconView>
+                                    <BtnIcon
+                                        source={require('../../assets/plus.png')} 
+                                    />
+                                </BtnIconView>
+                                <BasicText>
+                                    원하는 그룹 만들기
+                                </BasicText>
+                            </RowView>
+    
+                            <NextIcon
+                                source={require('../../assets/next.png')} 
+                            />
+                        </BtnView>
+                        <BtnView>
+                            <RowView style={{ alignItems: 'center'}}>
+                                <BtnIconView>
+                                    <BtnIcon
+                                        source={require('../../assets/letter.png')} 
+                                    />
+                                </BtnIconView>
+                                <BasicText>
+                                    받은 초대 코드 입력하기
+                                </BasicText>
+                            </RowView>
+    
+                            <NextIcon
+                                source={require('../../assets/next.png')} 
+                            />
+                        </BtnView>
+                        <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
+                            <RowView style={{alignItems:'center'}}>
+                                <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
+                                    <BtnIcon
+                                        source={require('../../assets/search.png')} 
+                                    />
+                                </BtnIconView>
+                                <BasicText>
+                                    오픈 그룹 찾기
+                                </BasicText>
+                            </RowView>
+    
+                            <NextIcon
+                                source={require('../../assets/next.png')} 
+                            />
+                        </BtnView>
+                    </View>
+    
+                    <TitleText>
+                        새로 생긴 그룹
+                    </TitleText>
+    
+                    <View style={{height:15}} />
+    
+    
+                    <Carousel
+                        ref={(ref:any) => { carouselRef = ref }}
+                        data={newGroupArr}
+                        renderItem={groupView}
+                        sliderWidth={ScreenWidth}
+                        itemWidth={ScreenWidth}
+                        sliderHeight={groupsHeight}
+                        itemHeight={groupsHeight}
+                        // containerCustomStyle={{backgroundColor:'yellow'}}
+                    />
+    
+                    <FindBtn>
+                        <BasicText>
+                            오픈 그룹 찾기
+                        </BasicText>
+                    </FindBtn>
+    
+                   
+    
+                </Scroll>
+
+                
+    
+            </Container>
+        )
+    }
 
 
 
     return(
         <Container>
 
-            {/* <HeaderView>
-                <HeaderBtnView>
-                    <HeaderBtn>
-                        <HeaderText>
-                            그룹
-                        </HeaderText>
-                    </HeaderBtn>
-                    <HeaderBtn>
-                        <HeaderText>
-                            서바이벌
-                        </HeaderText>
-                    </HeaderBtn>
-                    <HeaderBtn>
-                        <HeaderText>
-                            종료된
-                        </HeaderText>
-                    </HeaderBtn>
-                </HeaderBtnView>
-
-                <TouchableOpacity>
-                    <SearchIcon
-                        source={require('../../assets/search.png')}
-                    />
-                </TouchableOpacity>
-            </HeaderView> */}
-
-
-            <Scroll>
-                <GuideView>
-                    <Image
-                        style={{width: 65, height: 65}}
-                        source={require('../../assets/group.png')}
-                    />
-                    <GuideText>
-                        친구랑 기록을 실시간 공유해요
-                    </GuideText>
-                    <GuideBtn style={{borderColor: CommonSetting.color.borderColor}}>
-                        <BasicText>
-                            그룹 가이드 보기
-                        </BasicText>
-                    </GuideBtn>
-                </GuideView>
-
-                <View style={{marginBottom: 25}}>
-                    <BtnView
-                        onPress={() => {moveTo('MakeGroup')}}
-                    >
-                        <RowView style={{alignItems: 'center'}}>
-                            <BtnIconView>
-                                <BtnIcon
-                                    source={require('../../assets/plus.png')} 
-                                />
-                            </BtnIconView>
-                            <BasicText>
-                                원하는 그룹 만들기
-                            </BasicText>
-                        </RowView>
-
-                        <NextIcon
-                            source={require('../../assets/next.png')} 
-                        />
-                    </BtnView>
-                    <BtnView>
-                        <RowView style={{ alignItems: 'center'}}>
-                            <BtnIconView>
-                                <BtnIcon
-                                    source={require('../../assets/letter.png')} 
-                                />
-                            </BtnIconView>
-                            <BasicText>
-                                받은 초대 코드 입력하기
-                            </BasicText>
-                        </RowView>
-
-                        <NextIcon
-                            source={require('../../assets/next.png')} 
-                        />
-                    </BtnView>
-                    <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
-                        <RowView style={{alignItems:'center'}}>
-                            <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
-                                <BtnIcon
-                                    source={require('../../assets/search.png')} 
-                                />
-                            </BtnIconView>
-                            <BasicText>
-                                오픈 그룹 찾기
-                            </BasicText>
-                        </RowView>
-
-                        <NextIcon
-                            source={require('../../assets/next.png')} 
-                        />
-                    </BtnView>
-                </View>
-
-                <TitleText>
-                    새로 생긴 그룹
-                </TitleText>
-
-                <View style={{height:15}} />
-
-
-                <Carousel
-                    ref={(ref:any) => { carouselRef = ref }}
-                    data={newGroupArr}
-                    renderItem={groupView}
-                    sliderWidth={ScreenWidth}
-                    itemWidth={ScreenWidth}
-                    sliderHeight={groupsHeight}
-                    itemHeight={groupsHeight}
-                    // containerCustomStyle={{backgroundColor:'yellow'}}
-                />
-
-                <FindBtn>
-                    <BasicText>
-                        오픈 그룹 찾기
-                    </BasicText>
-                </FindBtn>
-
-               
-
-            </Scroll>
+            <FlatList
+                data={tempData}
+                keyExtractor={(item, index) => index.toString()}      
+                renderItem={renderScreen}  
+                horizontal={true}
+            />
 
         </Container>
     )
 }
 
 const Container = styled.SafeAreaView`
-    width: 100%;
-    height: 100%;
+    width: ${ScreenWidth};
+    height: ${ScreenHeight};
     background-color: ${CommonSetting.color.background_dark};
 `
 const Scroll = styled.ScrollView`

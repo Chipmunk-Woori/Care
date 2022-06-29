@@ -18,9 +18,18 @@ const ScreenWidth = Dimensions.get('window').width;
 const MakeGroup = ({goBack} :Props) => {
 
     const [reload, setReload] = useState(false);
+    const [icon, setIcon] = useState('');
+    const [iconBackgroundColor, setIconBackgroundColor] = useState('rgb(47, 49, 62)');
     const [groupName, setGroupName] = useState('');
-    const [intro, setIntro] = useState('');
+    const [introduction, setIntroduction] = useState('');
+    const [record, setRecord] = useState<any[]>([]);
     const [openSwitch, setOpenSwitch] = useState(false);
+    const [numberOfLimit, setNumberOfLimit] = useState('');
+    const [period, setPeriod] = useState('');
+    const [endDate, setEndDate] = useState('2022년 07월 06일');
+    const [strength, setStrength] = useState('');
+    const [physicalCondition, setPhysicalCondition] = useState('');
+    const [goals, setGoals] = useState('');
     const [connectionOptions, setConnectionOptions] = useState([
         {
             id : 1,
@@ -50,24 +59,51 @@ const MakeGroup = ({goBack} :Props) => {
 
     const toggleSwitch = () => setOpenSwitch(previousState => !previousState);
 
+
     const onPressCheck = (item :any) => {
         
-        const tempArr = connectionOptions;
+        //record에 선택된 옵션 넣기
+        let tempArr : any[] = record;
+        let result = false;
 
-        tempArr.map((mi :any) => {
-            if (mi.id === item.id) {
-                mi.selected = !mi.selected;
-            }
-            setConnectionOptions(tempArr);
-        })
+        if (record.length > 0) {
+            record.map((recordItem: any) => {
+                if (recordItem === item) {
+                    tempArr = tempArr.filter((i) => {
+                        return i !== item
+                    })
+
+                    result = true;
+                }
+            })
+        }
+
+        if (result == false) {
+            tempArr.push(item);
+        }
+
+        setRecord(tempArr);
 
         setReload(!reload);
 
     }
 
-    const confirmCheck = (item :any) => {
 
-        if (item.selected === true) {
+    const confirmCheck = (item: any) => {
+
+        let result = false;
+
+        record.map((recordItem: any) => {
+            if (recordItem === item) {
+                result = true
+            } 
+        })
+
+        if (result == false) {
+            return (
+                <NoChecked onPress={()=>{onPressCheck(item)}} /> 
+            )
+        } else {
             return (
                 <Checked 
                     onPress={()=>{onPressCheck(item)}}> 
@@ -76,13 +112,8 @@ const MakeGroup = ({goBack} :Props) => {
                     />
                 </Checked>
             )
-        } else if (item.selected === false) {
-            return (
-                <NoChecked onPress={()=>{onPressCheck(item)}} /> 
-            )
         }
- 
-    } 
+    }
 
     const connectionView = ({item} :any) => {
        
@@ -105,7 +136,11 @@ const MakeGroup = ({goBack} :Props) => {
         return(
             strengthOptions.map((item:any, index:any) => {
                 return (
-                   <OptionView key={index.toString()}>
+                    <OptionView 
+                        onPress={()=>{selectStrength(item)}}
+                        key={index.toString()}
+                        style={{backgroundColor : strength === item ? CommonSetting.color.borderColor : CommonSetting.color.background_dark}}
+                    >
                         <OptionText>
                             {item}
                         </OptionText>
@@ -113,6 +148,21 @@ const MakeGroup = ({goBack} :Props) => {
                 )
             })
         )
+    }
+
+    const selectStrength = (item: any) => {
+        if (strength === item) {
+            setStrength('');
+        } else {
+            setStrength(item)
+        }
+    }
+
+    const showBlock = () => {
+        if ( icon == '' || iconBackgroundColor == '' || groupName == ''
+            || introduction == '' || record.length > 0 ) {
+            return <BlockView />
+        } 
     }
 
     const storeData = async () => {
@@ -145,10 +195,16 @@ const MakeGroup = ({goBack} :Props) => {
 
             <PaddingView>
 
-                <GroupNameView>
-                    <GroupNameIcon>
+                <GroupNameView style={{backgroundColor: iconBackgroundColor}}>
+                   
+                    <GroupNameIcon
+                        value={icon}
+                        onChangeText={setIcon}
+                        maxLength={2}
+                        style={{fontSize:60}}
+                        textAlign={'center'}
+                    />
 
-                    </GroupNameIcon>
 
                     <GroupNameInput
                         value={groupName}
@@ -158,11 +214,21 @@ const MakeGroup = ({goBack} :Props) => {
                     />
 
                     <RowCenter>
-                        <GroupNameColor style={{backgroundColor:'rgb(226,129,144)'}}/>
-                        <GroupNameColor style={{backgroundColor:'rgb(230,145,105)'}}/>
-                        <GroupNameColor style={{backgroundColor:'rgb(230,167,79)'}}/>
-                        <GroupNameColor style={{backgroundColor:'rgb(160,206,70)'}}/>
-                        <GroupNameColor style={{backgroundColor:'rgb(130,219,183)'}}/>
+                        <GroupNameColor 
+                            onPress={()=>{setIconBackgroundColor('#dfb1b8')}}
+                            style={{backgroundColor:'rgb(226,129,144)'}}/>
+                        <GroupNameColor 
+                            onPress={()=>{setIconBackgroundColor('#e4bba9')}}
+                            style={{backgroundColor:'rgb(230,145,105)'}}/>
+                        <GroupNameColor 
+                            onPress={()=>{setIconBackgroundColor('#e2ceb2')}}
+                            style={{backgroundColor:'rgb(230,167,79)'}}/>
+                        <GroupNameColor 
+                            onPress={()=>{setIconBackgroundColor('#bdce9c')}}
+                            style={{backgroundColor:'rgb(160,206,70)'}}/>
+                        <GroupNameColor 
+                            onPress={()=>{setIconBackgroundColor('#b2ddcc')}}
+                            style={{backgroundColor:'rgb(130,219,183)'}}/>
                     </RowCenter>
                 </GroupNameView>
 
@@ -172,10 +238,11 @@ const MakeGroup = ({goBack} :Props) => {
                     </Title>
 
                     <IntroInput
-                        value={intro}
-                        onChangeText={setIntro}
+                        value={introduction}
+                        onChangeText={setIntroduction}
                         placeholder={'첫 문장이 가장 먼저 보이게 돼요'}
-                        placeholderTextColor={"rgb(95, 95, 117)"}
+                        placeholderTextColor={"rgb(143, 143, 167)"}
+                        style={{color:'rgb(143, 143, 167)'}}
                     />
                 </>
                 
@@ -245,9 +312,18 @@ const MakeGroup = ({goBack} :Props) => {
                         <OpenGroupTitle>
                             인원 제한
                         </OpenGroupTitle>
-                        <OptionText>
-                            10명
-                        </OptionText>
+                        <RowView>
+                            <AddedCondition
+                                value={numberOfLimit}
+                                onChangeText={setNumberOfLimit}
+                                placeholder={'10'}
+                                placeholderTextColor={"white"}
+                                style={{color:'white'}}
+                            />
+                            <AddedConditionText>
+                                명
+                            </AddedConditionText>
+                        </RowView>
                     </View>
 
                     <RowView style={{marginBottom:23}}>
@@ -255,17 +331,35 @@ const MakeGroup = ({goBack} :Props) => {
                             <OpenGroupTitle>
                                 진행 기간
                             </OpenGroupTitle>
-                            <OptionText>
-                                예) 30일
-                            </OptionText>
+                            <RowView>
+                                <AddedCondition
+                                    value={period}
+                                    onChangeText={setPeriod}
+                                    placeholder={'예) 30'}
+                                    placeholderTextColor={"white"}
+                                    style={{color:'white'}}
+                                />
+                                <AddedConditionText>
+                                    일
+                                </AddedConditionText>
+                            </RowView>
                         </View>
                         <View style={{width:'50%'}}>
                             <OpenGroupTitle>
                                 그룹 종료일
                             </OpenGroupTitle>
-                            <OptionText>
-                                선택하기
-                            </OptionText>
+                            <RowView>
+                                <AddedCondition
+                                    value={endDate}
+                                    onChangeText={setEndDate}
+                                    placeholder={'선택하기'}
+                                    placeholderTextColor={"white"}
+                                    style={{color:'white'}}
+                                />
+                                <AddedConditionText>
+                                    
+                                </AddedConditionText>
+                            </RowView>
                         </View>
                     </RowView>
 
@@ -303,7 +397,7 @@ const MakeGroup = ({goBack} :Props) => {
 
                     <RowCenter>
                         <BodyConditionOption>
-                            채우기
+                            세우기
                         </BodyConditionOption>
                         <NextIcon
                             source={require('../../assets/next.png')}
@@ -325,6 +419,8 @@ const MakeGroup = ({goBack} :Props) => {
                         만들기
                     </MakingText>
                 </MakingBtn>
+
+                {showBlock()}
             </MakingBtnBack>
         </Container>
     )
@@ -350,18 +446,19 @@ const RowTouch = styled.TouchableOpacity`
 const GroupNameView = styled.View`
     width: 100%;
     height: 330px;
-    background-color: rgb(47,49,62);
     border-radius: ${CommonSetting.btnBorderRadius}px;
     align-items: center;
     margin-bottom: 26px;
 `
-const GroupNameIcon = styled.TouchableOpacity`
+const GroupNameIcon = styled.TextInput`
     width: 100px;
     height: 100px;
     border-radius: 50px;
     border-color: ${CommonSetting.color.borderColor};
     border-width: 1.5px;
     border-style: dashed;
+    align-items: center;
+    justify-content: center;
     margin-top: 73px;
 `
 const GroupNameInput = styled.TextInput`
@@ -396,11 +493,22 @@ const IntroInput = styled.TextInput`
     font-weight: 500;
     margin-bottom: 50px;
 `
+const AddedCondition = styled.TextInput`
+    /* padding: 10px; */
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+`
+const AddedConditionText = styled.TextInput`
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+`
 const AddRullBtn = styled.TouchableOpacity`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    border-radius: ${CommonSetting.btnBorderRadius};
+    border-radius: ${CommonSetting.btnBorderRadius}px;
     border-color: ${CommonSetting.color.borderColor};
     border-width: 1px;
     padding-left: 13px;
@@ -420,7 +528,7 @@ const AddRullIcon = styled.Image`
     height: 15px;
     margin-right: 10px;
 `
-const OptionView = styled.TouchableOpacity`
+const OptionView = styled.Pressable`
     padding: 10px;
     border-radius: 20px;
     border-color: ${CommonSetting.color.borderColor};
@@ -525,6 +633,8 @@ const MakingBtnBack = styled.View`
     padding-right: ${CommonSetting.screenPaddingHorizontal};
     padding-top: 5px;
     padding-bottom: 5px;
+    align-items: center;
+    justify-content: center;
 `
 const MakingBtn = styled.TouchableOpacity`
     width: 100%;
@@ -532,12 +642,21 @@ const MakingBtn = styled.TouchableOpacity`
     background-color: rgb(48,48,62);
     align-items: center;
     justify-content: center;
-    border-radius: ${CommonSetting.btnBorderRadius};
+    border-radius: ${CommonSetting.btnBorderRadius}px;
 `
 const  MakingText = styled.Text`
     font-size: 15px;
     font-weight: 500;
     color: white
+`
+const BlockView = styled.View`
+    width: 100%;
+    height: 48px;
+    background-color: rgba(0,0,0,0);
+    align-items: center;
+    justify-content: center;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    position: absolute;
 `
 
 

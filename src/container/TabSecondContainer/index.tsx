@@ -103,8 +103,6 @@ const TabSecondContainer = ({navigation}: Props) => {
         <>
             <StatusBar barStyle={'light-content'} />
 
-            {/* <TabSecond/> */}
-
             <Container>
                 <PaddingView>
                     <HeaderView>

@@ -33,6 +33,8 @@ import GroupPage from './page/GroupPage';
 import TerminatedPage from './page/TerminatedPage';
 import SurvivalPage from './page/SurvivalPage';
 
+import ImageUpload from './presentational/ImageUpload';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -47,6 +49,14 @@ const TabFirstStackScreen = ({navigation, route}: any) => {
                 name="TabFirst"
                 component={TabFirstPage}
                 options={{headerShown: false}}
+            />
+            <TabFirstStack.Screen
+                name="ImageUpload0"
+                component={ImageUpload}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal"
+                }}
             />
         </TabFirstStack.Navigator>
     )
@@ -83,6 +93,14 @@ const TabSecondStackScreen = ({navigation, route}: any) => {
                component={MakeGroupPage}
                 options={{headerShown: false}}
             /> 
+            <TabSecondStack.Screen
+                name="ImageUpload1"
+                component={ImageUpload}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal"
+                }}
+            /> 
         </TabSecondStack.Navigator>
     )
 }
@@ -96,7 +114,18 @@ const TabThirdStackScreen = ({navigation, route}: any) => {
             <TabThirdStack.Screen 
                 name="TabThird"
                 component={TabThirdPage}
-                options={{headerShown: false}}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal"
+                }}
+            />
+            <TabThirdStack.Screen 
+                name="ImageUpload2"
+                component={ImageUpload}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal"
+                }}
             />
         </TabThirdStack.Navigator>
             
@@ -114,6 +143,14 @@ const TabFourthStackScreen = ({navigation, route}: any) => {
                 component={TabFourthPage}
                 options={{headerShown: false}}
             />
+            <TabFourthStack.Screen
+                name="ImageUpload3"
+                component={ImageUpload}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal"
+                }}
+            />
         </TabFourthStack.Navigator>
     )
 }
@@ -128,6 +165,14 @@ const TabFifthStackScreen = ({navigation, route}: any) => {
                 name="TabFifth"
                 component={TabFifthPage}
                 options={{headerShown: false}}
+            />
+            <TabFifthStack.Screen
+                name="ImageUpload4"
+                component={ImageUpload}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal"
+                }}
             />
         </TabFifthStack.Navigator>
     )
@@ -195,6 +240,12 @@ const App = () => {
                                 source={focused ? require('../src/assets/TabThird_sel.png') : require('../src/assets/TabThird.png')}
                             />
                         )
+                    })}
+                    listeners={({navigation}) => ({
+                        tabPress: (e) => {
+                            e.preventDefault() //탭을 누르면 발생하는 이벤트(화면 이동)를 막겠다
+                            navigation.navigate(`ImageUpload${navigation.getState().index}`)
+                        }
                     })}
                 />
                 <Tab.Screen 
