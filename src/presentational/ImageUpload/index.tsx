@@ -1,32 +1,114 @@
 import React, {useRef, useState, useEffect} from "react";
-import {View, Text, SafeAreaView, TouchableOpacity, ScrollView, Dimensions, Image, FlatList} from "react-native";
+import {View, Text, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { BlurView, VibrancyView } from "@react-native-community/blur";
 
-interface Props {
-    navigation: any;
-}
+
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
-const ImageUpload = ({navigation}: Props) => {
 
-    const goBack = () => {
-        navigation.goBack();
+interface Props {
+    goBack: () => any;
+    imageSelector: () => any;
+    uploadImages: any;
+}
+
+
+const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
+
+    const Images = () => {
+        if (uploadImages.length > 0) {
+            let result = uploadImages.map((item :any, index :number) => {
+                return (
+                    <UploadImg
+                        source={{uri: item}}
+                        key={index.toString()}
+                    />
+                )
+            })
+
+            return result
+        }
     }
+
 
 
     return(
         <Container>
-            <TouchableOpacity
-                onPress={()=>{goBack()}}
+       
+            <BlurView
+                style={styles.absolute}
+                blurType="dark"
+                blurAmount={20}
+                reducedTransparencyFallbackColor="white"
             >
-                <Text>뒤로</Text>
-            </TouchableOpacity>
+                <BottomView>
+
+                    <RowView>
+                        <CategoryView>
+                            <IconView>
+                                <Icon>
+                                    🍽
+                                </Icon>
+                            </IconView>
+                            <CategoryText>
+                                식단
+                            </CategoryText>
+                        </CategoryView>
+
+                        <CategoryView>
+                            <IconView>
+                                <Icon>
+                                    🧍🏼‍♀️
+                                </Icon>
+                            </IconView>
+                            <CategoryText>
+                                신체
+                            </CategoryText>
+                        </CategoryView>
+
+                        <CategoryView>
+                            <IconView>
+                                <Icon>
+                                    🔥
+                                </Icon>
+                            </IconView>
+                            <CategoryText>
+                                운동
+                            </CategoryText>
+                        </CategoryView>
+
+                        <CategoryView>
+                            <IconView>
+                                <Icon>
+                                    💧
+                                </Icon>
+                            </IconView>
+                            <CategoryText>
+                                물
+                            </CategoryText>
+                        </CategoryView>
+                    </RowView>
+
+
+
+                    <CloseBtnView
+                        onPress={()=>{goBack()}}
+                    >
+                        <CloseBtn
+                            source={require('../../assets/TabThird_sel.png')}
+                        />
+                    </CloseBtnView>
+                </BottomView>
+            </BlurView>
+            
+
         </Container>
 
     )
@@ -35,8 +117,70 @@ const ImageUpload = ({navigation}: Props) => {
 const Container = styled.SafeAreaView`
     width: ${ScreenWidth}px;
     height: ${ScreenHeight}px;
-    background-color: ${CommonSetting.color.background_dark};
-    background-color: #31a3d8;
 `
+const RowView = styled.View`
+    flex-direction: row;
+    width: ${ScreenWidth*0.22*4}px;
+    justify-content: space-between;
+    margin-top: 26px;
+    /* background-color: aqua; */
+`
+const UploadImg = styled.Image`
+    width: 200px;
+    height: 200px;
+`
+const BottomView = styled.SafeAreaView`
+    width: ${ScreenWidth}px;
+    height: 200px;
+    background-color: ${CommonSetting.color.darkBtn};
+    align-items: center;
+    position: absolute;
+    bottom: 0px;
+`
+const CloseBtnView = styled.TouchableOpacity`
+    position: absolute;
+    bottom: 42px;
+`
+const CloseBtn = styled.Image`
+    width: 25px;
+    height: 25px;
+`
+const CategoryView = styled.TouchableOpacity`
+    width: ${ScreenWidth*0.18}px;
+    height: ${ScreenWidth*0.18}px;
+    align-items: center;
+    justify-content: center;
+    /* background-color: orange; */
+`
+const IconView = styled.View`
+    width: ${ScreenWidth*0.11}px;
+    height: ${ScreenWidth*0.11}px;
+    border-radius: 50px;
+    border-color: ${CommonSetting.color.borderColor};
+    border-width: 1px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+`
+const Icon = styled.Text`
+    font-size: 22px;
+`
+const CategoryText = styled.Text`
+    font-size: 16px;
+    color: white;
+`
+
+
+const styles = StyleSheet.create({
+    absolute : {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        height: ScreenHeight,
+        width: ScreenWidth
+    }
+})
 
 export default ImageUpload;

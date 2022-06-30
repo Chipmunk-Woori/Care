@@ -34,6 +34,7 @@ import TerminatedPage from './page/TerminatedPage';
 import SurvivalPage from './page/SurvivalPage';
 
 import ImageUpload from './presentational/ImageUpload';
+import ImageUploadContainer from './container/ImageUploadContainer';
 
 
 const Stack = createNativeStackNavigator();
@@ -52,7 +53,7 @@ const TabFirstStackScreen = ({navigation, route}: any) => {
             />
             <TabFirstStack.Screen
                 name="ImageUpload0"
-                component={ImageUpload}
+                component={ImageUploadContainer}
                 options={{
                     headerShown: false,
                     presentation: "transparentModal"
@@ -95,7 +96,7 @@ const TabSecondStackScreen = ({navigation, route}: any) => {
             /> 
             <TabSecondStack.Screen
                 name="ImageUpload1"
-                component={ImageUpload}
+                component={ImageUploadContainer}
                 options={{
                     headerShown: false,
                     presentation: "transparentModal"
@@ -121,7 +122,7 @@ const TabThirdStackScreen = ({navigation, route}: any) => {
             />
             <TabThirdStack.Screen 
                 name="ImageUpload2"
-                component={ImageUpload}
+                component={ImageUploadContainer}
                 options={{
                     headerShown: false,
                     presentation: "transparentModal"
@@ -145,7 +146,7 @@ const TabFourthStackScreen = ({navigation, route}: any) => {
             />
             <TabFourthStack.Screen
                 name="ImageUpload3"
-                component={ImageUpload}
+                component={ImageUploadContainer}
                 options={{
                     headerShown: false,
                     presentation: "transparentModal"
@@ -168,7 +169,7 @@ const TabFifthStackScreen = ({navigation, route}: any) => {
             />
             <TabFifthStack.Screen
                 name="ImageUpload4"
-                component={ImageUpload}
+                component={ImageUploadContainer}
                 options={{
                     headerShown: false,
                     presentation: "transparentModal"
