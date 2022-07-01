@@ -1,13 +1,12 @@
 import React, {useRef, useState, useEffect} from "react";
-import {View, Text, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
+import {View, Text, Modal, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { BlurView, VibrancyView } from "@react-native-community/blur";
-
-
+import ImageUploadBody from "../ImageUploadBody";
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
@@ -21,6 +20,9 @@ interface Props {
 
 
 const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
+
+    const [optionState, setOptionState] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
 
     const Images = () => {
         if (uploadImages.length > 0) {
@@ -37,6 +39,44 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
         }
     }
 
+    const closeOption = () => {
+        setOptionState(false)
+    }
+
+    const option = () => {
+        
+        if (selectedOption === '식단') {
+
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={optionState}
+                    onRequestClose={() => {
+                        setOptionState(false)
+                    }}
+                >
+                    <ImageUploadBody closeOption={closeOption}/>
+                </Modal>
+            )
+        } else if (selectedOption === '신체') {
+
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={optionState}
+                    onRequestClose={() => {
+                        setOptionState(false)
+                    }}
+                >
+                    <ImageUploadBody closeOption={closeOption}/>
+                </Modal>
+            )
+        }
+        
+    }
+
 
 
     return(
@@ -51,7 +91,12 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                 <BottomView>
 
                     <RowView>
-                        <CategoryView>
+                        <CategoryView
+                            onPress={() => {
+                                setSelectedOption('식단');
+                                setOptionState(true);
+                            }}
+                        >
                             <IconView>
                                 <Icon>
                                     🍽
@@ -62,7 +107,12 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                             </CategoryText>
                         </CategoryView>
 
-                        <CategoryView>
+                        <CategoryView
+                            onPress={() => {
+                                setSelectedOption('신체');
+                                setOptionState(true);
+                            }}
+                        >
                             <IconView>
                                 <Icon>
                                     🧍🏼‍♀️
@@ -106,6 +156,8 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                         />
                     </CloseBtnView>
                 </BottomView>
+
+                {option()}
             </BlurView>
             
 

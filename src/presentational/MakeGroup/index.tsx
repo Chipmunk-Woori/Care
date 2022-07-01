@@ -499,7 +499,7 @@ const AddedCondition = styled.TextInput`
     font-size: 14px;
     font-weight: 500;
 `
-const AddedConditionText = styled.TextInput`
+const AddedConditionText = styled.Text`
     color: white;
     font-size: 14px;
     font-weight: 500;
