@@ -14,7 +14,10 @@ interface Props {
 const FinalBtn = ({func, text, marginTop, marginBottom, backgroundColor}: Props) => {
     return(
         <BtnBack>
-            <Btn onPress={() => {func()}}>
+            <Btn 
+                style={{backgroundColor: backgroundColor ? backgroundColor : 'rgb(48,48,62)'}}
+                onPress={() => {func()}}
+            >
                 <BtnText>
                     {text}
                 </BtnText>

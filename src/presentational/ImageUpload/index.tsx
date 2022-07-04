@@ -2,11 +2,11 @@ import React, {useRef, useState, useEffect} from "react";
 import {View, Text, Modal, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
-import BasicText from '../../component/BasicText';
-import TitleText from "../../component/TitleText";
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { BlurView, VibrancyView } from "@react-native-community/blur";
 import ImageUploadBody from "../ImageUploadBody";
+import ImageUploadDiet from "../ImageUploadDiet";
+import ImageUploadExercise from "../ImageUploadExercise";
+import ImageUploadWater from "../ImageUploadWater";
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
@@ -56,7 +56,7 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                         setOptionState(false)
                     }}
                 >
-                    <ImageUploadBody closeOption={closeOption}/>
+                    <ImageUploadDiet closeOption={closeOption} goBack={goBack}/>
                 </Modal>
             )
         } else if (selectedOption === '신체') {
@@ -70,7 +70,35 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                         setOptionState(false)
                     }}
                 >
-                    <ImageUploadBody closeOption={closeOption}/>
+                    <ImageUploadBody closeOption={closeOption} goBack={goBack}/>
+                </Modal>
+            )
+        } else if (selectedOption === '운동') {
+
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={optionState}
+                    onRequestClose={() => {
+                        setOptionState(false)
+                    }}
+                >
+                    <ImageUploadExercise closeOption={closeOption} goBack={goBack}/>
+                </Modal>
+            )
+        } else if (selectedOption === '물') {
+
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={optionState}
+                    onRequestClose={() => {
+                        setOptionState(false)
+                    }}
+                >
+                    <ImageUploadWater closeOption={closeOption} goBack={goBack}/>
                 </Modal>
             )
         }
@@ -123,7 +151,12 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                             </CategoryText>
                         </CategoryView>
 
-                        <CategoryView>
+                        <CategoryView
+                            onPress={() => {
+                                setSelectedOption('운동');
+                                setOptionState(true);
+                            }}
+                        >
                             <IconView>
                                 <Icon>
                                     🔥
@@ -134,7 +167,12 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                             </CategoryText>
                         </CategoryView>
 
-                        <CategoryView>
+                        <CategoryView
+                            onPress={() => {
+                                setSelectedOption('물');
+                                setOptionState(true);
+                            }}
+                        >
                             <IconView>
                                 <Icon>
                                     💧

@@ -1,0 +1,41 @@
+[
+    {
+        "date" : "2022-06-30",
+        "weight" : 41,
+        "muscle" : "",
+        "fatPercent" : "",
+        "img" : "",
+        "memo" : "",
+        "condition" : "",
+        "bedTime" : "",
+        "wakeUpTitme" : "",
+        "toilet" : "",
+        "menstruation" : ""
+    },
+    {
+        "date" : "2022-07-01",
+        "weight" : 41,
+        "muscle" : "",
+        "fatPercent" : "",
+        "img" : "",
+        "memo" : "",
+        "condition" : "",
+        "bedTime" : "",
+        "wakeUpTitme" : "",
+        "toilet" : "",
+        "menstruation" : ""
+    },
+    {
+        "date" : "2022-07-02",
+        "weight" : 41.8,
+        "muscle" : "",
+        "fatPercent" : "",
+        "img" : "",
+        "memo" : "",
+        "condition" : "",
+        "bedTime" : "",
+        "wakeUpTitme" : "",
+        "toilet" : "",
+        "menstruation" : ""
+    }
+]

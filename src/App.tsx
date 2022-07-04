@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -35,6 +35,8 @@ import SurvivalPage from './page/SurvivalPage';
 
 import ImageUpload from './presentational/ImageUpload';
 import ImageUploadContainer from './container/ImageUploadContainer';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RecordBody from "./common/RecordBody.json";
 
 
 const Stack = createNativeStackNavigator();
@@ -182,6 +184,19 @@ const TabFifthStackScreen = ({navigation, route}: any) => {
 
 
 const App = () => {
+
+    const recordBody = async () => {
+        try {
+            const jsonValue = JSON.stringify(RecordBody);
+            AsyncStorage.setItem('recordBody', jsonValue);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        recordBody()
+    },[])
 
 
     return (

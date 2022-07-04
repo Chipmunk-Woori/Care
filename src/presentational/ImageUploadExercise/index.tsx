@@ -19,13 +19,13 @@ interface Props {
     goBack: () => any;
 }
 
-const ImageUploadBody = ({closeOption, goBack}: Props) => {
+const ImageUploadExercise = ({closeOption, goBack}: Props) => {
     
-    const [weight, setWeight] = useState('');
-    const [muscle, setMuscle] = useState('');
-    const [fatPercent, setFatPercent] = useState('');
-    const [memo, setMemo] = useState('');
     const [uploadImage, setUploadImge] = useState<any>();
+    const [title, setTitle] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [time, setTime] = useState("");
+    const [memo, setMemo] = useState("");
 
     const [year, setYear] = useState(0);
     const [month, setMonth] = useState<string|number>(0);
@@ -88,61 +88,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
         }
     }
 
-    const save = async () => {
-        try {
-            //기존 recordBody 데이터 받아옴
-            const value = await AsyncStorage.getItem('recordBody');
-
-            //입력 데이터 - date
-            let todayDate = `${year}-${month}-${date}`;
-
-            //입력 데이터
-            let input = {
-                "date" : todayDate,
-                "weight" : weight,
-                "muscle" : muscle,
-                "fatPercent" : fatPercent,
-                "img" : uploadImage,
-                "memo" : "",
-                "condition" : "",
-                "bedTime" : "",
-                "wakeUpTitme" : "",
-                "toilet" : "",
-                "menstruation" : ""
-            }
-
-            //입력 데이터 추가해서 setItem
-            let valueArr = []; 
-            let duplication = false;
-
-            if (value !== null) {
-                valueArr = JSON.parse(value);
-            } else {
-                console.log('recordBoy 비어있음')
-            }
-
-            //중복 체크
-            valueArr.map((item :any) => {
-                if (item.date == todayDate) {
-                    duplication = true
-                }
-            })
-
-            if (duplication == false) {
-                valueArr.push(input);
     
-                let newValueArr = JSON.stringify(valueArr);
-                AsyncStorage.setItem('recordBody', newValueArr);
-
-                //확인
-                console.log(newValueArr);
-            }
-
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     useEffect(() => {
         let today = new Date();
@@ -172,7 +118,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
 
                 <HeaderView>
                     <HeaderText>
-                        {year}년 {month}월 {date}일 신체
+                        {year}년 {month}월 {date}일 운동
                     </HeaderText>
 
                     <TouchableOpacity
@@ -186,69 +132,94 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                 </HeaderView>
 
                 <TitleText marginBottom={15}>
-                    신체 기록
+                    오늘의 사진으로 추가
                 </TitleText>
 
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
-                        체중
+                        운동 제목
                     </DetailOption>
 
                     <RowView>
                         <AddedCondition
-                            value={weight}
-                            onChangeText={setWeight}
+                            value={title}
+                            onChangeText={setTitle}
+                            placeholder={`${month}월 ${date}일 운동`}
+                            placeholderTextColor={CommonSetting.color.borderColor}
+                            style={{color:'white',fontSize:20}}
+                        />
+                        <AddedConditionText>
+                            
+                        </AddedConditionText>
+                    </RowView>
+                </View>
+
+
+                <View style={{marginBottom: 10}}>
+                    <DetailOption>
+                        운동 시작 시간
+                    </DetailOption>
+
+                    <RowView>
+                        <AddedCondition
+                            value={startTime}
+                            onChangeText={setStartTime}
                             placeholder={'0'}
                             placeholderTextColor={CommonSetting.color.borderColor}
                             style={{color:'white'}}
                         />
                         <AddedConditionText>
-                            {`   `}kg
+                            
                         </AddedConditionText>
                     </RowView>
                 </View>
 
+
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
-                        골격근량
+                        운동 시간
                     </DetailOption>
 
                     <RowView>
                         <AddedCondition
-                            value={muscle}
-                            onChangeText={setMuscle}
+                            value={time}
+                            onChangeText={setTime}
                             placeholder={'0'}
                             placeholderTextColor={CommonSetting.color.borderColor}
                             style={{color:'white'}}
                         />
                         <AddedConditionText>
-                            {`   `}kg
+                            
                         </AddedConditionText>
                     </RowView>
                 </View>
 
+
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
-                        체지방률
+                        내용
                     </DetailOption>
 
                     <RowView>
                         <AddedCondition
-                            value={fatPercent}
-                            onChangeText={setFatPercent}
-                            placeholder={'0'}
+                            value={memo}
+                            onChangeText={setMemo}
+                            placeholder={'운동 내용을 입력해주세요'}
                             placeholderTextColor={CommonSetting.color.borderColor}
                             style={{color:'white'}}
                         />
                         <AddedConditionText>
-                            {`   `}%
+                            
                         </AddedConditionText>
                     </RowView>
                 </View>
 
+
+                <Line />
+
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
-                        눈바디
+                        사진
                     </DetailOption>
 
 
@@ -268,31 +239,14 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                     </RowView>
                 </View>
 
-                <Line />
-
-                <TitleText marginBottom={15}>
-                    메모
-                </TitleText>
-
-                <AddedCondition
-                    value={memo}
-                    onChangeText={setMemo}
-                    placeholder={'기분, 컨디션, 몸 상태 등을 자유롭게 입력해 주세요'}
-                    placeholderTextColor={CommonSetting.color.borderColor}
-                    style={{color:'white'}}
-                />
-
-
-
-
             </Scroll>
 
 
-           
+            
             <PaddingView>
                 <FinalBtn 
                     func={()=>{
-                        save();
+                        // save();
                         goBack();
                     }}
                     text={'저장하기'}
@@ -390,4 +344,4 @@ const Line = styled.View`
     margin-top: 15px;
     margin-bottom: 18px;
 `
-export default ImageUploadBody;
+export default ImageUploadExercise;
