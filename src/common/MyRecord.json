@@ -1,0 +1,25 @@
+[
+    {
+        "date" : "2022-07-06",
+        "diet" : [
+            
+        ],
+        "body" : [
+            {
+                "date" : "2022-07-06",
+                "weight" : "41",
+                "muscle" : "",
+                "fatPercent" : "",
+                "img" : "",
+                "memo" : "",
+                "condition" : "",
+                "bedTime" : "",
+                "wakeUpTitme" : "",
+                "toilet" : "",
+                "menstruation" : ""
+            }
+        ],
+        "exercise" : [],
+        "water" : []
+    }
+]

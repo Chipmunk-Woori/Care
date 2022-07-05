@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 
 interface Props {
-    title: string,
+    title?: string,
     icon?: any
 }
 

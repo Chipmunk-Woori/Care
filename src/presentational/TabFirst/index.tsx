@@ -5,7 +5,9 @@ import CommonSetting from '../../common/CommonSetting';
 import TopTitle from '../../component/TopTitle';
 import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calendars';
 import BasicText from "../../component/BasicText";
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import BasicTextBig from "../../component/BasicTextBig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useIsFocused} from '@react-navigation/native';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
@@ -24,7 +26,9 @@ const TabFirst = () => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
-    
+    const [selectedYear, setSelectedYear] = useState<number|string>();
+    const [selectedMonth, setSelectedMonth] = useState<number|string>();
+    const isFocused = useIsFocused();
 
     //상단 아이콘
     const topTitleIcon = [
@@ -39,11 +43,7 @@ const TabFirst = () => {
         {
             img: require('../../assets/palette.png'),
             func: () => {console.log('세번째')}
-        },
-        {
-            img: require('../../assets/TabThird.png'),
-            func: () => {}
-        },
+        }
     ]
 
     //'식단' 내용
@@ -119,9 +119,30 @@ const TabFirst = () => {
             )
         } else if (selectedCategory === 2) {
             return(
-                <View>
-                    
-                </View>
+                <BodyView>
+                    <RowView>
+                        <Icon>
+                            🧍🏼‍♀️
+                        </Icon>
+                        <View>
+                            <BasicTextBig marginBottom={10}>
+                                신체 
+                            </BasicTextBig>
+                            <BasicText marginBottom={5}>
+                                체중      kg
+                            </BasicText>
+                            <BasicText>
+                                골격근량    kg
+                            </BasicText>
+                        </View>
+                    </RowView>
+
+                    <TouchableOpacity>
+                        <Modify
+                            source={require('../../assets/more.png')}
+                        />
+                    </TouchableOpacity>
+                </BodyView>
             )
         }
     }
@@ -156,7 +177,14 @@ const TabFirst = () => {
     }
 
 
-
+    //내 기록 데이터 받아오기
+    const myRecord = async () => {
+        try {
+            const value = await AsyncStorage.getItem('MyRecord');
+        } catch (e) {
+            console.log(e)
+        }
+    } 
 
 
     useEffect(() => {
@@ -167,12 +195,13 @@ const TabFirst = () => {
         
         let todayString = `${year}-${month}-${date}`;
         setTodayDate(todayString);
+        setSelectedYear(year);
+        setSelectedMonth(month);
 
 
         let temp = {
             [todayString] : {
                 selected: true,
-                // marked: true,
                 customStyles: {
                     container: {
                         backgroundColor: CommonSetting.color.point,
@@ -191,24 +220,25 @@ const TabFirst = () => {
         setPressedDate(temp);
     },[])
 
+
+    useEffect(() => {
+        if (isFocused === true) {
+            myRecord();
+        }
+    },[isFocused])
+
+
+
     return(
-        <Container style={{paddingHorizontal: CommonSetting.screenPaddingHorizontal}}>
+        <Container>
 
             <PaddingView>
                 <TopTitle
-                    title={'2022년 5월'}
+                    title={`${selectedYear}년 ${selectedMonth}월`}
                     icon={topTitleIcon}
                 />
 
-                <CalendarBtn
-                    onPress={() => {}}
-                > 
-                    <ArrowBtn
-                        source={require('../../assets/arrow_down.png')}
-                    />
-                </CalendarBtn>
-                
-
+            
                 {/* <Calendar
                     // minDate={todayDate}
                     monthFormat={'yyyy년 MM월'}
@@ -260,61 +290,71 @@ const TabFirst = () => {
                     disableAllTouchEventsForDisabledDays={true}
                 /> */}
 
-            
-                    {/* <CalendarContainer> */}
-                        {/* <CalendarList
-                            horizontal={true}
-                            pagingEnabled={true}
-                            calendarWidth={screenWidth}
-                            monthFormat={''}
-                            markingType={'custom'}
-                            markedDates={pressedDate}
-                            onDayPress={day => {
-                                let temp = {
-                                    [day.dateString] : {
-                                        selected: true,
-                                        // marked: true,
-                                        customStyles: {
-                                            container: {
-                                                backgroundColor: CommonSetting.color.point,
-                                                borderRadius: 15,
-                                                borderColor: CommonSetting.color.point,
-                                                borderWidth: 1,
-                                                alignItems: 'center',
-                                                justifyContents: 'center',
-                                            },
-                                            text: {
-                                                color: '#ffffff',
-                                            }
-                                        }
+            </PaddingView>
+
+
+            <CalendarContainer>
+                <CalendarList
+                    horizontal={true}
+                    pagingEnabled={true}
+                    calendarWidth={screenWidth}
+                    monthFormat={''}
+                    markingType={'custom'}
+                    markedDates={pressedDate}
+                    onVisibleMonthsChange={(months) => {
+                        let year = months[0].year;
+                        let month = months[0].month;
+                        setSelectedYear(year);
+                        setSelectedMonth(month);
+                    }}
+                    onDayPress={day => {
+                        let temp = {
+                            [day.dateString] : {
+                                selected: true,
+                                customStyles: {
+                                    container: {
+                                        backgroundColor: CommonSetting.color.point,
+                                        borderRadius: 15,
+                                        borderColor: CommonSetting.color.point,
+                                        borderWidth: 1,
+                                        alignItems: 'center',
+                                        justifyContents: 'center',
+                                    },
+                                    text: {
+                                        color: '#ffffff',
                                     }
                                 }
-                                setPressedDate(temp);
-                            }}
-                            theme={{
-                                backgroundColor: '#ffffff',
-                                textSectionTitleColor: '#666666', //요일 색
-                                selectedDayTextColor: '#ffffff',
-                                todayTextColor: '#666666',
-                                dayTextColor: '#666666', 
-                                monthTextColor: '#ffffff',
-                                textDisabledColor: '#bbbbbb',
-                                textDayFontWeight: '400',
-                                textDayFontSize: 13,
-                                textMonthFontSize: 0,
-                                textDayHeaderFontSize: 13,
-                                // textDisabledColor: '#d9e1e8',
-                            }}
-                        /> */}
-                    {/* </CalendarContainer> */}
-            
+                            }
+                        }
+                        setPressedDate(temp);
 
-                <View style={{backgroundColor:'rgba(64, 64, 77, 0.5)', height: 60, marginBottom: 15}}/>
+                        console.log(day);
+                    }}
+                    theme={{
+                        calendarBackground: CommonSetting.color.background_dark, //달력 배경색
+                        textSectionTitleColor: '#ffffff', //요일 색
+                        selectedDayTextColor: '#ffffff',
+                        todayTextColor: '#ffffff',
+                        dayTextColor: '#ffffff', 
+                        monthTextColor: '#ffffff',
+                        textDisabledColor: '#bbbbbb',
+                        textDayFontWeight: '400',
+                        textDayFontSize: 13,
+                        textMonthFontSize: 0, //월
+                        textDayHeaderFontSize: 13 //요일 크기
+                    }}
+                />
+            </CalendarContainer>
 
+
+
+            <PaddingView>
+                
                 <CategoryBackView> 
 
                     <CategoryView
                         onPress={() => {setSelectedCategory(1)}}
+                        style={{backgroundColor: selectedCategory === 2 ? 'rgba(64, 64, 77, 1)' : CommonSetting.color.background_dark}}
                     >
                         <CategoryText>
                             식단
@@ -323,6 +363,7 @@ const TabFirst = () => {
 
                     <CategoryView
                         onPress={() => {setSelectedCategory(2)}}
+                        style={{backgroundColor: selectedCategory === 1 ? 'rgba(64, 64, 77, 1)' : CommonSetting.color.background_dark}}
                     >
                         <CategoryText>
                             신체 & 운동
@@ -334,6 +375,8 @@ const TabFirst = () => {
                 {categoryContents()}
  
             </PaddingView>
+
+
             
         </Container>
     )
@@ -353,18 +396,18 @@ const RowView = styled.View`
 `
 const CalendarContainer = styled.View`
     width: 100%;
-    height: ${CalendarHeight}px;
     background-color: ${CommonSetting.color.background_dark};
-    top: 0px;
+    background-color: orange;
 `
 const CalendarBtn = styled.TouchableOpacity`
     width: 30%;
     height: 45px;
     position: absolute;
+    z-index: 100;
     left: 20px;
     top: 50px;
     justify-content: center;
-    /* background-color: bisque; */
+    background-color: red;
 `
 const ArrowBtn = styled.Image`
     width: 20px;
@@ -395,7 +438,7 @@ const CategoryView = styled.TouchableOpacity`
 `
 const CategoryText = styled.Text`
     color: white;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
 `
 const DietBtnView = styled.TouchableOpacity`
@@ -431,53 +474,22 @@ const NextIcon = styled.Image`
     width: 15px;
     height: 15px;
 `
-
-
-const styles = StyleSheet.create({
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22,
-      backgroundColor:'lavender'
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5
-    },
-    button: {
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2
-    },
-    buttonOpen: {
-      backgroundColor: "#F194FF",
-    },
-    buttonClose: {
-      backgroundColor: "#2196F3",
-    },
-    textStyle: {
-      color: "white",
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    }
-  });
-
+const BodyView = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom-color: white;
+    border-bottom-width: 0.3px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+`
+const Icon = styled.Text`
+    font-size: 35px;
+    margin-right: 10px;
+`
+const Modify = styled.Image`
+    width: 15px;
+    height: 15px;
+`
  
 
 export default TabFirst;

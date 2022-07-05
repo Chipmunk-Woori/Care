@@ -5,6 +5,7 @@ import CommonSetting from '../../common/CommonSetting';
 import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import {useIsFocused} from '@react-navigation/native';
 
 
 interface Props {
@@ -24,6 +25,7 @@ const Group = ({moveTo, newGroups}: Props) => {
     let carouselRef = useRef(null);
     const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
     const tempData = ['MyGroup', 'Group'];
+    const isFocused = useIsFocused();
 
 
 
@@ -90,14 +92,20 @@ const Group = ({moveTo, newGroups}: Props) => {
         let singleView = null;
         let totalView :any[] = [];
 
+       
         item.map((i:any, index:any) => {
             singleView = groupSingleView(i, index);
             totalView.push(singleView);
         })
-
         item = totalView;
 
+        
+
         return item;
+
+        
+        
+
 
     }
 
@@ -112,13 +120,11 @@ const Group = ({moveTo, newGroups}: Props) => {
 
                 if (index % 3 == 0) {
                     let singleArr = [];
-
-                    
+ 
                     if(index <= lastIndex) {
                         let first = newGroups[index];
                         singleArr.push(first)
                     }
-                    
                     
                     if(index+1 <= lastIndex) {
                         let second = newGroups[index+1];
@@ -131,16 +137,20 @@ const Group = ({moveTo, newGroups}: Props) => {
                     }
 
                     totalArr.push(singleArr)
-
                 }
 
             })
-        
-            setNewGroupArr(totalArr);
 
+            setNewGroupArr(totalArr);
+        
+
+        } else {
+            console.log('newGroup 없음')
         }
 
     },[newGroups])
+
+
 
 
     const renderScreen = ({item, index}: any) => {
@@ -232,7 +242,7 @@ const Group = ({moveTo, newGroups}: Props) => {
     
                     <View style={{height:15}} />
     
-    
+                    {/* 여기 할 차례 : flatlist 랑 carousel 가로 터치가 겹치는 문제 해결하기 */}
                     <Carousel
                         ref={(ref:any) => { carouselRef = ref }}
                         data={newGroupArr}

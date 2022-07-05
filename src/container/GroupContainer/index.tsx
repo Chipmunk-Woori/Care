@@ -4,9 +4,9 @@ import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Group from '../../presentational/Group';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 
 interface Props {
     navigation: any;
@@ -15,6 +15,7 @@ interface Props {
 const GroupContainer = ({navigation}: Props) => {
 
     const [newGroups, setNewGroups] = useState([]);
+    const isFocused = useIsFocused();
 
     const moveTo = (screen: any) => {
         navigation.push(screen);
@@ -37,8 +38,11 @@ const GroupContainer = ({navigation}: Props) => {
 
 
     useEffect(() => {
-        getNewGroups();
-    },[])
+        if (isFocused === true) {
+            getNewGroups();
+        }
+    },[isFocused])
+    
 
     return(
         <>

@@ -37,6 +37,7 @@ import ImageUpload from './presentational/ImageUpload';
 import ImageUploadContainer from './container/ImageUploadContainer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RecordBody from "./common/RecordBody.json";
+import MyRecord from "./common/MyRecord.json";
 
 
 const Stack = createNativeStackNavigator();
@@ -194,8 +195,18 @@ const App = () => {
         }
     }
 
+    const myRecord = async () => {
+        try {
+            const jsonValue = JSON.stringify(MyRecord);
+            AsyncStorage.setItem('MyRecord', jsonValue);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
-        recordBody()
+        recordBody();
+        myRecord();
     },[])
 
 

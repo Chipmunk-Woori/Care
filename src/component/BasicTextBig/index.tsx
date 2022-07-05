@@ -8,18 +8,16 @@ interface Props {
     marginBottom? : number;
 }
 
-const BasicText = ({children, marginTop, marginBottom}: Props) => {
+const BasicTextBig = ({children, marginTop, marginBottom}: Props) => {
     return(
         <>
             <Text 
                 style={{
-                    fontSize: 15, 
-                    color: 'white', 
-                    fontWeight: '600',
+                    fontSize: 16, 
+                    color: 'white',
                     marginTop: marginTop ? marginTop : 0,
                     marginBottom: marginBottom ? marginBottom : 0,
-                }
-            }>
+                }}>
                 {children}
             </Text>
         </>
@@ -27,4 +25,4 @@ const BasicText = ({children, marginTop, marginBottom}: Props) => {
 }
 
 
-export default BasicText;
+export default BasicTextBig;
