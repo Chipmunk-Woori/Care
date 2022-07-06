@@ -25,11 +25,13 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
     const [muscle, setMuscle] = useState('');
     const [fatPercent, setFatPercent] = useState('');
     const [memo, setMemo] = useState('');
-    const [uploadImage, setUploadImge] = useState<any>();
+    const [uploadImage, setUploadImage] = useState<any>();
 
     const [year, setYear] = useState(0);
     const [month, setMonth] = useState<string|number>(0);
     const [date, setDate] = useState<string|number>(0);
+
+    const [reload, setReload] = useState(false);
 
 
     const imageSelector = async () => {
@@ -58,7 +60,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
             mediaType: 'photo'
         }).then(image => {
             let temp = image.path;
-            setUploadImge(temp);
+            setUploadImage(temp);
         })
     }
 
@@ -89,60 +91,89 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
     }
 
     const save = async () => {
-        try {
-            //기존 recordBody 데이터 받아옴
-            const value = await AsyncStorage.getItem('recordBody');
+       
+        //기존 recordBody 데이터 받아옴
+        const value = await AsyncStorage.getItem('MyRecord');
+        const selectedDate = await AsyncStorage.getItem('selectedDate');
 
-            //입력 데이터 - date
-            let todayDate = `${year}-${month}-${date}`;
+        console.log("💎" + selectedDate);
 
-            //입력 데이터
-            let input = {
-                "date" : todayDate,
-                "weight" : weight,
-                "muscle" : muscle,
-                "fatPercent" : fatPercent,
-                "img" : uploadImage,
-                "memo" : "",
-                "condition" : "",
-                "bedTime" : "",
-                "wakeUpTitme" : "",
-                "toilet" : "",
-                "menstruation" : ""
-            }
+        //입력 데이터 - date
+        let todayDate = `${year}-${month}-${date}`;
 
-            //입력 데이터 추가해서 setItem
-            let valueArr = []; 
-            let duplication = false;
+        //입력 데이터
+        let input = {
+            "date" : selectedDate,
+            "weight" : weight,
+            "muscle" : muscle,
+            "fatPercent" : fatPercent,
+            "img" : uploadImage,
+            "memo" : memo,
+            "condition" : "",
+            "bedTime" : "",
+            "wakeUpTitme" : "",
+            "toilet" : "",
+            "menstruation" : ""
+        }
 
-            if (value !== null) {
-                valueArr = JSON.parse(value);
-            } else {
-                console.log('recordBoy 비어있음')
-            }
+        //입력 데이터 추가해서 setItem
+        let valueArr :any[] = []; 
+        let duplication = false;
 
-            //중복 체크
-            valueArr.map((item :any) => {
-                if (item.date == todayDate) {
-                    duplication = true
+        if (value !== null) {
+            valueArr = JSON.parse(value);
+        } else {
+            console.log('MyRecord 비어있음')
+        }
+
+        //중복 체크
+        if(valueArr.length > 0) {
+            valueArr.map( async (item :any) => {
+                if (item.date == selectedDate) {
+                    duplication = true;
+
+                    //중복 있으면 해당 날짜에 body값 넣기
+                    item["body"] = input;
+                    let newValueArr = JSON.stringify(valueArr);
+                    await AsyncStorage.setItem('MyRecord', newValueArr);
                 }
             })
-
-            if (duplication == false) {
-                valueArr.push(input);
-    
-                let newValueArr = JSON.stringify(valueArr);
-                AsyncStorage.setItem('recordBody', newValueArr);
-
-                //확인
-                console.log(newValueArr);
-            }
-
-
-        } catch (e) {
-            console.log(e)
         }
+
+
+        if (duplication == false) {
+            //날짜 새로 생성
+            let newRecord = {
+                "date" : selectedDate,
+                "diet" : {},
+                "body" : input,
+                "exercise" : {},
+                "water" : {}
+            } 
+
+            valueArr.push(newRecord);
+
+            let newValueArr = JSON.stringify(valueArr);
+            await AsyncStorage.setItem('MyRecord', newValueArr);
+        }
+
+        setReload(!reload);
+
+        
     }
+
+
+    const getMyRecord = async () => {
+        console.log('🍯')
+        const value = await AsyncStorage.getItem('MyRecord');
+        
+    }
+
+    useEffect(() => {
+        getMyRecord();
+    },[reload])
+
+
 
     useEffect(() => {
         let today = new Date();
@@ -198,7 +229,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                         <AddedCondition
                             value={weight}
                             onChangeText={setWeight}
-                            placeholder={'0'}
+                            placeholder={'입력하기'}
                             placeholderTextColor={CommonSetting.color.borderColor}
                             style={{color:'white'}}
                         />
@@ -217,7 +248,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                         <AddedCondition
                             value={muscle}
                             onChangeText={setMuscle}
-                            placeholder={'0'}
+                            placeholder={'입력하기'}
                             placeholderTextColor={CommonSetting.color.borderColor}
                             style={{color:'white'}}
                         />
@@ -236,7 +267,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                         <AddedCondition
                             value={fatPercent}
                             onChangeText={setFatPercent}
-                            placeholder={'0'}
+                            placeholder={'입력하기'}
                             placeholderTextColor={CommonSetting.color.borderColor}
                             style={{color:'white'}}
                         />
@@ -293,7 +324,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                 <FinalBtn 
                     func={()=>{
                         save();
-                        goBack();
+                        // goBack();
                     }}
                     text={'저장하기'}
                     backgroundColor={'rgb(43,45,75)'}

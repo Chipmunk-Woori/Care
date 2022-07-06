@@ -177,16 +177,6 @@ const TabFirst = () => {
     }
 
 
-    //내 기록 데이터 받아오기
-    const myRecord = async () => {
-        try {
-            const value = await AsyncStorage.getItem('MyRecord');
-        } catch (e) {
-            console.log(e)
-        }
-    } 
-
-
     useEffect(() => {
         let today: (Date) = new Date();
         let year: (number | string) = today.getFullYear();
@@ -218,14 +208,29 @@ const TabFirst = () => {
             }
         }
         setPressedDate(temp);
+
+
+        initSelectedDate(today);
     },[])
 
 
-    useEffect(() => {
-        if (isFocused === true) {
-            myRecord();
-        }
-    },[isFocused])
+    const initSelectedDate = async (today :any) => {
+        let year: (number | string) = today.getFullYear();
+        let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
+        let date: (number | string) = ("0" + today.getDate()).slice(-2);
+        
+        let todayString = `${year}-${month}-${date}`;
+
+        await AsyncStorage.setItem('selectedDate', todayString);
+    }
+
+
+    const saveSelectedDate = async (selectedDate :string) => {
+        await AsyncStorage.setItem('selectedDate', selectedDate);
+    }
+
+
+
 
 
 
@@ -328,7 +333,7 @@ const TabFirst = () => {
                         }
                         setPressedDate(temp);
 
-                        console.log(day);
+                        saveSelectedDate(day.dateString);
                     }}
                     theme={{
                         calendarBackground: CommonSetting.color.background_dark, //달력 배경색

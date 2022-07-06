@@ -21,22 +21,24 @@ const MyGroupContainer = ({navigation}: Props) => {
 
 
     const getNewGroups = async () => {
-        try {
-            const value = await AsyncStorage.getItem('newGroups');
-            if (value !== null) {
-                let valueArr = JSON.parse(value);
-                setNewGroups(valueArr);
-            } else {
-                console.log('newGroups 가져오기 실패');             
-            }
-        } catch (e) {
-            console.log(e)
+       
+        const value = await AsyncStorage.getItem('newGroups');
+        if (value !== null) {
+            let valueArr = JSON.parse(value);
+            setNewGroups(valueArr);
+        } else {
+            console.log('newGroups 가져오기 실패');             
         }
+        
     }
 
 
     useEffect(() => {
-        getNewGroups();
+        try {
+            getNewGroups();
+        } catch (e) {
+            console.log(e)
+        }
     },[])
 
     return(

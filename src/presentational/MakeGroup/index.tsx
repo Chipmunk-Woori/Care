@@ -165,13 +165,7 @@ const MakeGroup = ({goBack} :Props) => {
         } 
     }
 
-    const storeData = async () => {
-        try {
-            await AsyncStorage.setItem('testSet', '👻 value 👻')
-        } catch (e) {
-            console.log(e)
-        }
-    }
+
 
     const getData = async () => {
         try {

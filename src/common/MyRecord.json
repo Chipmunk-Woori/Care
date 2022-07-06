@@ -1,12 +1,10 @@
 [
     {
-        "date" : "2022-07-06",
-        "diet" : [
-            
-        ],
-        "body" : [
+        "date" : "2022-07-05",
+        "diet" : {},
+        "body" : 
             {
-                "date" : "2022-07-06",
+                "date" : "2022-07-05",
                 "weight" : "41",
                 "muscle" : "",
                 "fatPercent" : "",
@@ -18,8 +16,8 @@
                 "toilet" : "",
                 "menstruation" : ""
             }
-        ],
-        "exercise" : [],
-        "water" : []
+        ,
+        "exercise" : {},
+        "water" : {}
     }
 ]

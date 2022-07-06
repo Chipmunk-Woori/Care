@@ -186,27 +186,18 @@ const TabFifthStackScreen = ({navigation, route}: any) => {
 
 const App = () => {
 
-    const recordBody = async () => {
-        try {
-            const jsonValue = JSON.stringify(RecordBody);
-            AsyncStorage.setItem('recordBody', jsonValue);
-        } catch (e) {
-            console.log(e)
-        }
+    const myRecord = async () => {
+        let myRecord = await AsyncStorage.getItem('MyRecord');
+        console.log("myRecord 확인해봅시당🌼" + myRecord)
     }
 
-    const myRecord = async () => {
-        try {
-            const jsonValue = JSON.stringify(MyRecord);
-            AsyncStorage.setItem('MyRecord', jsonValue);
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     useEffect(() => {
-        recordBody();
-        myRecord();
+        try {
+            myRecord();
+        } catch (e) {
+            console.log(e)
+        }
     },[])
 
 
