@@ -9,12 +9,7 @@
                 "muscle" : "",
                 "fatPercent" : "",
                 "img" : "",
-                "memo" : "",
-                "condition" : "",
-                "bedTime" : "",
-                "wakeUpTitme" : "",
-                "toilet" : "",
-                "menstruation" : ""
+                "memo" : ""
             }
         ,
         "exercise" : {},

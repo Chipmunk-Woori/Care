@@ -7,6 +7,7 @@ import ImageUploadBody from "../ImageUploadBody";
 import ImageUploadDiet from "../ImageUploadDiet";
 import ImageUploadExercise from "../ImageUploadExercise";
 import ImageUploadWater from "../ImageUploadWater";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
@@ -40,7 +41,7 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
     }
 
     const closeOption = () => {
-        setOptionState(false)
+        setOptionState(false);
     }
 
     const option = () => {
@@ -274,3 +275,5 @@ const styles = StyleSheet.create({
 })
 
 export default ImageUpload;
+
+

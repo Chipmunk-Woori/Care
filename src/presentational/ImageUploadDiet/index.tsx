@@ -25,7 +25,7 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
 
     const [year, setYear] = useState(0);
     const [month, setMonth] = useState<string|number>(0);
-    const [date, setDate] = useState<string|number>(0);
+    const [day, setDay] = useState<string|number>(0);
 
 
     const imageSelector = async () => {
@@ -102,7 +102,7 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
 
         setYear(todayYear);
         setMonth(todayMonth);
-        setDate(todayDate);
+        setDay(todayDate);
     },[])
 
     return(
@@ -114,7 +114,7 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
 
                 <HeaderView>
                     <HeaderText>
-                        {year}년 {month}월 {date}일
+                        {year}년 {month}월 {day}일
                     </HeaderText>
 
                     <TouchableOpacity

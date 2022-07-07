@@ -28,7 +28,7 @@ const ImageUploadWater = ({closeOption, goBack}: Props) => {
 
     const [year, setYear] = useState(0);
     const [month, setMonth] = useState<string|number>(0);
-    const [date, setDate] = useState<string|number>(0);
+    const [day, setDay] = useState<string|number>(0);
 
 
     const imageSelector = async () => {
@@ -93,19 +93,19 @@ const ImageUploadWater = ({closeOption, goBack}: Props) => {
         let today = new Date();
         let todayYear = today.getFullYear();
         let todayMonth : string|number = today.getMonth()+1;
-        let todayDate : string|number = today.getDate();
+        let todayDay : string|number = today.getDate();
 
         if (todayMonth < 10) {
             todayMonth = `0${todayMonth}`
         }
 
-        if (todayDate < 10) {
-            todayDate = `0${todayDate}`
+        if (todayDay < 10) {
+            todayDay = `0${todayDay}`
         }
 
         setYear(todayYear);
         setMonth(todayMonth);
-        setDate(todayDate);
+        setDay(todayDay);
     },[])
 
     return(
@@ -117,7 +117,7 @@ const ImageUploadWater = ({closeOption, goBack}: Props) => {
 
                 <HeaderView>
                     <HeaderText>
-                        {year}년 {month}월 {date}일 물
+                        {year}년 {month}월 {day}일 물
                     </HeaderText>
 
                     <TouchableOpacity

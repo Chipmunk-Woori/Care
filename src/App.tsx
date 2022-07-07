@@ -188,7 +188,7 @@ const App = () => {
 
     const myRecord = async () => {
         let myRecord = await AsyncStorage.getItem('MyRecord');
-        console.log("myRecord 확인해봅시당🌼" + myRecord)
+        console.log("myRecord 확인🌼" + myRecord)
     }
 
 

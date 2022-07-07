@@ -7,7 +7,6 @@ import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calenda
 import BasicText from "../../component/BasicText";
 import BasicTextBig from "../../component/BasicTextBig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useIsFocused} from '@react-navigation/native';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
@@ -19,8 +18,6 @@ interface Props {
 
 const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
-const CalendarHeight = screenHeight - 45;
-
 
 const TabFirst = () => {
     const [todayDate, setTodayDate] = useState('');
@@ -28,8 +25,17 @@ const TabFirst = () => {
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
     const [selectedYear, setSelectedYear] = useState<number|string>();
     const [selectedMonth, setSelectedMonth] = useState<number|string>();
-    const isFocused = useIsFocused();
+    const [selectedDate, setSelectedDate] = useState('');
 
+    const [weight, setWeight] = useState('');
+    const [muscle, setMuscle] = useState('');
+    const [fatPercent, setFatPercent] = useState('');
+    const [memo, setMemo] = useState('');
+    const [uploadImage, setUploadImage] = useState<any>();
+
+    const [record, setRecord] = useState<any[]>([]);
+    
+    
     //상단 아이콘
     const topTitleIcon = [
         {
@@ -104,6 +110,8 @@ const TabFirst = () => {
     LocaleConfig.defaultLocale = 'kr';
 
 
+
+
     //카테고리 내용 보여줌
     const categoryContents = () => {
         if (selectedCategory === 1) {
@@ -118,7 +126,9 @@ const TabFirst = () => {
                 </View>
             )
         } else if (selectedCategory === 2) {
-            return(
+
+
+            return (
                 <BodyView>
                     <RowView>
                         <Icon>
@@ -128,25 +138,43 @@ const TabFirst = () => {
                             <BasicTextBig marginBottom={10}>
                                 신체 
                             </BasicTextBig>
-                            <BasicText marginBottom={5}>
-                                체중      kg
-                            </BasicText>
-                            <BasicText>
-                                골격근량    kg
-                            </BasicText>
+    
+                            {
+                                weight !== '' &&
+                                    (<BasicText marginBottom={5}>
+                                        체중 {weight} kg
+                                    </BasicText>)
+                            }
+                            {
+                                muscle !== '' &&
+                                    (<BasicText marginBottom={5}>
+                                        골격근량 {muscle} kg
+                                    </BasicText>)
+                            }
+                            {
+                                fatPercent !== '' &&
+                                    (<BasicText marginBottom={5}>
+                                        체지방률 {fatPercent} %
+                                    </BasicText>)
+                            }
+                            {
+                                memo !== '' &&
+                                    (<BasicText marginBottom={5}>
+                                        메모 {memo} 
+                                    </BasicText>)
+                            }
                         </View>
                     </RowView>
-
+    
                     <TouchableOpacity>
                         <Modify
                             source={require('../../assets/more.png')}
                         />
                     </TouchableOpacity>
                 </BodyView>
-            )
+            ) 
         }
     }
-
 
 
     const dietBtn = ({item, index}: any) => {
@@ -177,13 +205,74 @@ const TabFirst = () => {
     }
 
 
+    const getMyRecord = async () => {
+        let myRecord = await AsyncStorage.getItem('MyRecord');
+
+        if (myRecord !== null) {
+            let myRecordArr = JSON.parse(myRecord);
+            setRecord(myRecordArr);
+        }
+
+    }
+
+
+
+    const initSelectedDate = async (today :any) => {
+        let year: (number | string) = today.getFullYear();
+        let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
+        let day: (number | string) = ("0" + today.getDate()).slice(-2);
+        
+        let todayString = `${year}-${month}-${day}`;
+
+        await AsyncStorage.setItem('selectedDate', todayString);
+    }
+
+
+    const saveSelectedDate = async (date :string) => {
+        await AsyncStorage.setItem('selectedDate', date);
+        setSelectedDate(date);
+    }
+
+
+
+    const getBodyAndExer = async () => {
+
+        record.map((item :any) => {
+
+            if (item.date == selectedDate) {
+                
+                let body = item.body;
+
+                setWeight(body.weight);
+                setMuscle(body.muscle);
+                setFatPercent(body.fatPercent);
+                setMemo(body.memo);
+                setUploadImage(body.img);
+
+            }
+        })
+        
+    }
+
+
+    //선택한 날짜에 맞는 데이터 보여주기
     useEffect(() => {
+
+        getBodyAndExer();
+
+    },[selectedDate])
+
+
+
+    useEffect( () => {
+
+        //초기 날짜 설정
         let today: (Date) = new Date();
         let year: (number | string) = today.getFullYear();
         let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
-        let date: (number | string) = ("0" + today.getDate()).slice(-2);
+        let day: (number | string) = ("0" + today.getDate()).slice(-2);
         
-        let todayString = `${year}-${month}-${date}`;
+        let todayString = `${year}-${month}-${day}`;
         setTodayDate(todayString);
         setSelectedYear(year);
         setSelectedMonth(month);
@@ -209,29 +298,16 @@ const TabFirst = () => {
         }
         setPressedDate(temp);
 
-
         initSelectedDate(today);
+
+        //내 기록 받아오기
+        try {
+            getMyRecord()
+        } catch (e) {
+            console.log(e)
+        }
+
     },[])
-
-
-    const initSelectedDate = async (today :any) => {
-        let year: (number | string) = today.getFullYear();
-        let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
-        let date: (number | string) = ("0" + today.getDate()).slice(-2);
-        
-        let todayString = `${year}-${month}-${date}`;
-
-        await AsyncStorage.setItem('selectedDate', todayString);
-    }
-
-
-    const saveSelectedDate = async (selectedDate :string) => {
-        await AsyncStorage.setItem('selectedDate', selectedDate);
-    }
-
-
-
-
 
 
     return(

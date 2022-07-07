@@ -5,12 +5,7 @@
         "muscle" : "",
         "fatPercent" : "",
         "img" : "",
-        "memo" : "",
-        "condition" : "",
-        "bedTime" : "",
-        "wakeUpTitme" : "",
-        "toilet" : "",
-        "menstruation" : ""
+        "memo" : ""
     },
     {
         "date" : "2022-07-01",
@@ -18,12 +13,7 @@
         "muscle" : "",
         "fatPercent" : "",
         "img" : "",
-        "memo" : "",
-        "condition" : "",
-        "bedTime" : "",
-        "wakeUpTitme" : "",
-        "toilet" : "",
-        "menstruation" : ""
+        "memo" : ""
     },
     {
         "date" : "2022-07-02",
@@ -31,11 +21,6 @@
         "muscle" : "",
         "fatPercent" : "",
         "img" : "",
-        "memo" : "",
-        "condition" : "",
-        "bedTime" : "",
-        "wakeUpTitme" : "",
-        "toilet" : "",
-        "menstruation" : ""
+        "memo" : ""
     }
 ]

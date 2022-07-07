@@ -27,11 +27,10 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
     const [memo, setMemo] = useState('');
     const [uploadImage, setUploadImage] = useState<any>();
 
-    const [year, setYear] = useState(0);
-    const [month, setMonth] = useState<string|number>(0);
-    const [date, setDate] = useState<string|number>(0);
+    const [selYear, setSelYear] = useState('');
+    const [selMonth, setSelMonth] = useState('');
+    const [selDay, setSelDay] = useState('');
 
-    const [reload, setReload] = useState(false);
 
 
     const imageSelector = async () => {
@@ -96,11 +95,6 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
         const value = await AsyncStorage.getItem('MyRecord');
         const selectedDate = await AsyncStorage.getItem('selectedDate');
 
-        console.log("💎" + selectedDate);
-
-        //입력 데이터 - date
-        let todayDate = `${year}-${month}-${date}`;
-
         //입력 데이터
         let input = {
             "date" : selectedDate,
@@ -108,12 +102,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
             "muscle" : muscle,
             "fatPercent" : fatPercent,
             "img" : uploadImage,
-            "memo" : memo,
-            "condition" : "",
-            "bedTime" : "",
-            "wakeUpTitme" : "",
-            "toilet" : "",
-            "menstruation" : ""
+            "memo" : memo
         }
 
         //입력 데이터 추가해서 setItem
@@ -157,42 +146,50 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
             await AsyncStorage.setItem('MyRecord', newValueArr);
         }
 
-        setReload(!reload);
 
-        
     }
 
 
-    const getMyRecord = async () => {
-        console.log('🍯')
-        const value = await AsyncStorage.getItem('MyRecord');
-        
+    const getSelectedDate = async () => {
+        const selectedDate = await AsyncStorage.getItem('selectedDate');
+        let myRecord = await AsyncStorage.getItem('MyRecord');
+
+        if (selectedDate !== null) {           
+            let year = selectedDate.substring(0,4);
+            let month = selectedDate.substring(5,7);
+            let day = selectedDate.substring(8,10);
+
+            setSelYear(year);
+            setSelMonth(month);
+            setSelDay(day);
+        } else {
+            console.log('selectedDate == null')
+        }
+
+        if (myRecord !== null) {
+            let record = JSON.parse(myRecord);
+            record.map((item :any) => {
+                if (item.date == selectedDate) {
+                    let body = item.body;
+                    setWeight(body.weight);
+                    setMuscle(body.muscle);
+                    setFatPercent(body.fatPercent);
+                    setMemo(body.memo);
+                    setUploadImage(body.img);
+                }
+            })
+        }
     }
 
     useEffect(() => {
-        getMyRecord();
-    },[reload])
-
-
-
-    useEffect(() => {
-        let today = new Date();
-        let todayYear = today.getFullYear();
-        let todayMonth : string|number = today.getMonth()+1;
-        let todayDate : string|number = today.getDate();
-
-        if (todayMonth < 10) {
-            todayMonth = `0${todayMonth}`
+        try {
+            getSelectedDate();
+        } catch (e) {
+            console.log(e)
         }
-
-        if (todayDate < 10) {
-            todayDate = `0${todayDate}`
-        }
-
-        setYear(todayYear);
-        setMonth(todayMonth);
-        setDate(todayDate);
     },[])
+
+
 
     return(
         <Container>
@@ -203,7 +200,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
 
                 <HeaderView>
                     <HeaderText>
-                        {year}년 {month}월 {date}일 신체
+                        {selYear}년 {selMonth}월 {selDay}일 신체
                     </HeaderText>
 
                     <TouchableOpacity
@@ -314,8 +311,6 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                 />
 
 
-
-
             </Scroll>
 
 
@@ -324,7 +319,7 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                 <FinalBtn 
                     func={()=>{
                         save();
-                        // goBack();
+                        goBack();
                     }}
                     text={'저장하기'}
                     backgroundColor={'rgb(43,45,75)'}
