@@ -39,6 +39,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import RecordBody from "./common/RecordBody.json";
 import MyRecord from "./common/MyRecord.json";
 
+import ImageUploadDiet from './presentational/ImageUploadDiet';
+import ImageUploadBody from "./presentational/ImageUploadBody";
+import ImageUploadExercise from './presentational/ImageUploadExercise';
+import ImageUploadWater from './presentational/ImageUploadWater';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,6 +57,11 @@ const TabFirstStackScreen = ({navigation, route}: any) => {
             <TabFirstStack.Screen
                 name="TabFirst"
                 component={TabFirstPage}
+                options={{headerShown: false}}
+            />
+            <TabFirstStack.Screen
+                name="ImageUploadBody"
+                component={ImageUploadBody}
                 options={{headerShown: false}}
             />
             <TabFirstStack.Screen

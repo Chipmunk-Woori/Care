@@ -7,19 +7,20 @@ import {Calendar, LocaleConfig, CalendarList, Agenda} from 'react-native-calenda
 import BasicText from "../../component/BasicText";
 import BasicTextBig from "../../component/BasicTextBig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ImageUploadBody from "../ImageUploadBody";
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
 
 
 interface Props {
-
+    moveTo: (screen :any) => any;
 }
 
 const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
 
-const TabFirst = () => {
+const TabFirst = ({moveTo} :Props) => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
@@ -34,7 +35,8 @@ const TabFirst = () => {
     const [uploadImage, setUploadImage] = useState<any>();
 
     const [record, setRecord] = useState<any[]>([]);
-    
+    const [bodyRecord, setBodyRecord] = useState(false);
+    const [moreState, setMoreState] = useState(false);
     
     //상단 아이콘
     const topTitleIcon = [
@@ -127,52 +129,104 @@ const TabFirst = () => {
             )
         } else if (selectedCategory === 2) {
 
+            if (bodyRecord == true) {
+                return (
+                    <>
+                    
+                        <BodyView>
+                            <RowView>
+                                <Icon>
+                                    🧍🏼‍♀️
+                                </Icon>
+                                <View>
+                                    <BasicTextBig marginBottom={10}>
+                                        신체 
+                                    </BasicTextBig>
+            
+                                    {
+                                        weight !== '' &&
+                                            (<BasicText marginBottom={5}>
+                                                체중 {weight} kg
+                                            </BasicText>)
+                                    }
+                                    {
+                                        muscle !== '' &&
+                                            (<BasicText marginBottom={5}>
+                                                골격근량 {muscle} kg
+                                            </BasicText>)
+                                    }
+                                    {
+                                        fatPercent !== '' &&
+                                            (<BasicText marginBottom={5}>
+                                                체지방률 {fatPercent} %
+                                            </BasicText>)
+                                    }
+                                    {
+                                        memo !== '' &&
+                                            (<BasicText marginBottom={5}>
+                                                메모 {memo} 
+                                            </BasicText>)
+                                    }
+                                </View>
+                            </RowView>
 
-            return (
-                <BodyView>
-                    <RowView>
-                        <Icon>
-                            🧍🏼‍♀️
-                        </Icon>
-                        <View>
-                            <BasicTextBig marginBottom={10}>
-                                신체 
-                            </BasicTextBig>
-    
-                            {
-                                weight !== '' &&
-                                    (<BasicText marginBottom={5}>
-                                        체중 {weight} kg
-                                    </BasicText>)
-                            }
-                            {
-                                muscle !== '' &&
-                                    (<BasicText marginBottom={5}>
-                                        골격근량 {muscle} kg
-                                    </BasicText>)
-                            }
-                            {
-                                fatPercent !== '' &&
-                                    (<BasicText marginBottom={5}>
-                                        체지방률 {fatPercent} %
-                                    </BasicText>)
-                            }
-                            {
-                                memo !== '' &&
-                                    (<BasicText marginBottom={5}>
-                                        메모 {memo} 
-                                    </BasicText>)
-                            }
-                        </View>
-                    </RowView>
-    
-                    <TouchableOpacity>
-                        <Modify
-                            source={require('../../assets/more.png')}
-                        />
-                    </TouchableOpacity>
-                </BodyView>
-            ) 
+                            <RowView>
+                                {
+                                    moreState == true && 
+                                    
+                                        <More>
+                                            <MoreOption
+                                                onPress={() => {moveTo('ImageUploadBody')}}
+                                            >
+                                                
+                                                <MoreOptionText>
+                                                    수정
+                                                </MoreOptionText>
+                                            </MoreOption>
+
+                                            <MoreOption
+                                                onPress={() => {
+                                                    Alert.alert(
+                                                        '삭제하시겠습니까?', '',
+                                                        [
+                                                            {
+                                                                text: '확인',
+                                                                onPress: () => {}
+                                                            },
+                                                            {
+                                                                text: '취소',
+                                                                onPress: () => {setMoreState(false)}
+                                                            }
+                                                        ]
+                                                    )
+                                                }}
+                                            >
+                                                <MoreOptionText>
+                                                    삭제
+                                                </MoreOptionText>
+                                            </MoreOption>
+                                            
+                                        </More>
+                                    
+                                }
+
+                
+                                <TouchableOpacity
+                                    onPress={() => {setMoreState(!moreState)}}
+                                >
+                                    <Modify
+                                        source={require('../../assets/more.png')}
+                                    />
+                                </TouchableOpacity>
+                            </RowView>
+
+                            
+                        </BodyView>
+
+                        
+                    </>
+                )
+            }
         }
     }
 
@@ -237,11 +291,15 @@ const TabFirst = () => {
 
     const getBodyAndExer = async () => {
 
+        let check = false
+
         record.map((item :any) => {
 
             if (item.date == selectedDate) {
                 
                 let body = item.body;
+                check = true
+                setBodyRecord(true)
 
                 setWeight(body.weight);
                 setMuscle(body.muscle);
@@ -249,6 +307,16 @@ const TabFirst = () => {
                 setMemo(body.memo);
                 setUploadImage(body.img);
 
+            } 
+
+            if (check == false) {
+                setBodyRecord(false);
+
+                setWeight('');
+                setMuscle('');
+                setFatPercent('');
+                setMemo('');
+                setUploadImage('');
             }
         })
         
@@ -429,7 +497,7 @@ const TabFirst = () => {
 
 
 
-            <PaddingView>
+            <PaddingScrollView>
                 
                 <CategoryBackView> 
 
@@ -454,8 +522,14 @@ const TabFirst = () => {
                 </CategoryBackView>
 
                 {categoryContents()}
+
+
+                
+
+                
+             
  
-            </PaddingView>
+            </PaddingScrollView>
 
 
             
@@ -472,6 +546,10 @@ const PaddingView = styled.View`
     padding-left: ${CommonSetting.screenPaddingHorizontal};
     padding-right: ${CommonSetting.screenPaddingHorizontal};
 `
+const PaddingScrollView = styled.ScrollView`
+    padding-left: ${CommonSetting.screenPaddingHorizontal};
+    padding-right: ${CommonSetting.screenPaddingHorizontal};
+`
 const RowView = styled.View`
     flex-direction: row;
 `
@@ -479,21 +557,6 @@ const CalendarContainer = styled.View`
     width: 100%;
     background-color: ${CommonSetting.color.background_dark};
     background-color: orange;
-`
-const CalendarBtn = styled.TouchableOpacity`
-    width: 30%;
-    height: 45px;
-    position: absolute;
-    z-index: 100;
-    left: 20px;
-    top: 50px;
-    justify-content: center;
-    background-color: red;
-`
-const ArrowBtn = styled.Image`
-    width: 20px;
-    height: 20px;
-    left: 85%;
 `
 const CategoryBackView = styled.View`
     width: 100%;
@@ -571,6 +634,33 @@ const Modify = styled.Image`
     width: 15px;
     height: 15px;
 `
+const MoreBack = styled.View`
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+`
+const More = styled.View`
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    margin-right: 10px;
+    flex-direction: row;
+    height: 30px;
+`
+const MoreOption = styled.TouchableOpacity`
+    width: 50px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    border-color: ${CommonSetting.color.borderColor};
+    border-width: 1px;
+    margin-left: 13px;
+`
+const MoreOptionText = styled.Text`
+    font-size: 14px;
+    color: white;
+`
+
+
  
 
 export default TabFirst;

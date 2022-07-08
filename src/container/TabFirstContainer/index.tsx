@@ -14,10 +14,16 @@ const TabFirstContainer = ({navigation}: Props) => {
 
     const isFocused = useIsFocused();
 
+    const moveTo = (screen: any) => {
+        navigation.push(screen);
+    }
+
     return(
         <>
             <StatusBarDefault />
-            <TabFirst />
+            <TabFirst 
+                moveTo={moveTo}
+            />
         </>
     )
 }

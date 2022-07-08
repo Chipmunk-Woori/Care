@@ -15,11 +15,11 @@ const ScreenWidth = Dimensions.get('window').width;
 
 
 interface Props {
-    closeOption: () => any;
-    goBack: () => any;
+    closeOption?: () => any;
+    navigation?: any;
 }
 
-const ImageUploadBody = ({closeOption, goBack}: Props) => {
+const ImageUploadBody = ({closeOption, navigation}: Props) => {
     
     const [weight, setWeight] = useState('');
     const [muscle, setMuscle] = useState('');
@@ -32,6 +32,10 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
     const [selDay, setSelDay] = useState('');
 
 
+    // 여기 할 차례
+    const goBack = () => {
+        navigation.goBack();
+    }
 
     const imageSelector = async () => {
 
@@ -199,19 +203,23 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
                 <TopMark />
 
                 <HeaderView>
+
+                    
                     <HeaderText>
                         {selYear}년 {selMonth}월 {selDay}일 신체
                     </HeaderText>
 
-                    <TouchableOpacity
-                        onPress={() => {closeOption()}}
-                    >
-                        <Image
-                            source={require('../../assets/TabThird_sel.png')}
-                            style={{width: 18, height: 18, marginLeft:20}}
-                        />
-                    </TouchableOpacity>
+                    
                 </HeaderView>
+
+                <TouchableOpacity
+                    onPress={() => {goBack()}}
+                >
+                    <Image
+                        source={require('../../assets/back.png')}
+                        style={{width: 18, height: 18, marginBottom :20}}
+                    />
+                </TouchableOpacity>
 
                 <TitleText marginBottom={15}>
                     신체 기록
@@ -355,7 +363,7 @@ const HeaderView = styled.View`
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 `
 const HeaderText = styled.Text`
     font-weight: bold;
