@@ -21,8 +21,8 @@ const TabThird = () => {
 }
 
 const Container = styled.SafeAreaView`
-    width: ${ScreenWidth};
-    height: ${ScreenHeight};
+    width: ${ScreenWidth}px;
+    height: ${ScreenHeight}px;
     background-color: ${CommonSetting.color.background_dark};
 `
 

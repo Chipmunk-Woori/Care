@@ -23,10 +23,11 @@ const groupsHeight = BtnViewHeight * 3 + 10;
 const Group = ({moveTo, newGroups}: Props) => {
 
     let carouselRef = useRef(null);
+    let groupCarouselRef = useRef(null);
     const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
     const tempData = ['MyGroup', 'Group'];
     const isFocused = useIsFocused();
-
+    const [selectedScreenIndex, setSelectedScreenIndex] = useState(0);
 
 
     const groupSingleView = (item: any, index: any) => {
@@ -99,14 +100,7 @@ const Group = ({moveTo, newGroups}: Props) => {
         })
         item = totalView;
 
-        
-
         return item;
-
-        
-        
-
-
     }
 
 
@@ -152,7 +146,10 @@ const Group = ({moveTo, newGroups}: Props) => {
 
 
 
+    // ------그룹 상단 Carousel------
 
+
+    // X
     const renderScreen = ({item, index}: any) => {
         if (index == 0) {
             return firstScreen()
@@ -163,6 +160,7 @@ const Group = ({moveTo, newGroups}: Props) => {
         }
     }
 
+    // X
     const firstScreen = () => {
         return(
             <Container>
@@ -270,60 +268,228 @@ const Group = ({moveTo, newGroups}: Props) => {
         )
     }
 
+    //기본 그룹 만들기 화면 (FlatList Footer)
+    const groupScreen = () => {
+
+        <Container>
+            <Scroll>
+                <View style={{marginBottom: 25}}>
+                    <BtnView
+                        onPress={() => {moveTo('MakeGroup')}}
+                    >
+                        <RowView style={{alignItems: 'center'}}>
+                            <BtnIconView>
+                                <BtnIcon
+                                    source={require('../../assets/plus.png')} 
+                                />
+                            </BtnIconView>
+                            <BasicText>
+                                원하는 그룹 만들기
+                            </BasicText>
+                        </RowView>
+
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
+                        />
+                    </BtnView>
+                    <BtnView>
+                        <RowView style={{ alignItems: 'center'}}>
+                            <BtnIconView>
+                                <BtnIcon
+                                    source={require('../../assets/letter.png')} 
+                                />
+                            </BtnIconView>
+                            <BasicText>
+                                받은 초대 코드 입력하기
+                            </BasicText>
+                        </RowView>
+
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
+                        />
+                    </BtnView>
+                    <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
+                        <RowView style={{alignItems:'center'}}>
+                            <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
+                                <BtnIcon
+                                    source={require('../../assets/search.png')} 
+                                />
+                            </BtnIconView>
+                            <BasicText>
+                                오픈 그룹 찾기
+                            </BasicText>
+                        </RowView>
+
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
+                        />
+                    </BtnView>
+                </View>
+
+                <TitleText>
+                    새로 생긴 그룹
+                </TitleText>
+
+                <View style={{height:15}} />
+
+                {/* 여기 할 차례 : flatlist 랑 carousel 가로 터치가 겹치는 문제 해결하기 */}
+                <Carousel
+                    ref={(ref:any) => { carouselRef = ref }}
+                    data={newGroupArr}
+                    renderItem={groupView}
+                    sliderWidth={ScreenWidth}
+                    itemWidth={ScreenWidth}
+                    sliderHeight={groupsHeight}
+                    itemHeight={groupsHeight}
+                    // containerCustomStyle={{backgroundColor:'yellow'}}
+                />
+
+                <FindBtn>
+                    <BasicText>
+                        오픈 그룹 찾기
+                    </BasicText>
+                </FindBtn>
+            </Scroll>
+
+        </Container>
+    }
+
+    const myGroupCarousel = ({item, index}: any) => {
+
+        
+        
+
+        //화면 퍼블리싱해놓고 데이터 받아서(파라미터 item) 그 데이터 보여주기
+        return (
+            
+            <GuideView style={{backgroundColor:'orange'}}>
+                
+                <GuideText>
+                        주 3회 운동
+                </GuideText>
+                
+            </GuideView>
+        )
+    }
+
+    
+
+    //위에 flatlist 에 따라 보여줄 아래 내용
+    const myGroupScreen = () => {
+        if (selectedScreenIndex == 0) {
+        return (
+            <View style={{marginBottom: 25}}>
+            <BtnView
+                onPress={() => {moveTo('MakeGroup')}}
+            >
+                <RowView style={{alignItems: 'center'}}>
+                    <BtnIconView>
+                        <BtnIcon
+                            source={require('../../assets/plus.png')} 
+                        />
+                    </BtnIconView>
+                    <BasicText>
+                        원하는 그룹 만들기
+                    </BasicText>
+                </RowView>
+
+                <NextIcon
+                    source={require('../../assets/next.png')} 
+                />
+            </BtnView>
+            <BtnView>
+                <RowView style={{ alignItems: 'center'}}>
+                    <BtnIconView>
+                        <BtnIcon
+                            source={require('../../assets/letter.png')} 
+                        />
+                    </BtnIconView>
+                    <BasicText>
+                        받은 초대 코드 입력하기
+                    </BasicText>
+                </RowView>
+
+                <NextIcon
+                    source={require('../../assets/next.png')} 
+                />
+            </BtnView>
+            <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
+                <RowView style={{alignItems:'center'}}>
+                    <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
+                        <BtnIcon
+                            source={require('../../assets/search.png')} 
+                        />
+                    </BtnIconView>
+                    <BasicText>
+                        오픈 그룹 찾기
+                    </BasicText>
+                </RowView>
+
+                <NextIcon
+                    source={require('../../assets/next.png')} 
+                />
+            </BtnView>
+        </View>
+        )}
+    }
+
 
 
     return(
         <Container>
 
-            <FlatList
+            {/* <FlatList
                 data={tempData}
                 keyExtractor={(item, index) => index.toString()}      
                 renderItem={renderScreen}  
                 horizontal={true}
-            />
+            /> */}
 
+         
+            <Scroll>
+                {/* <FlatList
+                    data={tempData}
+                    keyExtractor={(item, index) => index.toString()}      
+                    renderItem={myGroupCarousel}  
+                    horizontal={true}
+                /> */}
+
+                <Carousel
+                    ref={(ref:any) => { groupCarouselRef = ref }}
+                    data={tempData}
+                    renderItem={myGroupCarousel}
+                    sliderWidth={ScreenWidth}
+                    itemWidth={ScreenWidth}
+                    sliderHeight={groupsHeight}
+                    itemHeight={groupsHeight}
+                    onSnapToItem={(slideIndex) => {//화면 넘길떄마다 실행될 함수
+                        console.log(slideIndex)
+                        setSelectedScreenIndex(slideIndex)
+                    }}
+                />
+
+                {/* 마지막 index(footer 이면 보여줄 화면) */}
+
+                {myGroupScreen()}
+            </Scroll>
+          
         </Container>
     )
 }
 
 const Container = styled.SafeAreaView`
-    width: ${ScreenWidth};
-    height: ${ScreenHeight};
+    width: ${ScreenWidth}px;
+    height: ${ScreenHeight}px;
     background-color: ${CommonSetting.color.background_dark};
 `
 const Scroll = styled.ScrollView`
     padding-left: ${CommonSetting.screenPaddingHorizontal};
     padding-right: ${CommonSetting.screenPaddingHorizontal};
     margin-bottom: 130px;
-`
-const HeaderView = styled.View`
-    width: 100%;
-    height: 7%;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-left: 5%;
-    padding-right: 5%;
-`
-const HeaderBtnView = styled.View`
-    flex-direction: row;
-    width: 50%;
-    justify-content: space-between;
-    align-items: center;
-`
-const HeaderBtn = styled.TouchableOpacity`
-`
-const HeaderText = styled.Text`
-    font-size: 18px;
-    color: ${CommonSetting.color.text_light};
-    font-weight: bold;
-`
-const SearchIcon = styled.Image`
-    width: 20px;
-    height: 20px;
+
 `
 const GuideView = styled.View`
-    width: 100%;
+    width: ${ScreenWidth*0.9}px;
     height: ${GuideViewHeight}px;
     border-color: ${CommonSetting.color.borderColor};
     border-width: 1px;
@@ -333,6 +499,7 @@ const GuideView = styled.View`
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
+    background-color: red;
 `
 const GuideText = styled.Text`
     font-size: 22px;
