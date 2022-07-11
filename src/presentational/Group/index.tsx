@@ -6,6 +6,8 @@ import BasicText from '../../component/BasicText';
 import TitleText from "../../component/TitleText";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import {useIsFocused} from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NewGroups from '../../common/NewGroups.json';
 
 
 interface Props {
@@ -27,7 +29,8 @@ const Group = ({moveTo, newGroups}: Props) => {
     const [newGroupArr, setNewGroupArr] = useState<any[]>([]);
     const tempData = ['MyGroup', 'Group'];
     const isFocused = useIsFocused();
-    const [selectedScreenIndex, setSelectedScreenIndex] = useState(0);
+    const [selectedScreenIndex, setSelectedScreenIndex] = useState(0); //현재 보고있는 화면
+    const [myGroups, setMyGroups] = useState([]);
 
 
     const groupSingleView = (item: any, index: any) => {
@@ -104,8 +107,24 @@ const Group = ({moveTo, newGroups}: Props) => {
     }
 
 
+
+    const getNewGroup = async () => {
+
+        let newGroups = await AsyncStorage.getItem('newGroups');
+        let newGroupsArr = [];
+
+        if (newGroups) {
+            newGroupsArr = JSON.parse(newGroups);
+        }
+
+        setMyGroups(newGroupsArr);
+        
+    }
+
+
     useEffect(() => {
 
+        //'새로 생긴 그룹'
         if (newGroups) {
             let totalArr :any[] = [];
             let lastIndex = newGroups.length -1;
@@ -143,6 +162,15 @@ const Group = ({moveTo, newGroups}: Props) => {
         }
 
     },[newGroups])
+
+
+    useEffect(() => {
+        try {
+            getNewGroup()
+        } catch (e) {
+            console.log(e)
+        }
+    },[])
 
 
 
@@ -354,19 +382,61 @@ const Group = ({moveTo, newGroups}: Props) => {
         </Container>
     }
 
-    const myGroupCarousel = ({item, index}: any) => {
 
-        
-        
+
+    const myGroupCarousel = ({item, index}: any) => {
 
         //화면 퍼블리싱해놓고 데이터 받아서(파라미터 item) 그 데이터 보여주기
         return (
             
-            <GuideView style={{backgroundColor:'orange'}}>
+            <GuideView 
+                style={{
+                    backgroundColor:item.iconBackgroundColor,
+                    paddingHorizontal: CommonSetting.screenPaddingHorizontal
+                }}>
                 
-                <GuideText>
-                        주 3회 운동
-                </GuideText>
+                <RowBetween>
+                    <DDayView>
+                        <DDay>
+                            D-{item.period}
+                        </DDay>
+                    </DDayView>
+
+                    <IconView>
+                        <Icon>
+                            {item.icon}
+                        </Icon>
+                        <Title>
+                            {item.title}
+                        </Title>
+                    </IconView>
+
+                    <More>
+                        <MoreIcon
+                            source={require('../../assets/more_dark.png')}
+                        />
+                    </More>
+                </RowBetween>
+
+                <NotiView>
+                    <Noti>
+                        {item.introduction}
+                    </Noti>
+                </NotiView>
+
+                <LankingView>
+                    <LankingTouch>
+                        <LankingText>
+                            랭킹
+                        </LankingText>
+                    </LankingTouch>
+
+                    <LankingTouch>
+                        <LankingText>
+                            멤버
+                        </LankingText>
+                    </LankingTouch>
+                </LankingView>
                 
             </GuideView>
         )
@@ -374,76 +444,131 @@ const Group = ({moveTo, newGroups}: Props) => {
 
     
 
-    //위에 flatlist 에 따라 보여줄 아래 내용
+    //위 carousel에 따라 보여줄 아래 내용
     const myGroupScreen = () => {
         if (selectedScreenIndex == 0) {
-        return (
-            <View style={{marginBottom: 25}}>
-            <BtnView
-                onPress={() => {moveTo('MakeGroup')}}
-            >
-                <RowView style={{alignItems: 'center'}}>
-                    <BtnIconView>
-                        <BtnIcon
-                            source={require('../../assets/plus.png')} 
-                        />
-                    </BtnIconView>
-                    <BasicText>
-                        원하는 그룹 만들기
-                    </BasicText>
-                </RowView>
+            return (
+                <View style={{marginBottom: 25}}>
+                    <BtnView
+                        onPress={() => {moveTo('MakeGroup')}}
+                        
+                    >
+                        <RowView style={{alignItems: 'center'}}>
+                            <BtnIconView>
+                                <BtnIcon
+                                    source={require('../../assets/plus.png')} 
+                                />
+                            </BtnIconView>
+                            <BasicText>
+                                원하는 그룹 만들기
+                            </BasicText>
+                        </RowView>
 
-                <NextIcon
-                    source={require('../../assets/next.png')} 
-                />
-            </BtnView>
-            <BtnView>
-                <RowView style={{ alignItems: 'center'}}>
-                    <BtnIconView>
-                        <BtnIcon
-                            source={require('../../assets/letter.png')} 
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
                         />
-                    </BtnIconView>
-                    <BasicText>
-                        받은 초대 코드 입력하기
-                    </BasicText>
-                </RowView>
+                    </BtnView>
 
-                <NextIcon
-                    source={require('../../assets/next.png')} 
-                />
-            </BtnView>
-            <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
-                <RowView style={{alignItems:'center'}}>
-                    <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
-                        <BtnIcon
-                            source={require('../../assets/search.png')} 
+                    <BtnView>
+                        <RowView style={{ alignItems: 'center'}}>
+                            <BtnIconView>
+                                <BtnIcon
+                                    source={require('../../assets/letter.png')} 
+                                />
+                            </BtnIconView>
+                            <BasicText>
+                                받은 초대 코드 입력하기
+                            </BasicText>
+                        </RowView>
+
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
                         />
-                    </BtnIconView>
-                    <BasicText>
-                        오픈 그룹 찾기
-                    </BasicText>
-                </RowView>
+                    </BtnView>
 
-                <NextIcon
-                    source={require('../../assets/next.png')} 
-                />
-            </BtnView>
-        </View>
-        )}
+                    <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
+                        <RowView style={{alignItems:'center'}}>
+                            <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
+                                <BtnIcon
+                                    source={require('../../assets/search.png')} 
+                                />
+                            </BtnIconView>
+                            <BasicText>
+                                오픈 그룹 찾기
+                            </BasicText>
+                        </RowView>
+
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
+                        />
+                    </BtnView>
+                </View>
+            )
+        }
+    }
+
+
+    const myGroupScreen_test = () => {
+        return(
+            <View>
+                <BtnView
+                    onPress={() => {moveTo('MakeGroup')}}
+                    style={{height: (BtnViewHeight-10)}}
+                >
+                    <RowView style={{alignItems: 'center'}}>
+                        <BtnIconView style={{backgroundColor:'rgb(153,153,174)', width: 33, height: 33}}>
+                            
+                            <BtnIcon
+                                source={require('../../assets/message.png')} 
+                            />
+                        </BtnIconView>
+                        <Chat>
+                            그룹 채팅방
+                        </Chat>
+                    </RowView>
+
+                    <NextIcon
+                        source={require('../../assets/next.png')} 
+                    />
+                </BtnView>
+
+
+                <BtnView
+                    onPress={() => {moveTo('MakeGroup')}}
+                    style={{height: (BtnViewHeight-10)}}
+                >
+                    <RowView style={{alignItems: 'center'}}>
+                        <BtnIconView style={{width: 33, height: 33}}>
+                            <BtnIcon
+                                source={require('../../assets/addFriend.png')} 
+                            />
+                        </BtnIconView>
+                        <View>
+                            <Chat>
+                                첫 멤버를 초대해볼까요?
+                            </Chat>
+                            <Code>
+                                GROUP-92232B
+                            </Code>
+                        </View>
+                        
+                    </RowView>
+
+                    <SharingCodeView>
+                        <SharingCode>
+                            코드 공유
+                        </SharingCode>
+                    </SharingCodeView>
+                </BtnView>
+
+            </View>
+        )
     }
 
 
 
     return(
         <Container>
-
-            {/* <FlatList
-                data={tempData}
-                keyExtractor={(item, index) => index.toString()}      
-                renderItem={renderScreen}  
-                horizontal={true}
-            /> */}
 
          
             <Scroll>
@@ -456,21 +581,21 @@ const Group = ({moveTo, newGroups}: Props) => {
 
                 <Carousel
                     ref={(ref:any) => { groupCarouselRef = ref }}
-                    data={tempData}
+                    data={myGroups}
                     renderItem={myGroupCarousel}
                     sliderWidth={ScreenWidth}
                     itemWidth={ScreenWidth}
                     sliderHeight={groupsHeight}
                     itemHeight={groupsHeight}
                     onSnapToItem={(slideIndex) => {//화면 넘길떄마다 실행될 함수
-                        console.log(slideIndex)
                         setSelectedScreenIndex(slideIndex)
                     }}
                 />
 
-                {/* 마지막 index(footer 이면 보여줄 화면) */}
 
-                {myGroupScreen()}
+                {/* 마지막 index(footer 이면 보여줄 화면) */}
+                {myGroupScreen_test()}
+
             </Scroll>
           
         </Container>
@@ -499,7 +624,6 @@ const GuideView = styled.View`
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
-    background-color: red;
 `
 const GuideText = styled.Text`
     font-size: 22px;
@@ -619,6 +743,120 @@ const FindBtn = styled.TouchableOpacity`
     justify-content: center;
     margin-top: 30px;
 `
-
+const RowBetween = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 45%;
+`
+const DDayView = styled.View`
+    background-color: black;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    width: 18%;
+    height: 28px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+`
+const DDay = styled.Text`
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+`
+const TitleView = styled.View`
+    width: 70%;
+`
+const Icon = styled.Text`
+    font-size: 30px;
+    margin-bottom: 5px;
+`
+const Title = styled.Text`
+    font-size: 20px;
+    color: ${CommonSetting.color.text_navy};
+    font-weight: 600;
+`
+const More = styled.TouchableOpacity`
+    width: 8%;
+    align-items: flex-end;
+    justify-content: center;
+    height: 25px;
+`
+const MoreIcon = styled.Image`
+    width: 15px;
+    height: 15px;
+`
+const IconView = styled.View`
+    align-items: center;
+    width: 74%;
+    justify-content: center;
+`
+const NotiView = styled.TouchableOpacity`
+    width: 100%;
+    height: 18%;
+    background-color: white;
+    flex-direction: row;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    align-items: center;
+    padding-left: ${CommonSetting.screenPaddingHorizontal};
+    padding-right: ${CommonSetting.screenPaddingHorizontal};
+    margin-bottom: 5px;
+`
+const Noti = styled.Text`
+    color: ${CommonSetting.color.borderColor};
+    font-size: 15px;
+`
+const LankingView = styled.View`
+    width: 100%;
+    height: 18%;
+    flex-direction: row;
+    justify-content: space-between;
+    
+`
+const LankingTouch = styled.TouchableOpacity`
+    width: 47%;
+    height: 100%;
+    background-color: #cce4db;
+    align-items: center;
+    justify-content: center;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+`
+const LankingText = styled.Text`
+    color: ${CommonSetting.color.background_dark};
+    font-size: 16px;
+`
+const ChatView = styled.View`
+    width: 100%;
+    background-color: ${CommonSetting.color.lightBtn};
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    height: 30px;
+    flex-direction: row;
+    align-items: center;
+`
+const Chat = styled.Text`
+    font-size: 15px;
+    color: ${CommonSetting.color.text_gray};
+    font-weight: 700;
+    margin-bottom: 5px;
+`
+const Code = styled.Text`
+    font-size: 12px;
+    color: ${CommonSetting.color.text_gray};
+    font-weight: 500;
+`
+const SharingCodeView = styled.TouchableOpacity`
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    border-width: 1px;
+    border-color: ${CommonSetting.color.borderColor};
+    background-color: ${CommonSetting.color.background_dark};
+    padding-left: 13px;
+    padding-right: 13px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+`
+const SharingCode = styled.Text`
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+`
 
 export default Group;

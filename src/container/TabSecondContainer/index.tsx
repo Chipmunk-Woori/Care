@@ -80,17 +80,12 @@ const TabSecondContainer = ({navigation}: Props) => {
     }
 
 
-    const storeNewGroups = async () => {
-        const jsonValue = JSON.stringify(NewGroups);
-        await AsyncStorage.setItem('newGroups', jsonValue);
-    }
-    
+
 
     useEffect(() => {
         try {   
             let init = headerBtnArr[0].title;
             setSelectedHeader(init);
-            storeNewGroups()
         } catch (e) {
             console.log(e)
         }

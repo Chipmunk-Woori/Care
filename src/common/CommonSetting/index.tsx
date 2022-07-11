@@ -5,6 +5,9 @@ const CommonSetting = {
         background_light: 'white',
         background_dark: 'rgba(28, 28, 35, 1)',
 
+        text_navy: 'rgb(54,54,79)',
+        text_darkGray: 'rgb(132,131,139)',
+        text_gray: '#b5b5c0',
         text_light: 'white',
         text_dark: 'black',
 

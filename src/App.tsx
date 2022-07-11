@@ -198,7 +198,15 @@ const App = () => {
 
     const myRecord = async () => {
         let myRecord = await AsyncStorage.getItem('MyRecord');
-        console.log("myRecord 확인🌼" + myRecord)
+
+        if (myRecord !== null) {
+            let valueArr = JSON.parse(myRecord);
+            let date = valueArr.map((item:any) => {
+                return item.date
+            })
+            console.log("myRecord 확인🌼" + date)
+        }
+        
     }
 
 
