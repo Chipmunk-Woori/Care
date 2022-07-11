@@ -366,7 +366,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
             //데이터 받아와서 처음에 state에 넣음. 그 state로 화면에 보여줌.
             //save해서 데이터 변경할 때 AsyncStorage.setItem( ) 도 하고, 보여주는 state도 변경
-            
             getMyRecord();
             getBodyAndExer();
         } catch (e) {
