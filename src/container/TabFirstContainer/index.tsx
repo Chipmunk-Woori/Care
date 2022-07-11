@@ -18,11 +18,16 @@ const TabFirstContainer = ({navigation}: Props) => {
         navigation.push(screen);
     }
 
+    const goBack = () => {
+        navigation.goBack();
+    }
+
     return(
         <>
             <StatusBarDefault />
             <TabFirst 
                 moveTo={moveTo}
+                goBack={goBack}
             />
         </>
     )

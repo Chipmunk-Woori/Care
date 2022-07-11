@@ -15,12 +15,13 @@ import ImageUploadBody from "../ImageUploadBody";
 
 interface Props {
     moveTo: (screen :any) => any;
+    goBack: () => any;
 }
 
 const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
 
-const TabFirst = ({moveTo} :Props) => {
+const TabFirst = ({moveTo, goBack} :Props) => {
     const [todayDate, setTodayDate] = useState('');
     const [pressedDate, setPressedDate] = useState({});
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
@@ -37,6 +38,8 @@ const TabFirst = ({moveTo} :Props) => {
     const [record, setRecord] = useState<any[]>([]);
     const [bodyRecord, setBodyRecord] = useState(false);
     const [moreState, setMoreState] = useState(false);
+
+    const [optionState, setOptionState] = useState(false);
     
     //상단 아이콘
     const topTitleIcon = [
@@ -113,6 +116,26 @@ const TabFirst = ({moveTo} :Props) => {
 
 
 
+    
+
+    const closeOption = () => {
+        setOptionState(false);
+    }
+
+    const ModifyScreen = () => {
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={optionState}
+                onRequestClose={() => {
+                    setOptionState(false)
+                }}
+            >
+                <ImageUploadBody closeOption={closeOption} goBack={goBack}/>
+            </Modal>
+        )
+    }
 
     //카테고리 내용 보여줌
     const categoryContents = () => {
@@ -176,9 +199,8 @@ const TabFirst = ({moveTo} :Props) => {
                                     
                                         <More>
                                             <MoreOption
-                                                onPress={() => {moveTo('ImageUploadBody')}}
+                                                onPress={() => { setOptionState(true) }}
                                             >
-                                                
                                                 <MoreOptionText>
                                                     수정
                                                 </MoreOptionText>
@@ -259,6 +281,7 @@ const TabFirst = ({moveTo} :Props) => {
     }
 
 
+   //내 데이터 가져오기
     const getMyRecord = async () => {
         let myRecord = await AsyncStorage.getItem('MyRecord');
 
@@ -319,16 +342,37 @@ const TabFirst = ({moveTo} :Props) => {
                 setUploadImage('');
             }
         })
+
+        
         
     }
 
 
     //선택한 날짜에 맞는 데이터 보여주기
     useEffect(() => {
-
-        getBodyAndExer();
-
+        try {
+            getBodyAndExer();
+        } catch (e) {
+            console.log(e)
+        }
     },[selectedDate])
+
+
+    //여기 할 차례
+    useEffect( () => {
+        try {
+            //수정이 완료됐을 때(값이 변경됐을 때) 실행돼야 함
+            //save 할 때 useState를 사용해서 뭔가 할 수 있는 방법
+
+            //데이터 받아와서 처음에 state에 넣음. 그 state로 화면에 보여줌.
+            //save해서 데이터 변경할 때 AsyncStorage.setItem( ) 도 하고, 보여주는 state도 변경
+            
+            getMyRecord();
+            getBodyAndExer();
+        } catch (e) {
+            console.log(e)
+        }
+    }, [optionState])
 
 
 
@@ -523,9 +567,7 @@ const TabFirst = ({moveTo} :Props) => {
 
                 {categoryContents()}
 
-
-                
-
+                {ModifyScreen()}
                 
              
  

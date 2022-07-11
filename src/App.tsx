@@ -60,11 +60,6 @@ const TabFirstStackScreen = ({navigation, route}: any) => {
                 options={{headerShown: false}}
             />
             <TabFirstStack.Screen
-                name="ImageUploadBody"
-                component={ImageUploadBody}
-                options={{headerShown: false}}
-            />
-            <TabFirstStack.Screen
                 name="ImageUpload0"
                 component={ImageUploadContainer}
                 options={{

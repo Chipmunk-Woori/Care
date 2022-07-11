@@ -71,7 +71,7 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                         setOptionState(false)
                     }}
                 >
-                    <ImageUploadBody closeOption={closeOption} />
+                    <ImageUploadBody closeOption={closeOption} goBack={goBack}/>
                 </Modal>
             )
         } else if (selectedOption === '운동') {

@@ -30,7 +30,7 @@ const Group = ({moveTo, newGroups}: Props) => {
     const tempData = ['MyGroup', 'Group'];
     const isFocused = useIsFocused();
     const [selectedScreenIndex, setSelectedScreenIndex] = useState(0); //현재 보고있는 화면
-    const [myGroups, setMyGroups] = useState([]);
+    const [myGroups, setMyGroups] = useState<any[]>([]);
 
 
     const groupSingleView = (item: any, index: any) => {
@@ -117,7 +117,10 @@ const Group = ({moveTo, newGroups}: Props) => {
             newGroupsArr = JSON.parse(newGroups);
         }
 
-        setMyGroups(newGroupsArr);
+        //Carousel 마지막 화면은 '그룹 만들기'
+        let value :any[] = [ ...newGroupsArr, {title:"Developer"}]; 
+
+        setMyGroups(value);
         
     }
 
@@ -174,8 +177,7 @@ const Group = ({moveTo, newGroups}: Props) => {
 
 
 
-    // ------그룹 상단 Carousel------
-
+    // ------------------그룹 Carousel------------------
 
     // X
     const renderScreen = ({item, index}: any) => {
@@ -268,7 +270,6 @@ const Group = ({moveTo, newGroups}: Props) => {
     
                     <View style={{height:15}} />
     
-                    {/* 여기 할 차례 : flatlist 랑 carousel 가로 터치가 겹치는 문제 해결하기 */}
                     <Carousel
                         ref={(ref:any) => { carouselRef = ref }}
                         data={newGroupArr}
@@ -296,11 +297,30 @@ const Group = ({moveTo, newGroups}: Props) => {
         )
     }
 
-    //기본 그룹 만들기 화면 (FlatList Footer)
-    const groupScreen = () => {
+    //그룹 만들기 화면 (Carousel)
+    const groupCarousel = () => {
+        return (
+            <GuideView>
+                <Image
+                    style={{width: 65, height: 65}}
+                    source={require('../../assets/group.png')}
+                />
+                <GuideText>
+                    친구랑 기록을 실시간 공유해요
+                </GuideText>
+                <GuideBtn style={{borderColor: CommonSetting.color.borderColor}}>
+                    <BasicText>
+                        그룹 가이드 보기
+                    </BasicText>
+                </GuideBtn>
+            </GuideView>
+        )
+    }
 
-        <Container>
-            <Scroll>
+    //그룹 만들기 화면 (아래)
+    const groupScreen = () => { 
+        return (
+            <>
                 <View style={{marginBottom: 25}}>
                     <BtnView
                         onPress={() => {moveTo('MakeGroup')}}
@@ -360,7 +380,6 @@ const Group = ({moveTo, newGroups}: Props) => {
 
                 <View style={{height:15}} />
 
-                {/* 여기 할 차례 : flatlist 랑 carousel 가로 터치가 겹치는 문제 해결하기 */}
                 <Carousel
                     ref={(ref:any) => { carouselRef = ref }}
                     data={newGroupArr}
@@ -377,192 +396,166 @@ const Group = ({moveTo, newGroups}: Props) => {
                         오픈 그룹 찾기
                     </BasicText>
                 </FindBtn>
-            </Scroll>
-
-        </Container>
+            </>
+        )
     }
 
 
 
     const myGroupCarousel = ({item, index}: any) => {
 
-        //화면 퍼블리싱해놓고 데이터 받아서(파라미터 item) 그 데이터 보여주기
-        return (
-            
-            <GuideView 
-                style={{
-                    backgroundColor:item.iconBackgroundColor,
-                    paddingHorizontal: CommonSetting.screenPaddingHorizontal
-                }}>
-                
-                <RowBetween>
-                    <DDayView>
-                        <DDay>
-                            D-{item.period}
-                        </DDay>
-                    </DDayView>
-
-                    <IconView>
-                        <Icon>
-                            {item.icon}
-                        </Icon>
-                        <Title>
-                            {item.title}
-                        </Title>
-                    </IconView>
-
-                    <More>
-                        <MoreIcon
-                            source={require('../../assets/more_dark.png')}
-                        />
-                    </More>
-                </RowBetween>
-
-                <NotiView>
-                    <Noti>
-                        {item.introduction}
-                    </Noti>
-                </NotiView>
-
-                <LankingView>
-                    <LankingTouch>
-                        <LankingText>
-                            랭킹
-                        </LankingText>
-                    </LankingTouch>
-
-                    <LankingTouch>
-                        <LankingText>
-                            멤버
-                        </LankingText>
-                    </LankingTouch>
-                </LankingView>
-                
-            </GuideView>
-        )
-    }
-
-    
-
-    //위 carousel에 따라 보여줄 아래 내용
-    const myGroupScreen = () => {
-        if (selectedScreenIndex == 0) {
+        if (index !== myGroups.length-1) {
+        
             return (
-                <View style={{marginBottom: 25}}>
-                    <BtnView
-                        onPress={() => {moveTo('MakeGroup')}}
-                        
-                    >
-                        <RowView style={{alignItems: 'center'}}>
-                            <BtnIconView>
-                                <BtnIcon
-                                    source={require('../../assets/plus.png')} 
-                                />
-                            </BtnIconView>
-                            <BasicText>
-                                원하는 그룹 만들기
-                            </BasicText>
-                        </RowView>
+                <GuideView 
+                    style={{
+                        backgroundColor:item.iconBackgroundColor,
+                        paddingHorizontal: CommonSetting.screenPaddingHorizontal
+                    }}>
+                    
+                    <RowBetween>
+                        <DDayView>
+                            <DDay>
+                                D-{item.period}
+                            </DDay>
+                        </DDayView>
 
-                        <NextIcon
-                            source={require('../../assets/next.png')} 
+                        <IconView>
+                            <Icon>
+                                {item.icon}
+                            </Icon>
+                            <Title>
+                                {item.title}
+                            </Title>
+                        </IconView>
+
+                        <More>
+                            <MoreIcon
+                                source={require('../../assets/more_dark.png')}
+                            />
+                        </More>
+                    </RowBetween>
+
+                    <NotiView>
+                        <NotiIcon
+                            source={require('../../assets/megaphone.png')}
                         />
-                    </BtnView>
+                        <Noti>
+                            {item.introduction}
+                        </Noti>
+                    </NotiView>
 
-                    <BtnView>
-                        <RowView style={{ alignItems: 'center'}}>
-                            <BtnIconView>
-                                <BtnIcon
-                                    source={require('../../assets/letter.png')} 
-                                />
-                            </BtnIconView>
-                            <BasicText>
-                                받은 초대 코드 입력하기
-                            </BasicText>
-                        </RowView>
+                    <LankingView>
+                        <LankingTouch>
+                            <LankingText>
+                                랭킹
+                            </LankingText>
+                        </LankingTouch>
 
-                        <NextIcon
-                            source={require('../../assets/next.png')} 
-                        />
-                    </BtnView>
-
-                    <BtnView style={{backgroundColor: CommonSetting.color.lightBtn}}>
-                        <RowView style={{alignItems:'center'}}>
-                            <BtnIconView style={{backgroundColor: CommonSetting.color.lightBtnIcon}}>
-                                <BtnIcon
-                                    source={require('../../assets/search.png')} 
-                                />
-                            </BtnIconView>
-                            <BasicText>
-                                오픈 그룹 찾기
-                            </BasicText>
-                        </RowView>
-
-                        <NextIcon
-                            source={require('../../assets/next.png')} 
-                        />
-                    </BtnView>
-                </View>
+                        <LankingTouch>
+                            <LankingText>
+                                멤버
+                            </LankingText>
+                        </LankingTouch>
+                    </LankingView>
+                    
+                </GuideView>
             )
+        } else {
+            return groupCarousel()
         }
     }
 
 
-    const myGroupScreen_test = () => {
-        return(
-            <View>
-                <BtnView
-                    onPress={() => {moveTo('MakeGroup')}}
-                    style={{height: (BtnViewHeight-10)}}
-                >
-                    <RowView style={{alignItems: 'center'}}>
-                        <BtnIconView style={{backgroundColor:'rgb(153,153,174)', width: 33, height: 33}}>
-                            
-                            <BtnIcon
-                                source={require('../../assets/message.png')} 
-                            />
-                        </BtnIconView>
-                        <Chat>
-                            그룹 채팅방
-                        </Chat>
-                    </RowView>
+    //아랫부분
+    const myGroupScreen = () => {
 
-                    <NextIcon
-                        source={require('../../assets/next.png')} 
-                    />
-                </BtnView>
+        const item :any = myGroups[selectedScreenIndex];
 
 
-                <BtnView
-                    onPress={() => {moveTo('MakeGroup')}}
-                    style={{height: (BtnViewHeight-10)}}
-                >
-                    <RowView style={{alignItems: 'center'}}>
-                        <BtnIconView style={{width: 33, height: 33}}>
-                            <BtnIcon
-                                source={require('../../assets/addFriend.png')} 
-                            />
-                        </BtnIconView>
-                        <View>
+        if (typeof item !== 'undefined' && item.title !== "Developer") {
+            
+            return(
+                <View>
+    
+                    <BtnView
+                        onPress={() => {moveTo('MakeGroup')}}
+                        style={{height: (BtnViewHeight-10)}}
+                    >
+                        <RowView style={{alignItems: 'center'}}>
+                            <BtnIconView style={{backgroundColor:'#fafaec', width: 33, height: 33}}>
+                                
+                                <BtnIcon
+                                    source={require('../../assets/crown.png')} 
+                                />
+                            </BtnIconView>
                             <Chat>
-                                첫 멤버를 초대해볼까요?
+                                {item.title}
                             </Chat>
-                            <Code>
-                                GROUP-92232B
-                            </Code>
-                        </View>
-                        
-                    </RowView>
+                        </RowView>
+    
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
+                        />
+                    </BtnView>
+    
+                    <BtnView
+                        onPress={() => {moveTo('MakeGroup')}}
+                        style={{height: (BtnViewHeight-10)}}
+                    >
+                        <RowView style={{alignItems: 'center'}}>
+                            <BtnIconView style={{backgroundColor:'rgb(153,153,174)', width: 33, height: 33}}>
+                                
+                                <BtnIcon
+                                    source={require('../../assets/message.png')} 
+                                />
+                            </BtnIconView>
+                            <Chat>
+                                그룹 채팅방
+                            </Chat>
+                        </RowView>
+    
+                        <NextIcon
+                            source={require('../../assets/next.png')} 
+                        />
+                    </BtnView>
+    
+    
+                    <BtnView
+                        onPress={() => {moveTo('MakeGroup')}}
+                        style={{height: (BtnViewHeight-10)}}
+                    >
+                        <RowView style={{alignItems: 'center'}}>
+                            <BtnIconView style={{width: 33, height: 33}}>
+                                <BtnIcon
+                                    source={require('../../assets/addFriend.png')} 
+                                />
+                            </BtnIconView>
+                            <View>
+                                <Chat>
+                                    첫 멤버를 초대해볼까요?
+                                </Chat>
+                                <Code>
+                                    GROUP-92232B
+                                </Code>
+                            </View>
+                            
+                        </RowView>
+    
+                        <SharingCodeView>
+                            <SharingCode>
+                                코드 공유
+                            </SharingCode>
+                        </SharingCodeView>
+                    </BtnView>
+    
+                </View>
+            )
+        } else {
+            return groupScreen()
+        }
 
-                    <SharingCodeView>
-                        <SharingCode>
-                            코드 공유
-                        </SharingCode>
-                    </SharingCodeView>
-                </BtnView>
-
-            </View>
-        )
+        
     }
 
 
@@ -587,14 +580,12 @@ const Group = ({moveTo, newGroups}: Props) => {
                     itemWidth={ScreenWidth}
                     sliderHeight={groupsHeight}
                     itemHeight={groupsHeight}
-                    onSnapToItem={(slideIndex) => {//화면 넘길떄마다 실행될 함수
+                    onSnapToItem={(slideIndex) => {//화면 넘길때마다 실행될 함수
                         setSelectedScreenIndex(slideIndex)
                     }}
                 />
 
-
-                {/* 마지막 index(footer 이면 보여줄 화면) */}
-                {myGroupScreen_test()}
+                {myGroupScreen()}
 
             </Scroll>
           
@@ -805,12 +796,17 @@ const Noti = styled.Text`
     color: ${CommonSetting.color.borderColor};
     font-size: 15px;
 `
+const NotiIcon = styled.Image`
+    width: 17px;
+    height: 17px;
+    margin-right: 10px;
+`
 const LankingView = styled.View`
     width: 100%;
     height: 18%;
     flex-direction: row;
     justify-content: space-between;
-    
+    margin-top: 5px;
 `
 const LankingTouch = styled.TouchableOpacity`
     width: 47%;
@@ -836,7 +832,6 @@ const Chat = styled.Text`
     font-size: 15px;
     color: ${CommonSetting.color.text_gray};
     font-weight: 700;
-    margin-bottom: 5px;
 `
 const Code = styled.Text`
     font-size: 12px;

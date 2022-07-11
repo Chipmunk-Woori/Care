@@ -15,11 +15,11 @@ const ScreenWidth = Dimensions.get('window').width;
 
 
 interface Props {
-    closeOption?: () => any;
-    navigation?: any;
+    closeOption: () => any;
+    goBack: () => any;
 }
 
-const ImageUploadBody = ({closeOption, navigation}: Props) => {
+const ImageUploadBody = ({closeOption, goBack}: Props) => {
     
     const [weight, setWeight] = useState('');
     const [muscle, setMuscle] = useState('');
@@ -32,10 +32,7 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
     const [selDay, setSelDay] = useState('');
 
 
-    // 여기 할 차례
-    const goBack = () => {
-        navigation.goBack();
-    }
+   
 
     const imageSelector = async () => {
 
@@ -93,6 +90,7 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
         }
     }
 
+    //여기 할 차례
     const save = async () => {
        
         //기존 recordBody 데이터 받아옴
@@ -100,7 +98,7 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
         const selectedDate = await AsyncStorage.getItem('selectedDate');
 
         //입력 데이터
-        let input = {
+        let inputData = {
             "date" : selectedDate,
             "weight" : weight,
             "muscle" : muscle,
@@ -126,7 +124,10 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
                     duplication = true;
 
                     //중복 있으면 해당 날짜에 body값 넣기
-                    item["body"] = input;
+                    item["body"] = inputData;
+
+                    
+
                     let newValueArr = JSON.stringify(valueArr);
                     await AsyncStorage.setItem('MyRecord', newValueArr);
                 }
@@ -139,7 +140,7 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
             let newRecord = {
                 "date" : selectedDate,
                 "diet" : {},
-                "body" : input,
+                "body" : inputData,
                 "exercise" : {},
                 "water" : {}
             } 
@@ -213,7 +214,7 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
                 </HeaderView>
 
                 <TouchableOpacity
-                    onPress={() => {goBack()}}
+                    onPress={() => {closeOption()}}
                 >
                     <Image
                         source={require('../../assets/back.png')}
@@ -327,7 +328,7 @@ const ImageUploadBody = ({closeOption, navigation}: Props) => {
                 <FinalBtn 
                     func={()=>{
                         save();
-                        goBack();
+                        closeOption();
                     }}
                     text={'저장하기'}
                     backgroundColor={'rgb(43,45,75)'}
