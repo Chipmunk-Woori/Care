@@ -16,10 +16,10 @@ const ScreenWidth = Dimensions.get('window').width;
 
 interface Props {
     closeOption: () => any;
-    goBack: () => any;
+    modifyBodyData?: (weight: any, muscle: any, fatPercent: any, img: any, memo: any) => any;
 }
 
-const ImageUploadBody = ({closeOption, goBack}: Props) => {
+const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
     
     const [weight, setWeight] = useState('');
     const [muscle, setMuscle] = useState('');
@@ -90,12 +90,14 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
         }
     }
 
-    //여기 할 차례
+    
     const save = async () => {
        
         //기존 recordBody 데이터 받아옴
         const value = await AsyncStorage.getItem('MyRecord');
         const selectedDate = await AsyncStorage.getItem('selectedDate');
+
+        console.log(value)
 
         //입력 데이터
         let inputData = {
@@ -106,6 +108,9 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
             "img" : uploadImage,
             "memo" : memo
         }
+
+        //🌞 수정한 정보 보내기
+        // modifyBodyData(weight, muscle, fatPercent, uploadImage, memo);
 
         //입력 데이터 추가해서 setItem
         let valueArr :any[] = []; 
@@ -155,6 +160,8 @@ const ImageUploadBody = ({closeOption, goBack}: Props) => {
     }
 
 
+    //데이터 갖고와서 날짜(year, month, day), 
+    //신체(weight, muscle, fatPercent, memo, uploadImage) 변수에 넣음
     const getSelectedDate = async () => {
         const selectedDate = await AsyncStorage.getItem('selectedDate');
         let myRecord = await AsyncStorage.getItem('MyRecord');

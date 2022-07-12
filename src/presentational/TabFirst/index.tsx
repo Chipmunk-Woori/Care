@@ -22,7 +22,7 @@ const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
 
 const TabFirst = ({moveTo, goBack} :Props) => {
-    const [todayDate, setTodayDate] = useState('');
+    
     const [pressedDate, setPressedDate] = useState({});
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
     const [selectedYear, setSelectedYear] = useState<number|string>();
@@ -40,20 +40,22 @@ const TabFirst = ({moveTo, goBack} :Props) => {
     const [moreState, setMoreState] = useState(false);
 
     const [optionState, setOptionState] = useState(false);
+
+    const [reload, setReload] = useState(false);
     
     //상단 아이콘
     const topTitleIcon = [
         {
             img: require('../../assets/upload.png'),
-            func: () => {console.log('첫번째')}
+            func: () => {}
         },
         {
             img: require('../../assets/files.png'),
-            func: () => {console.log('두번째')}
+            func: () => {}
         },
         {
             img: require('../../assets/palette.png'),
-            func: () => {console.log('세번째')}
+            func: () => {}
         }
     ]
 
@@ -116,11 +118,24 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
 
 
+   //내 데이터 가져오기
+   const getMyRecord = async () => {
+        let myRecord = await AsyncStorage.getItem('MyRecord');
+
+        if (myRecord !== null) {
+            let myRecordArr = JSON.parse(myRecord);
+            setRecord(myRecordArr);
+        }
+
+    }
     
+
 
     const closeOption = () => {
         setOptionState(false);
     }
+
+
 
     const ModifyScreen = () => {
         return (
@@ -132,10 +147,12 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                     setOptionState(false)
                 }}
             >
-                <ImageUploadBody closeOption={closeOption} goBack={goBack}/>
+                <ImageUploadBody closeOption={closeOption} modifyBodyData={modifyBodyData}/>
             </Modal>
         )
     }
+
+
 
     //카테고리 내용 보여줌
     const categoryContents = () => {
@@ -153,6 +170,8 @@ const TabFirst = ({moveTo, goBack} :Props) => {
         } else if (selectedCategory === 2) {
 
             if (bodyRecord == true) {
+
+                console.log('---bodyRecord == true---')
                 return (
                     <>
                     
@@ -208,19 +227,7 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
                                             <MoreOption
                                                 onPress={() => {
-                                                    Alert.alert(
-                                                        '삭제하시겠습니까?', '',
-                                                        [
-                                                            {
-                                                                text: '확인',
-                                                                onPress: () => {}
-                                                            },
-                                                            {
-                                                                text: '취소',
-                                                                onPress: () => {setMoreState(false)}
-                                                            }
-                                                        ]
-                                                    )
+                                                    deleteBtn()
                                                 }}
                                             >
                                                 <MoreOptionText>
@@ -248,9 +255,12 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                         
                     </>
                 )
+            } else {
+                console.log('---bodyRecord == false---')
             }
         }
     }
+
 
 
     const dietBtn = ({item, index}: any) => {
@@ -281,18 +291,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
     }
 
 
-   //내 데이터 가져오기
-    const getMyRecord = async () => {
-        let myRecord = await AsyncStorage.getItem('MyRecord');
-
-        if (myRecord !== null) {
-            let myRecordArr = JSON.parse(myRecord);
-            setRecord(myRecordArr);
-        }
-
-    }
-
-
 
     const initSelectedDate = async (today :any) => {
         let year: (number | string) = today.getFullYear();
@@ -303,6 +301,7 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
         await AsyncStorage.setItem('selectedDate', todayString);
     }
+
 
 
     const saveSelectedDate = async (date :string) => {
@@ -319,6 +318,8 @@ const TabFirst = ({moveTo, goBack} :Props) => {
         record.map((item :any) => {
 
             if (item.date == selectedDate) {
+
+                console.log('---3---')
                 
                 let body = item.body;
                 check = true
@@ -333,6 +334,8 @@ const TabFirst = ({moveTo, goBack} :Props) => {
             } 
 
             if (check == false) {
+
+
                 setBodyRecord(false);
 
                 setWeight('');
@@ -342,10 +345,127 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                 setUploadImage('');
             }
         })
-
-        
-        
+ 
     }
+
+
+
+    //🌞
+    //AsyncStorage setItem이 완료됐을 때 getItem이 실행돼야하는데,
+    //이 타이밍을 맞출 수가 없어서 state를 사용함.
+
+    //(처음 useEffect로 AsyncStorage getItem하여 데이터 받음 > state에 넣음 > 그 state로 화면에 보여줌.)
+    //save해서 데이터 변경할 때 AsyncStorage.setItem도 하고, 보여주는 state도 변경.
+    const modifyBodyData = (weight: any, muscle: any, fatPercent: any, img: any, memo: any) => {
+
+        //수정된 데이터 바로 보여주기
+        setWeight(weight);
+        setMuscle(muscle);
+        setFatPercent(fatPercent);
+        setMemo(memo);
+        setUploadImage(img);
+
+        //수정된 데이터 따라 state도 변경
+        let tempArr = record;
+
+        tempArr.map((item: any) => {
+            if (item.date == selectedDate) {
+                item.body.weight = weight;
+                item.body.muscle = muscle;
+                item.body.fatPercent = fatPercent;
+                item.body.img = img;
+                item.body.memo = memo;
+            }
+        })
+    
+        setRecord(tempArr);
+        setReload(!reload);
+    }
+
+
+    //🌞
+    const deleteBtn = () => {
+        Alert.alert(
+            '삭제하시겠습니까?', '',
+            [
+                {
+                    text: '확인',
+                    onPress: () => { 
+                        try {
+                            deleteBodyData()
+                        } catch (e) {
+                            console.log(e)
+                        }
+                    }
+                },
+                {
+                    text: '취소',
+                    onPress: () => {setMoreState(false)}
+                }
+            ]
+        )
+    }
+
+
+    //🌞
+    const deleteBodyData = async () => {
+
+        // setBodyRecord(false);
+
+        let newRecord :any = [];
+        let check = false;
+
+
+        record.map((item: any, index: number) => {
+            if (item.date == selectedDate) {
+                check = true;
+                newRecord = record.filter((fItem) => (
+                    fItem.date !== selectedDate
+                ))
+            }
+        })
+
+        if (check !== false) {
+            let value = JSON.stringify(newRecord);
+            await AsyncStorage.setItem('MyRecord', value);
+        }
+
+
+
+    }
+
+
+    //🌞 
+    const onPressDay = (day: any) => {
+
+        let temp = {
+            [day.dateString] : {
+                selected: true,
+                customStyles: {
+                    container: {
+                        backgroundColor: CommonSetting.color.point,
+                        borderRadius: 15,
+                        borderColor: CommonSetting.color.point,
+                        borderWidth: 1,
+                        alignItems: 'center',
+                        justifyContents: 'center',
+                    },
+                    text: {
+                        color: '#ffffff',
+                    }
+                }
+            }
+        }
+        setPressedDate(temp);
+
+        try {
+            saveSelectedDate(day.dateString);
+        } catch (e) {
+            console.log(e)
+        }
+   
+    }
+
 
 
     //선택한 날짜에 맞는 데이터 보여주기
@@ -358,22 +478,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
     },[selectedDate])
 
 
-    //여기 할 차례
-    useEffect( () => {
-        try {
-            //수정이 완료됐을 때(값이 변경됐을 때) 실행돼야 함
-            //save 할 때 useState를 사용해서 뭔가 할 수 있는 방법
-
-            //데이터 받아와서 처음에 state에 넣음. 그 state로 화면에 보여줌.
-            //save해서 데이터 변경할 때 AsyncStorage.setItem( ) 도 하고, 보여주는 state도 변경
-            getMyRecord();
-            getBodyAndExer();
-        } catch (e) {
-            console.log(e)
-        }
-    }, [optionState])
-
-
 
     useEffect( () => {
 
@@ -384,7 +488,7 @@ const TabFirst = ({moveTo, goBack} :Props) => {
         let day: (number | string) = ("0" + today.getDate()).slice(-2);
         
         let todayString = `${year}-${month}-${day}`;
-        setTodayDate(todayString);
+        
         setSelectedYear(year);
         setSelectedMonth(month);
 
@@ -409,7 +513,11 @@ const TabFirst = ({moveTo, goBack} :Props) => {
         }
         setPressedDate(temp);
 
-        initSelectedDate(today);
+        try {
+            initSelectedDate(today);
+        } catch (e) {
+            console.log(e)
+        }
 
         //내 기록 받아오기
         try {
@@ -421,6 +529,8 @@ const TabFirst = ({moveTo, goBack} :Props) => {
     },[])
 
 
+
+
     return(
         <Container>
 
@@ -429,59 +539,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                     title={`${selectedYear}년 ${selectedMonth}월`}
                     icon={topTitleIcon}
                 />
-
-            
-                {/* <Calendar
-                    // minDate={todayDate}
-                    monthFormat={'yyyy년 MM월'}
-                    markingType={'custom'}
-                    markedDates={pressedDate}
-                    onDayPress={day => {
-                        let temp = {
-                            [day.dateString] : {
-                                selected: true,
-                                marked: true,
-                                customStyles: {
-                                    container: {
-                                        backgroundColor: CommonSetting.color.point,
-                                        borderRadius: 20,
-                                        borderColor: CommonSetting.color.point,
-                                        borderWidth: 1,
-                                        alignItems: 'center',
-                                        justifyContents: 'center',
-                                    },
-                                    text: {
-                                        color: '#ffffff',
-                                    }
-                                }
-                            }
-                        }
-                        setPressedDate(temp);
-                    }}
-                    
-                    theme={{
-                        backgroundColor: '#ffffff',
-                        calendarBackground: 'rgba(255, 255, 255, 0.5)',
-                        textSectionTitleColor: '#666666',
-                        selectedDayBackgroundColor: '#ffffff',
-                        selectedDayTextColor: CommonSetting.color.point,
-                        todayTextColor: '#666666',
-                        dayTextColor: '#666666',
-                        textDisabledColor: '#bbbbbb',
-                        arrowColor: CommonSetting.color.point,
-                        monthTextColor: '#333333',
-                        indicatorColor: 'blue',
-                        textDayFontWeight: '400',
-                        textMonthFontWeight: 'bold',
-                        textDayHeaderFontWeight: 'bold',
-                        textDayFontSize: 16,
-                        textMonthFontSize: 19,
-                        textDayHeaderFontSize: 16,
-                    }}
-                    enableSwipeMonths={true}
-                    disableAllTouchEventsForDisabledDays={true}
-                /> */}
-
             </PaddingView>
 
 
@@ -500,27 +557,7 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                         setSelectedMonth(month);
                     }}
                     onDayPress={day => {
-                        let temp = {
-                            [day.dateString] : {
-                                selected: true,
-                                customStyles: {
-                                    container: {
-                                        backgroundColor: CommonSetting.color.point,
-                                        borderRadius: 15,
-                                        borderColor: CommonSetting.color.point,
-                                        borderWidth: 1,
-                                        alignItems: 'center',
-                                        justifyContents: 'center',
-                                    },
-                                    text: {
-                                        color: '#ffffff',
-                                    }
-                                }
-                            }
-                        }
-                        setPressedDate(temp);
-
-                        saveSelectedDate(day.dateString);
+                        onPressDay(day)
                     }}
                     theme={{
                         calendarBackground: CommonSetting.color.background_dark, //달력 배경색
@@ -537,7 +574,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                     }}
                 />
             </CalendarContainer>
-
 
 
             <PaddingScrollView>
@@ -568,12 +604,8 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
                 {ModifyScreen()}
                 
-             
- 
             </PaddingScrollView>
-
-
-            
+        
         </Container>
     )
 }

@@ -1,13 +1,13 @@
 [
     {
-        "date" : "2022-07-05",
+        "date" : "2022-07-01",
         "diet" : {},
         "body" : 
             {
-                "date" : "2022-07-05",
+                "date" : "2022-07-01",
                 "weight" : "41",
-                "muscle" : "",
-                "fatPercent" : "",
+                "muscle" : "20",
+                "fatPercent" : "17",
                 "img" : "",
                 "memo" : ""
             }

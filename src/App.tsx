@@ -199,9 +199,17 @@ const App = () => {
             let date = valueArr.map((item:any) => {
                 return item.date
             })
-            console.log("myRecord 확인🌼" + date)
+            console.log("MyRecord 확인🌼" + date)
+        } else {
+            console.log("MyRecord == null...")
         }
         
+    }
+
+    
+    const tempSaveRecord = async() => {
+        let value = JSON.stringify(MyRecord);
+        await AsyncStorage.setItem('MyRecord', value)
     }
 
 
