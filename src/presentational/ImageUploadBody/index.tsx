@@ -10,6 +10,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import FinalBtn from '../../component/FinalBtn';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
@@ -30,6 +31,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
     const [selYear, setSelYear] = useState('');
     const [selMonth, setSelMonth] = useState('');
     const [selDay, setSelDay] = useState('');
+
 
 
    
@@ -81,7 +83,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
 
 
         //하나 선택
-        if (typeof uploadImage !== 'undefined') {
+        if (typeof uploadImage !== 'undefined' && uploadImage!== '') {
             return (
                 <UploadImg
                     source={{uri: uploadImage}}
@@ -92,12 +94,11 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
 
     
     const save = async () => {
-       
+
+     
         //기존 recordBody 데이터 받아옴
         const value = await AsyncStorage.getItem('MyRecord');
         const selectedDate = await AsyncStorage.getItem('selectedDate');
-
-        console.log(value)
 
         //입력 데이터
         let inputData = {
@@ -109,8 +110,12 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
             "memo" : memo
         }
 
-        //🌞 수정한 정보 보내기
-        // modifyBodyData(weight, muscle, fatPercent, uploadImage, memo);
+        //🌞 달력 - '수정' 에서 넘어온 경우. 수정한 정보 보내기.
+        if (modifyBodyData) {
+            console.log('🐷 modifyBodyData  1')
+            modifyBodyData(weight, muscle, fatPercent, uploadImage, memo);
+        }
+
 
         //입력 데이터 추가해서 setItem
         let valueArr :any[] = []; 
@@ -122,27 +127,27 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
             console.log('MyRecord 비어있음')
         }
 
+
+
         //중복 체크
-        if(valueArr.length > 0) {
-            valueArr.map( async (item :any) => {
+        if (valueArr.length > 0) {
+            valueArr.map( (item :any) => {
                 if (item.date == selectedDate) {
+                    
                     duplication = true;
 
                     //중복 있으면 해당 날짜에 body값 넣기
                     item["body"] = inputData;
-
                     
-
-                    let newValueArr = JSON.stringify(valueArr);
-                    await AsyncStorage.setItem('MyRecord', newValueArr);
                 }
             })
         }
 
-
+        
         if (duplication == false) {
+
             //날짜 새로 생성
-            let newRecord = {
+            let newDate = {
                 "date" : selectedDate,
                 "diet" : {},
                 "body" : inputData,
@@ -150,11 +155,12 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                 "water" : {}
             } 
 
-            valueArr.push(newRecord);
+            valueArr.push(newDate);
 
-            let newValueArr = JSON.stringify(valueArr);
-            await AsyncStorage.setItem('MyRecord', newValueArr);
         }
+
+        let newValueArr = JSON.stringify(valueArr);
+        await AsyncStorage.setItem('MyRecord', newValueArr);
 
 
     }

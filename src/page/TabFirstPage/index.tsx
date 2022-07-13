@@ -4,12 +4,13 @@ import TabFirstContainer from "../../container/TabFirstContainer";
 
 interface Props {
     navigation: any;
+    route: any;
 }
 
-const TabFirstPage = ({navigation}: Props) => {
+const TabFirstPage = ({navigation, route}: Props) => {
     return(
         <>
-            <TabFirstContainer navigation={navigation}/>
+            <TabFirstContainer navigation={navigation} route={route}/>
         </>
     )
 }

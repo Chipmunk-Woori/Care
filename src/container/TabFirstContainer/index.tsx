@@ -8,9 +8,13 @@ import {useIsFocused} from '@react-navigation/native';
 
 interface Props {
     navigation: any;
+    route: any;
 }
 
-const TabFirstContainer = ({navigation}: Props) => {
+const TabFirstContainer = ({navigation, route}: Props) => {
+
+    //route
+    //{"key": "TabFirst-Kd-0KzgxFEsNy2CKwRIVp", "name": "TabFirst", "params": undefined}
 
     const isFocused = useIsFocused();
 
@@ -28,6 +32,7 @@ const TabFirstContainer = ({navigation}: Props) => {
             <TabFirst 
                 moveTo={moveTo}
                 goBack={goBack}
+                route={route}
             />
         </>
     )

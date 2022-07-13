@@ -8,6 +8,7 @@ import BasicText from "../../component/BasicText";
 import BasicTextBig from "../../component/BasicTextBig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImageUploadBody from "../ImageUploadBody";
+import {useIsFocused} from '@react-navigation/native';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
@@ -16,12 +17,13 @@ import ImageUploadBody from "../ImageUploadBody";
 interface Props {
     moveTo: (screen :any) => any;
     goBack: () => any;
+    route: any;
 }
 
 const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
 
-const TabFirst = ({moveTo, goBack} :Props) => {
+const TabFirst = ({moveTo, goBack, route} :Props) => {
     
     const [pressedDate, setPressedDate] = useState({});
     const [selectedCategory, setSelectedCategory] = useState(1); //1:식단, 2:신체&운동
@@ -42,6 +44,7 @@ const TabFirst = ({moveTo, goBack} :Props) => {
     const [optionState, setOptionState] = useState(false);
 
     const [reload, setReload] = useState(false);
+    const isFocused = useIsFocused();
     
     //상단 아이콘
     const topTitleIcon = [
@@ -147,7 +150,10 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                     setOptionState(false)
                 }}
             >
-                <ImageUploadBody closeOption={closeOption} modifyBodyData={modifyBodyData}/>
+                <ImageUploadBody 
+                    closeOption={closeOption} 
+                    modifyBodyData={modifyBodyData}
+                />
             </Modal>
         )
     }
@@ -171,7 +177,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
             if (bodyRecord == true) {
 
-                console.log('---bodyRecord == true---')
                 return (
                     <>
                     
@@ -256,7 +261,6 @@ const TabFirst = ({moveTo, goBack} :Props) => {
                     </>
                 )
             } else {
-                console.log('---bodyRecord == false---')
             }
         }
     }
@@ -313,17 +317,22 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
     const getBodyAndExer = async () => {
 
-        let check = false
+        console.log('🦁' + selectedDate)
+        
+        let duplication = false;
 
-        record.map((item :any) => {
+
+        record.map((item :any, index :number) => {
+
+            
+            // console.log("record.item.date : " + item.date + '--' + index)
 
             if (item.date == selectedDate) {
-
-                console.log('---3---')
                 
-                let body = item.body;
-                check = true
+                duplication = true;
                 setBodyRecord(true)
+
+                let body = item.body;
 
                 setWeight(body.weight);
                 setMuscle(body.muscle);
@@ -333,24 +342,26 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
             } 
 
-            if (check == false) {
-
-
-                setBodyRecord(false);
-
-                setWeight('');
-                setMuscle('');
-                setFatPercent('');
-                setMemo('');
-                setUploadImage('');
-            }
         })
+
+        if (duplication == false) {
+
+            setBodyRecord(true);
+
+            setWeight('');
+            setMuscle('');
+            setFatPercent('');
+            setMemo('');
+            setUploadImage('');
+        }
+
+    
  
     }
 
 
 
-    //🌞
+    //🌞 수정
     //AsyncStorage setItem이 완료됐을 때 getItem이 실행돼야하는데,
     //이 타이밍을 맞출 수가 없어서 state를 사용함.
 
@@ -366,19 +377,47 @@ const TabFirst = ({moveTo, goBack} :Props) => {
         setUploadImage(img);
 
         //수정된 데이터 따라 state도 변경
-        let tempArr = record;
+        let tempRecord = record;
+        let duplication = false; //중복 체크
 
-        tempArr.map((item: any) => {
+        //case : 수정
+        tempRecord.map((item: any) => {
             if (item.date == selectedDate) {
                 item.body.weight = weight;
                 item.body.muscle = muscle;
                 item.body.fatPercent = fatPercent;
                 item.body.img = img;
                 item.body.memo = memo;
-            }
+
+
+                duplication = true;
+            } 
         })
+
+        //case : 추가
+        if (duplication == false) {
+
+            let newDate = {
+                "date" : selectedDate,
+                "diet" : {},
+                "body" : {
+                    "date" : selectedDate,
+                    "weight" : weight,
+                    "muscle" : muscle,
+                    "fatPercent" : fatPercent,
+                    "img" : uploadImage,
+                    "memo" : memo
+                },
+                "exercise" : {},
+                "water" : {}
+            }
+
+            tempRecord.push(newDate); 
+        } 
+
     
-        setRecord(tempArr);
+        setRecord(tempRecord);
+
         setReload(!reload);
     }
 
@@ -412,25 +451,39 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
         // setBodyRecord(false);
 
+
+        //수정된 데이터 바로 보여주기
+        setWeight('');
+        setMuscle('');
+        setFatPercent('');
+        setMemo('');
+        setUploadImage('');
+
+
+        //Async, state 변경
         let newRecord :any = [];
-        let check = false;
+        let duplication = false; 
 
 
         record.map((item: any, index: number) => {
             if (item.date == selectedDate) {
-                check = true;
+                duplication = true;
+
                 newRecord = record.filter((fItem) => (
                     fItem.date !== selectedDate
                 ))
             }
         })
 
-        if (check !== false) {
+        if (duplication !== false) {
+
             let value = JSON.stringify(newRecord);
             await AsyncStorage.setItem('MyRecord', value);
+
+            //화면에 보여주는 state변경
+            setRecord(newRecord)
+            setReload(!reload)
         }
-
-
 
     }
 
@@ -479,54 +532,70 @@ const TabFirst = ({moveTo, goBack} :Props) => {
 
 
 
+
     useEffect( () => {
 
-        //초기 날짜 설정
-        let today: (Date) = new Date();
-        let year: (number | string) = today.getFullYear();
-        let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
-        let day: (number | string) = ("0" + today.getDate()).slice(-2);
-        
-        let todayString = `${year}-${month}-${day}`;
-        
-        setSelectedYear(year);
-        setSelectedMonth(month);
+
+            //초기 날짜 설정
+            let today: (Date) = new Date();
+            let year: (number | string) = today.getFullYear();
+            let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
+            let day: (number | string) = ("0" + today.getDate()).slice(-2);
+            
+            let todayString = `${year}-${month}-${day}`;
+            
+            setSelectedYear(year);
+            setSelectedMonth(month);
 
 
-        let temp = {
-            [todayString] : {
-                selected: true,
-                customStyles: {
-                    container: {
-                        backgroundColor: CommonSetting.color.point,
-                        borderRadius: 50,
-                        borderColor: CommonSetting.color.point,
-                        borderWidth: 1,
-                        alignItems: 'center',
-                        justifyContents: 'center',
-                    },
-                    text: {
-                        color: '#ffffff',
+            let temp = {
+                [todayString] : {
+                    selected: true,
+                    customStyles: {
+                        container: {
+                            backgroundColor: CommonSetting.color.point,
+                            borderRadius: 50,
+                            borderColor: CommonSetting.color.point,
+                            borderWidth: 1,
+                            alignItems: 'center',
+                            justifyContents: 'center',
+                        },
+                        text: {
+                            color: '#ffffff',
+                        }
                     }
                 }
             }
-        }
-        setPressedDate(temp);
+            setPressedDate(temp);
 
-        try {
-            initSelectedDate(today);
-        } catch (e) {
-            console.log(e)
-        }
+            try {
+                initSelectedDate(today);
+            } catch (e) {
+                console.log(e)
+            }
 
-        //내 기록 받아오기
-        try {
-            getMyRecord()
-        } catch (e) {
-            console.log(e)
-        }
+            //내 기록 갖고오기
+            // try {
+            //     getMyRecord()
+            // } catch (e) {
+            //     console.log(e)
+            // }
+        
 
     },[])
+
+
+    useEffect(()=>{
+         if (isFocused == true) {
+             console.log(selectedDate)
+            //내 기록 갖고오기
+            try {
+                getMyRecord();
+            } catch (e) {
+                console.log(e)
+            }
+         }
+    },[isFocused])
 
 
 
