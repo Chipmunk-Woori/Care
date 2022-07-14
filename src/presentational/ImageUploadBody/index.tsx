@@ -97,8 +97,8 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
 
      
         //기존 recordBody 데이터 받아옴
-        const value = await AsyncStorage.getItem('MyRecord');
         const selectedDate = await AsyncStorage.getItem('selectedDate');
+        const value = await AsyncStorage.getItem('MyRecord');
 
         //입력 데이터
         let inputData = {
@@ -112,7 +112,6 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
 
         //🌞 달력 - '수정' 에서 넘어온 경우. 수정한 정보 보내기.
         if (modifyBodyData) {
-            console.log('🐷 modifyBodyData  1')
             modifyBodyData(weight, muscle, fatPercent, uploadImage, memo);
         }
 

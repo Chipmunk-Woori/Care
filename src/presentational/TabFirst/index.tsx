@@ -123,6 +123,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
    //내 데이터 가져오기
    const getMyRecord = async () => {
+
         let myRecord = await AsyncStorage.getItem('MyRecord');
 
         if (myRecord !== null) {
@@ -296,36 +297,19 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
 
 
-    const initSelectedDate = async (today :any) => {
-        let year: (number | string) = today.getFullYear();
-        let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
-        let day: (number | string) = ("0" + today.getDate()).slice(-2);
-        
-        let todayString = `${year}-${month}-${day}`;
-
-        await AsyncStorage.setItem('selectedDate', todayString);
-    }
-
-
 
     const saveSelectedDate = async (date :string) => {
-        await AsyncStorage.setItem('selectedDate', date);
         setSelectedDate(date);
+        await AsyncStorage.setItem('selectedDate', date);
     }
 
 
 
-    const getBodyAndExer = async () => {
-
-        console.log('🦁' + selectedDate)
+    const setBodyData = async () => {
         
         let duplication = false;
 
-
         record.map((item :any, index :number) => {
-
-            
-            // console.log("record.item.date : " + item.date + '--' + index)
 
             if (item.date == selectedDate) {
                 
@@ -355,8 +339,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
             setUploadImage('');
         }
 
-    
- 
     }
 
 
@@ -417,8 +399,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     
         setRecord(tempRecord);
-
-        setReload(!reload);
     }
 
 
@@ -449,7 +429,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     //🌞
     const deleteBodyData = async () => {
 
-        // setBodyRecord(false);
+        setBodyRecord(false);
 
 
         //수정된 데이터 바로 보여주기
@@ -477,12 +457,13 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
         if (duplication !== false) {
 
-            let value = JSON.stringify(newRecord);
-            await AsyncStorage.setItem('MyRecord', value);
-
             //화면에 보여주는 state변경
             setRecord(newRecord)
             setReload(!reload)
+            
+            let value = JSON.stringify(newRecord);
+            await AsyncStorage.setItem('MyRecord', value);
+            
         }
 
     }
@@ -520,83 +501,75 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
 
+    const initSelectedDate = async () => {
 
-    //선택한 날짜에 맞는 데이터 보여주기
-    useEffect(() => {
-        try {
-            getBodyAndExer();
-        } catch (e) {
-            console.log(e)
-        }
-    },[selectedDate])
+        //초기 날짜 설정(오늘)
+        let today: (Date) = new Date();
+        let year: (number | string) = today.getFullYear();
+        let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
+        let day: (number | string) = ("0" + today.getDate()).slice(-2);
+        
+        let todayString = `${year}-${month}-${day}`;
+        
+        
+        setSelectedDate(todayString);
+        setSelectedYear(year);
+        setSelectedMonth(month);
 
-
-
-
-    useEffect( () => {
-
-
-            //초기 날짜 설정
-            let today: (Date) = new Date();
-            let year: (number | string) = today.getFullYear();
-            let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
-            let day: (number | string) = ("0" + today.getDate()).slice(-2);
-            
-            let todayString = `${year}-${month}-${day}`;
-            
-            setSelectedYear(year);
-            setSelectedMonth(month);
-
-
-            let temp = {
-                [todayString] : {
-                    selected: true,
-                    customStyles: {
-                        container: {
-                            backgroundColor: CommonSetting.color.point,
-                            borderRadius: 50,
-                            borderColor: CommonSetting.color.point,
-                            borderWidth: 1,
-                            alignItems: 'center',
-                            justifyContents: 'center',
-                        },
-                        text: {
-                            color: '#ffffff',
-                        }
+        let temp = {
+            [todayString] : {
+                selected: true,
+                customStyles: {
+                    container: {
+                        backgroundColor: CommonSetting.color.point,
+                        borderRadius: 50,
+                        borderColor: CommonSetting.color.point,
+                        borderWidth: 1,
+                        alignItems: 'center',
+                        justifyContents: 'center',
+                    },
+                    text: {
+                        color: '#ffffff',
                     }
                 }
             }
-            setPressedDate(temp);
+        }
+        setPressedDate(temp);
 
-            try {
-                initSelectedDate(today);
-            } catch (e) {
-                console.log(e)
-            }
+        await AsyncStorage.setItem('selectedDate', todayString);
+    }
 
-            //내 기록 갖고오기
-            // try {
-            //     getMyRecord()
-            // } catch (e) {
-            //     console.log(e)
-            // }
-        
+
+    useEffect( () => {
+   
+        try {
+            initSelectedDate();
+            getMyRecord();
+            setBodyData();
+        } catch (e) {
+            console.log(e)
+        }
 
     },[])
 
 
-    useEffect(()=>{
-         if (isFocused == true) {
-             console.log(selectedDate)
-            //내 기록 갖고오기
-            try {
-                getMyRecord();
-            } catch (e) {
-                console.log(e)
+    //선택한 날짜에 맞는 데이터 보여주기
+    useEffect(() => {
+        try {
+            if (selectedDate !== '') {
+                setBodyData();
             }
-         }
-    },[isFocused])
+        } catch (e) {
+            console.log(e)
+        }
 
+        let recordDay :any[] = [];
+        record.map((item) => {
+            let date = item.date;
+            let day = date.substring(8,10)
+            recordDay.push(day)
+        })
+    },[selectedDate, record])
 
 
 
