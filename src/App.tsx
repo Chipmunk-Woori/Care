@@ -210,14 +210,14 @@ const App = () => {
     }
 
 
-    useEffect(() => {
-        try {
-            myRecord();
-            // tempSaveRecord();
-        } catch (e) {
-            console.log(e)
-        }
-    },[])
+    // useEffect(() => {
+    //     try {
+    //            myRecord();
+    //         // tempSaveRecord();
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // },[])
 
 
     return (

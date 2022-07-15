@@ -216,13 +216,9 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                 <TopMark />
 
                 <HeaderView>
-
-                    
                     <HeaderText>
                         {selYear}년 {selMonth}월 {selDay}일 신체
                     </HeaderText>
-
-                    
                 </HeaderView>
 
                 <TouchableOpacity
@@ -237,6 +233,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                 <TitleText marginBottom={15}>
                     신체 기록
                 </TitleText>
+
 
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
@@ -257,6 +254,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                     </RowView>
                 </View>
 
+
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
                         골격근량
@@ -276,6 +274,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                     </RowView>
                 </View>
 
+
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
                         체지방률
@@ -294,6 +293,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                         </AddedConditionText>
                     </RowView>
                 </View>
+
 
                 <View style={{marginBottom: 10}}>
                     <DetailOption>
@@ -317,7 +317,9 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
                     </RowView>
                 </View>
 
+
                 <Line />
+
 
                 <TitleText marginBottom={15}>
                     메모

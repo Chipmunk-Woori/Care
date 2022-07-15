@@ -35,7 +35,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     const [muscle, setMuscle] = useState('');
     const [fatPercent, setFatPercent] = useState('');
     const [memo, setMemo] = useState('');
-    const [uploadImage, setUploadImage] = useState<any>();
+    const [img, setImg] = useState<any>('');
 
     const [record, setRecord] = useState<any[]>([]);
     const [bodyRecord, setBodyRecord] = useState(false);
@@ -186,7 +186,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                                 <Icon>
                                     🧍🏼‍♀️
                                 </Icon>
-                                <View>
+                                <BodyDataView>
                                     <BasicTextBig marginBottom={10}>
                                         신체 
                                     </BasicTextBig>
@@ -215,7 +215,13 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                                                 메모 {memo} 
                                             </BasicText>)
                                     }
-                                </View>
+                                    {
+                                        (img !== '' && img !== undefined) && 
+                                            (<Img
+                                                source={{uri: img}}
+                                            />)
+                                    }
+                                </BodyDataView>
                             </RowView>
 
                             <RowView>
@@ -322,7 +328,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 setMuscle(body.muscle);
                 setFatPercent(body.fatPercent);
                 setMemo(body.memo);
-                setUploadImage(body.img);
+                setImg(body.img);
 
             } 
 
@@ -336,7 +342,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
             setMuscle('');
             setFatPercent('');
             setMemo('');
-            setUploadImage('');
+            setImg('');
         }
 
     }
@@ -356,7 +362,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         setMuscle(muscle);
         setFatPercent(fatPercent);
         setMemo(memo);
-        setUploadImage(img);
+        setImg(img);
 
         //수정된 데이터 따라 state도 변경
         let tempRecord = record;
@@ -387,7 +393,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                     "weight" : weight,
                     "muscle" : muscle,
                     "fatPercent" : fatPercent,
-                    "img" : uploadImage,
+                    "img" : img,
                     "memo" : memo
                 },
                 "exercise" : {},
@@ -437,7 +443,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         setMuscle('');
         setFatPercent('');
         setMemo('');
-        setUploadImage('');
+        setImg('');
 
 
         //Async, state 변경
@@ -557,19 +563,29 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     useEffect(() => {
         try {
             if (selectedDate !== '') {
+
                 setBodyData();
             }
         } catch (e) {
             console.log(e)
         }
 
+        //record day 확인
         let recordDay :any[] = [];
         record.map((item) => {
             let date = item.date;
             let day = date.substring(8,10)
             recordDay.push(day)
         })
+        //console.log(recordDay)
     },[selectedDate, record])
+
+
+    useEffect(() => {
+        if (isFocused == true) {
+            getMyRecord()
+        }
+    },[isFocused])
 
 
 
@@ -759,6 +775,9 @@ const More = styled.View`
     margin-right: 10px;
     flex-direction: row;
     height: 30px;
+    position: absolute;
+    z-index: 5;
+    right: 13px;
 `
 const MoreOption = styled.TouchableOpacity`
     width: 50px;
@@ -773,6 +792,16 @@ const MoreOption = styled.TouchableOpacity`
 const MoreOptionText = styled.Text`
     font-size: 14px;
     color: white;
+`
+const Img = styled.Image`
+    width: 100px;
+    height: 100px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    margin-top: 5px;
+` 
+const BodyDataView = styled.View`
+    padding-right: 15px;
+    width: 80%;
 `
 
 

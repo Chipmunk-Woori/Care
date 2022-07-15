@@ -9,6 +9,7 @@ import DetailOptionAnswer from "../../component/DetailOptionAnswer";
 import ImagePicker from 'react-native-image-crop-picker';
 import FinalBtn from '../../component/FinalBtn';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Picker} from '@react-native-picker/picker';
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
@@ -22,10 +23,26 @@ interface Props {
 const ImageUploadDiet = ({closeOption, goBack}: Props) => {
     
     const [uploadImage, setUploadImge] = useState<any>();
+    const [amPm, setAmPm] = useState('');
+    const [hour, setHour] = useState('');
+    const [minute, setMinute] = useState('');
 
-    const [year, setYear] = useState(0);
-    const [month, setMonth] = useState<string|number>(0);
-    const [day, setDay] = useState<string|number>(0);
+    const [selYear, setSelYear] = useState('');
+    const [selMonth, setSelMonth] = useState('');
+    const [selDay, setSelDay] = useState('');
+
+    const [score, setScore] = useState<any>();
+    const [scoreOption, setScoreOption] = useState([1,2,3,4,5]);
+    const [category, setCategory] = useState('');
+    const [categoryOption, setCategoryOption] = useState([
+        '아침', '아점', '점심', '점저', '저녁', '간식', '야식', '후식', '술', '음료', '영양제 / 보충제'
+    ])
+    const [amount, setAmount] = useState('');
+    const [amountOption, setAmountOption] = useState([
+        '가볍게', '적당히', '배부르게', '과하게'
+    ])
+
+    const [onPicker, setOnPicker] = useState(false);
 
 
     const imageSelector = async () => {
@@ -58,7 +75,7 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
         })
     }
 
-    const  showImage = () => {
+    const showImage = () => {
         //여러 개 선택
         // if (uploadImages.length > 0) {
         //     let result = uploadImages.map((item :any, index :number) => {
@@ -84,26 +101,261 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
         }
     }
 
+    const timeView = () => {
+        if (hour !== '') {
+            return (
+                <TouchableOpacity 
+                    style={{marginBottom:12}}
+                    onPress={()=>{setOnPicker(true)}}
+                >
+                    <OptionText>
+                        {amPm} {hour} : {minute}
+                    </OptionText>
+                </TouchableOpacity>
+            )
+        } else if (hour == '' && minute == '') {
+            return(
+                <TouchableOpacity 
+                    style={{marginBottom:12}}
+                    onPress={()=>{setOnPicker(true)}}
+                >
+                    <OptionText style={{color:CommonSetting.color.borderColor}}>시간 선택</OptionText>
+                </TouchableOpacity>
+            )
+        }
+    }
+
+    const pickerView = () => {
+
+        if (onPicker == true) {
+            return (
+                <>
+                    <PickerBtn>
+                        <ClosePicker onPress={() => {
+                            setOnPicker(false)
+                            setAmPm('')
+                            setHour('')
+                            setMinute('')
+                        }}>
+                            <ClosePickerText>
+                                삭제
+                            </ClosePickerText>
+                        </ClosePicker>
+
+                        <ClosePicker onPress={() => {setOnPicker(false)}}>
+                            <ClosePickerText>
+                                확인
+                            </ClosePickerText>
+                        </ClosePicker>
+                    </PickerBtn>
+
+                    <PickerBack>
+                        <Picker
+                            selectedValue={amPm}
+                            itemStyle={styles.pickerItem}
+                            style={styles.picker}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setAmPm(itemValue)
+                            }>
+                                <Picker.Item label = '오전' value = '오전'/>
+                                <Picker.Item label = '오후' value = '오후'/>
+                        </Picker>
+
+                        <Picker
+                            selectedValue={hour}
+                            itemStyle={styles.pickerItem}
+                            style={styles.picker}
+                            mode='dialog'
+                            onValueChange={(itemValue, itemIndex) =>
+                                setHour(itemValue)
+                            }>
+                                {hourOption()}
+                        </Picker>
+
+                        <Picker
+                            selectedValue={minute}
+                            itemStyle={styles.pickerItem}
+                            style={styles.picker}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setMinute(itemValue)
+                            }>
+                                {minuteOption()}
+                        </Picker>
+                    </PickerBack>
+                </>
+            )
+        } 
+
+    }
+
+
+    const hourOption = () => {
+        
+        let hourArr = [];
+
+        for (let i = 1; i < 13; i++) {
+            hourArr.push(i);
+        }   
+
+        let hourPicker = hourArr.map((item: any) => {
+            let tempHour = `0${item}`;
+            tempHour = tempHour.slice(-2)
+
+            return (
+                <Picker.Item label = {tempHour} value = {tempHour}/>
+            )
+        })
+
+        return hourPicker;
+        
+    }
+
+    const minuteOption = () => {
+        
+        let minuteArr = [];
+
+        for (let i = 0; i < 60; i++) {
+            minuteArr.push(i);
+        }   
+
+        let minutePicker = minuteArr.map((item: any) => {
+            let tempMinute = `0${item}`;
+            tempMinute = tempMinute.slice(-2);
+            
+            return (
+                <Picker.Item label = {tempMinute} value = {tempMinute}/>
+            )
+        })
+
+        return minutePicker;
+        
+    }
+
+
+
+    const scoreView = () => {
+        return (
+            scoreOption.map((item:any, index:any) => {
+                return (
+                    <ScoreOptionView 
+                        onPress={()=>{slectScore(item)}}
+                        key={index.toString()}
+                        style={{backgroundColor : score === item ? CommonSetting.color.borderColor : CommonSetting.color.background_dark}}
+                    >
+                        <OptionText>
+                            {item}
+                        </OptionText>
+                    </ScoreOptionView> 
+                )
+            })
+        )
+    }
+
+    const slectScore = (item: any) => {
+        if (score === item) {
+            setScore('');
+        } else {
+            setScore(item)
+        }
+    }
+
+
+    const categoryView = () => {
+        return (
+            categoryOption.map((item:any, index:any) => {
+                return (
+                    <OptionView 
+                        onPress={()=>{selectCategory(item)}}
+                        key={index.toString()}
+                        style={{backgroundColor : category === item ? CommonSetting.color.borderColor : CommonSetting.color.background_dark}}
+                    >
+                        <OptionText>
+                            {item}
+                        </OptionText>
+                    </OptionView> 
+                )
+            })
+        )
+    }
+
+    const selectCategory = (item: any) => {
+        if (category === item) {
+            setCategory('');
+        } else {
+            setCategory(item)
+        }
+    }
+
+
+    const amountView = () => {
+        return (
+            amountOption.map((item:any, index:any) => {
+                return (
+                    <OptionView 
+                        onPress={()=>{selectAmount(item)}}
+                        key={index.toString()}
+                        style={{backgroundColor : amount === item ? CommonSetting.color.borderColor : CommonSetting.color.background_dark}}
+                    >
+                        <OptionText>
+                            {item}
+                        </OptionText>
+                    </OptionView> 
+                )
+            })
+        )
+    }
+
+    const selectAmount = (item: any) => {
+        if (category === item) {
+            setAmount('');
+        } else {
+            setAmount(item)
+        }
+    }
     
 
+    //데이터 갖고와서 날짜(year, month, day), 
+    //신체(weight, muscle, fatPercent, memo, uploadImage) 변수에 넣음
+    const getSelectedDate = async () => {
+        const selectedDate = await AsyncStorage.getItem('selectedDate');
+        let myRecord = await AsyncStorage.getItem('MyRecord');
+
+        if (selectedDate !== null) {           
+            let year = selectedDate.substring(0,4);
+            let month = selectedDate.substring(5,7);
+            let day = selectedDate.substring(8,10);
+
+            setSelYear(year);
+            setSelMonth(month);
+            setSelDay(day);
+        } else {
+            console.log('selectedDate == null')
+        }
+
+        if (myRecord !== null) {
+            let record = JSON.parse(myRecord);
+            // record.map((item :any) => {
+            //     if (item.date == selectedDate) {
+            //         let body = item.body;
+            //         setWeight(body.weight);
+            //         setMuscle(body.muscle);
+            //         setFatPercent(body.fatPercent);
+            //         setMemo(body.memo);
+            //         setUploadImage(body.img);
+            //     }
+            // })
+        }
+    }
+
     useEffect(() => {
-        let today = new Date();
-        let todayYear = today.getFullYear();
-        let todayMonth : string|number = today.getMonth()+1;
-        let todayDate : string|number = today.getDate();
-
-        if (todayMonth < 10) {
-            todayMonth = `0${todayMonth}`
+        try {
+            getSelectedDate();
+        } catch (e) {
+            console.log(e)
         }
-
-        if (todayDate < 10) {
-            todayDate = `0${todayDate}`
-        }
-
-        setYear(todayYear);
-        setMonth(todayMonth);
-        setDay(todayDate);
     },[])
+
+
 
     return(
         <Container>
@@ -114,22 +366,78 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
 
                 <HeaderView>
                     <HeaderText>
-                        {year}년 {month}월 {day}일
+                        {selYear}년 {selMonth}월 {selDay}일 식단
                     </HeaderText>
-
-                    <TouchableOpacity
-                        onPress={() => {closeOption()}}
-                    >
-                        <Image
-                            source={require('../../assets/TabThird_sel.png')}
-                            style={{width: 18, height: 18, marginLeft:20}}
-                        />
-                    </TouchableOpacity>
                 </HeaderView>
 
-                <TitleText marginBottom={15}>
-                    오늘의 사진으로 추가
-                </TitleText>
+
+                <TouchableOpacity
+                    onPress={() => {closeOption()}}
+                >
+                    <Image
+                        source={require('../../assets/back.png')}
+                        style={{width: 18, height: 18, marginBottom :20}}
+                    />
+                </TouchableOpacity>
+
+
+                <RowView>
+                    <AddPicture
+                        onPress={() => {imageSelector()}}
+                    >
+                        <AddPictureIcon
+                            source={require('../../assets/plus.png')}
+                        />
+                        <AddPictureText>
+                            사진 추가
+                        </AddPictureText>
+                    </AddPicture>
+
+                    {showImage()}
+                </RowView>
+
+
+                <View style={{marginBottom: 10}}>
+                    <DetailOption>
+                        식단 점수
+                    </DetailOption>
+                    <RowView>
+                        {scoreView()}
+                    </RowView>
+                </View>
+
+
+                <View style={{marginBottom: 10}}>
+                    <DetailOption>
+                        분류
+                    </DetailOption>
+                    <RowView>
+                        {categoryView()}
+                    </RowView>
+                </View>
+
+
+                <View style={{marginBottom: 10}}>
+                    <DetailOption>
+                        식사량
+                    </DetailOption>
+                    <RowView>
+                        {amountView()}
+                    </RowView>
+                </View>
+
+                <View style={{marginBottom: 10}}>
+                    <DetailOption>
+                        시간
+                    </DetailOption>
+
+                    {timeView()}
+                    {pickerView()}
+                </View>
+
+
+
+                <View style={{height:100}} />
 
             </Scroll>
 
@@ -162,7 +470,8 @@ const Container = styled.SafeAreaView`
 const Scroll = styled.ScrollView`
     padding-top: 25px;
     padding-left: ${CommonSetting.screenPaddingHorizontal};
-    padding-right: 10px;
+    padding-right: ${CommonSetting.screenPaddingHorizontal};
+
 `
 const PaddingView = styled.View`
     padding-left: ${CommonSetting.screenPaddingHorizontal};
@@ -201,8 +510,8 @@ const AddedConditionText = styled.Text`
     font-weight: 500;
 `
 const AddPicture = styled.TouchableOpacity`
-    width: 170px;
-    height: 170px;
+    width: 100%;
+    height: 300px;
     border-radius: ${CommonSetting.btnBorderRadius}px;
     border-color: ${CommonSetting.color.borderColor};
     border-width: 1px;
@@ -221,8 +530,8 @@ const AddPictureText = styled.Text`
     font-size: 15px;
 `
 const UploadImg = styled.Image`
-    width: 170px;
-    height: 170px;
+    width: 100%;
+    height: 300px;
     border-radius: ${CommonSetting.btnBorderRadius}px;
     margin-top: 12px;
     align-items: center;
@@ -236,4 +545,71 @@ const Line = styled.View`
     margin-top: 15px;
     margin-bottom: 18px;
 `
+const OptionView = styled.Pressable`
+    padding: 10px;
+    border-radius: 20px;
+    border-color: ${CommonSetting.color.borderColor};
+    border-width: 1px;
+    align-self: flex-start;
+    flex-direction: row;
+    margin-right: 10px;
+`
+const ScoreOptionView = styled.Pressable`
+    width: 32px;
+    height: 32px;
+    border-radius: 20px;
+    border-color: ${CommonSetting.color.borderColor};
+    border-width: 1px;
+    margin-right: 10px;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+`
+const OptionText = styled.Text`
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+`
+const PickerBack = styled.View`
+    width: 100%;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+`
+const PickerBtn = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+`
+const ClosePicker = styled.TouchableOpacity`
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: ${CommonSetting.color.borderColor};
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+`
+const ClosePickerText = styled.Text`
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 5px;
+`
+
+const styles = StyleSheet.create({
+    pickerItem: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '500'
+    },
+    picker: {
+        width: 100,
+        height: 200,
+    }
+})
 export default ImageUploadDiet;
