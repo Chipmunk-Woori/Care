@@ -9,6 +9,7 @@ import BasicTextBig from "../../component/BasicTextBig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImageUploadBody from "../ImageUploadBody";
 import {useIsFocused} from '@react-navigation/native';
+import DetailOption from "../../component/DetailOption";
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
@@ -22,6 +23,7 @@ interface Props {
 
 const screenHeight: number = Dimensions.get('window').height;
 const screenWidth: number = Dimensions.get('window').width;
+const dietImgWidth = screenWidth*0.9*0.4;
 
 const TabFirst = ({moveTo, goBack, route} :Props) => {
     
@@ -31,11 +33,19 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     const [selectedMonth, setSelectedMonth] = useState<number|string>();
     const [selectedDate, setSelectedDate] = useState('');
 
+    //식단
+    const [score, setScore] = useState<any>();
+    const [category, setCategory] = useState('');
+    const [amount, setAmount] = useState('');
+    const [dietImg, setDietImg] = useState<any>('');
+    const [dietTime, setDietTime] = useState('');
+
+    //신체
     const [weight, setWeight] = useState('');
     const [muscle, setMuscle] = useState('');
     const [fatPercent, setFatPercent] = useState('');
     const [memo, setMemo] = useState('');
-    const [img, setImg] = useState<any>('');
+    const [bodyImg, setBodyImg] = useState<any>('');
 
     const [record, setRecord] = useState<any[]>([]);
     const [bodyRecord, setBodyRecord] = useState(false);
@@ -164,108 +174,151 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     //카테고리 내용 보여줌
     const categoryContents = () => {
         if (selectedCategory === 1) {
-            return(
-                <View>
-                    <FlatList
-                        data={firstCategoryContents}
-                        renderItem={dietBtn}
-                        keyExtractor={ (item, index) => index.toString()}
-                        horizontal={true}
-                    />
-                </View>
-            )
+            let duplication = false; 
+
+            record.map((item: any, index: number) => {
+                if (item.date == selectedDate) {
+                    duplication = true
+                }
+            })
+
+            if (duplication == false) {
+                return (
+                    <View>
+                        <FlatList
+                            data={firstCategoryContents}
+                            renderItem={dietBtn}
+                            keyExtractor={ (item, index) => index.toString()}
+                            horizontal={true}
+                        />
+                    </View>
+                )
+            } else {
+                return (
+                    <DietView>
+                        <DietImgView>
+
+                        </DietImgView>
+                        
+                        {
+                            dietImg !== '' && 
+                                <DietImg
+                                    source={{uri:dietImg}}
+                                />
+                        }
+
+                        <DietTextView>
+                            <BasicTextBig>
+                                {
+                                    category !== '' && category
+                                }
+                            </BasicTextBig>
+
+                            <RowView>
+                                <DetailOption>
+                                    {
+                                        dietTime !== '' && dietTime
+                                    }
+                                    {'   '}
+                                    {
+                                        amount !== '' && amount
+                                    }
+                                </DetailOption>
+                            
+                            </RowView>
+
+                        </DietTextView>
+                    </DietView>
+                )
+            }
+            
         } else if (selectedCategory === 2) {
 
             if (bodyRecord == true) {
 
                 return (
-                    <>
-                    
-                        <BodyView>
-                            <RowView>
-                                <Icon>
-                                    🧍🏼‍♀️
-                                </Icon>
-                                <BodyDataView>
-                                    <BasicTextBig marginBottom={10}>
-                                        신체 
-                                    </BasicTextBig>
-            
-                                    {
-                                        weight !== '' &&
-                                            (<BasicText marginBottom={5}>
-                                                체중 {weight} kg
-                                            </BasicText>)
-                                    }
-                                    {
-                                        muscle !== '' &&
-                                            (<BasicText marginBottom={5}>
-                                                골격근량 {muscle} kg
-                                            </BasicText>)
-                                    }
-                                    {
-                                        fatPercent !== '' &&
-                                            (<BasicText marginBottom={5}>
-                                                체지방률 {fatPercent} %
-                                            </BasicText>)
-                                    }
-                                    {
-                                        memo !== '' &&
-                                            (<BasicText marginBottom={5}>
-                                                메모 {memo} 
-                                            </BasicText>)
-                                    }
-                                    {
-                                        (img !== '' && img !== undefined) && 
-                                            (<Img
-                                                source={{uri: img}}
-                                            />)
-                                    }
-                                </BodyDataView>
-                            </RowView>
-
-                            <RowView>
+                    <BodyView>
+                        <RowView>
+                            <Icon>
+                                🧍🏼‍♀️
+                            </Icon>
+                            <BodyDataView>
+                                <BasicTextBig marginBottom={10}>
+                                    신체 
+                                </BasicTextBig>
+        
                                 {
-                                    moreState == true && 
-                                    
-                                        <More>
-                                            <MoreOption
-                                                onPress={() => { setOptionState(true) }}
-                                            >
-                                                <MoreOptionText>
-                                                    수정
-                                                </MoreOptionText>
-                                            </MoreOption>
-
-                                            <MoreOption
-                                                onPress={() => {
-                                                    deleteBtn()
-                                                }}
-                                            >
-                                                <MoreOptionText>
-                                                    삭제
-                                                </MoreOptionText>
-                                            </MoreOption>
-                                            
-                                        </More>
-                                    
+                                    weight !== '' &&
+                                        (<BasicText marginBottom={5}>
+                                            체중 {weight} kg
+                                        </BasicText>)
                                 }
+                                {
+                                    muscle !== '' &&
+                                        (<BasicText marginBottom={5}>
+                                            골격근량 {muscle} kg
+                                        </BasicText>)
+                                }
+                                {
+                                    fatPercent !== '' &&
+                                        (<BasicText marginBottom={5}>
+                                            체지방률 {fatPercent} %
+                                        </BasicText>)
+                                }
+                                {
+                                    memo !== '' &&
+                                        (<BasicText marginBottom={5}>
+                                            메모 {memo} 
+                                        </BasicText>)
+                                }
+                                {
+                                    (bodyImg !== '' && bodyImg !== undefined) && 
+                                        (<Img
+                                            source={{uri: bodyImg}}
+                                        />)
+                                }
+                            </BodyDataView>
+                        </RowView>
 
-                
-                                <TouchableOpacity
-                                    onPress={() => {setMoreState(!moreState)}}
-                                >
-                                    <Modify
-                                        source={require('../../assets/more.png')}
-                                    />
-                                </TouchableOpacity>
-                            </RowView>
+                        <RowView>
+                            {
+                                moreState == true && 
+                                
+                                    <More>
+                                        <MoreOption
+                                            onPress={() => { setOptionState(true) }}
+                                        >
+                                            <MoreOptionText>
+                                                수정
+                                            </MoreOptionText>
+                                        </MoreOption>
 
-                            
-                        </BodyView>
+                                        <MoreOption
+                                            onPress={() => {
+                                                deleteBtn()
+                                            }}
+                                        >
+                                            <MoreOptionText>
+                                                삭제
+                                            </MoreOptionText>
+                                        </MoreOption>
+                                        
+                                    </More>
+                                
+                            }
+
+            
+                            <TouchableOpacity
+                                onPress={() => {setMoreState(!moreState)}}
+                            >
+                                <Modify
+                                    source={require('../../assets/more.png')}
+                                />
+                            </TouchableOpacity>
+                        </RowView>
 
                         
-                    </>
+                    </BodyView>
                 )
             } else {
             }
@@ -328,7 +381,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 setMuscle(body.muscle);
                 setFatPercent(body.fatPercent);
                 setMemo(body.memo);
-                setImg(body.img);
+                setBodyImg(body.img);
 
             } 
 
@@ -342,9 +395,44 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
             setMuscle('');
             setFatPercent('');
             setMemo('');
-            setImg('');
+            setBodyImg('');
         }
 
+    }
+
+
+    const setDietData = async () => {
+
+        let duplication = false;
+
+        record.map((item :any, index :number) => {
+
+            if (item.date == selectedDate) {
+
+                let diet = item.diet;
+                
+                if (Object.keys(diet).length !== 0) { //{}이 아니라면
+                    duplication = true;
+
+                    setScore(diet.score);
+                    setCategory(diet.category);
+                    setAmount(diet.amount);
+                    setDietImg(diet.img);
+                    setDietTime(diet.time);
+                } 
+
+            } 
+
+        })
+
+        if (duplication == false) {
+
+            setScore('');
+            setCategory('');
+            setAmount('');
+            setDietImg('');
+            setDietTime('');
+        }
     }
 
 
@@ -362,7 +450,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         setMuscle(muscle);
         setFatPercent(fatPercent);
         setMemo(memo);
-        setImg(img);
+        setBodyImg(img);
 
         //수정된 데이터 따라 state도 변경
         let tempRecord = record;
@@ -374,7 +462,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 item.body.weight = weight;
                 item.body.muscle = muscle;
                 item.body.fatPercent = fatPercent;
-                item.body.img = img;
+                item.body.img = bodyImg;
                 item.body.memo = memo;
 
 
@@ -387,13 +475,13 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
             let newDate = {
                 "date" : selectedDate,
-                "diet" : {},
+                "diet" : [],
                 "body" : {
                     "date" : selectedDate,
                     "weight" : weight,
                     "muscle" : muscle,
                     "fatPercent" : fatPercent,
-                    "img" : img,
+                    "img" : bodyImg,
                     "memo" : memo
                 },
                 "exercise" : {},
@@ -443,7 +531,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         setMuscle('');
         setFatPercent('');
         setMemo('');
-        setImg('');
+        setBodyImg('');
 
 
         //Async, state 변경
@@ -551,6 +639,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         try {
             initSelectedDate();
             getMyRecord();
+            setDietData();
             setBodyData();
         } catch (e) {
             console.log(e)
@@ -563,7 +652,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     useEffect(() => {
         try {
             if (selectedDate !== '') {
-
+                setDietData();
                 setBodyData();
             }
         } catch (e) {
@@ -802,6 +891,26 @@ const Img = styled.Image`
 const BodyDataView = styled.View`
     padding-right: 15px;
     width: 80%;
+`
+const DietImgView = styled.View`
+    width: ${dietImgWidth}px;
+    height: ${dietImgWidth}px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+`
+const DietImg = styled.Image`
+    width: ${dietImgWidth}px;
+    height: ${dietImgWidth}px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    position: absolute;
+    z-index: 3;
+`
+const DietView = styled.View`
+    flex-direction: row;
+    margin-bottom: 10px;
+`
+const DietTextView = styled.View`
+    margin-left: 20px;
+    margin-top: 10px;
 `
 
 

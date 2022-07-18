@@ -17,20 +17,20 @@ const ScreenWidth = Dimensions.get('window').width;
 
 interface Props {
     closeOption: () => any;
-    goBack: () => any;
+    modifyBodyData?: (weight: any, muscle: any, fatPercent: any, img: any, memo: any) => any;
 }
 
-const ImageUploadDiet = ({closeOption, goBack}: Props) => {
+const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
     
-    const [uploadImage, setUploadImge] = useState<any>();
-    const [amPm, setAmPm] = useState('');
-    const [hour, setHour] = useState('');
-    const [minute, setMinute] = useState('');
-
     const [selYear, setSelYear] = useState('');
     const [selMonth, setSelMonth] = useState('');
     const [selDay, setSelDay] = useState('');
 
+
+    const [uploadImage, setUploadImge] = useState<any>();
+    const [amPm, setAmPm] = useState('');
+    const [hour, setHour] = useState('');
+    const [minute, setMinute] = useState('');
     const [score, setScore] = useState<any>();
     const [scoreOption, setScoreOption] = useState([1,2,3,4,5]);
     const [category, setCategory] = useState('');
@@ -101,6 +101,76 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
         }
     }
 
+    const save = async () => {
+
+        //기존 recordBody 데이터 받아옴
+        const selectedDate = await AsyncStorage.getItem('selectedDate');
+        const value = await AsyncStorage.getItem('MyRecord');
+
+
+        //입력 데이터
+        let inputData = {
+            "score" : score,
+            "category" : category,
+            "amount" : amount,
+            "time" : (hour !== '') && `${amPm} ${hour}:${minute}`,
+            "img" : uploadImage
+        }
+
+
+        //🌞 달력 - '수정' 에서 넘어온 경우. 수정한 정보 보내기.
+        if (modifyBodyData) {
+            modifyBodyData(score, category, amount, `${amPm} ${hour}:${minute}`, uploadImage)
+        }
+
+
+        //입력 데이터 추가해서 setItem
+        let valueArr :any[] = []; 
+        let duplication = false;
+
+        if (value !== null) {
+            valueArr = JSON.parse(value);
+        } else {
+            console.log('MyRecord 비어있음')
+        }
+
+
+        //중복 체크
+        if (valueArr.length > 0) {
+            valueArr.map( (item :any) => {
+                if (item.date == selectedDate) {
+                    
+                    duplication = true;
+
+                    //중복 있으면 해당 날짜에 body값 넣기
+                    item["diet"] = inputData;
+                
+                }
+            })
+        }
+
+
+        if (duplication == false) {
+
+            //날짜 새로 생성
+            let newDate = {
+                "date" : selectedDate,
+                "diet" : inputData,
+                "body" : {},
+                "exercise" : {},
+                "water" : {}
+            } 
+
+            valueArr.push(newDate);
+
+        }
+
+        let newValueArr = JSON.stringify(valueArr);
+        await AsyncStorage.setItem('MyRecord', newValueArr);
+
+
+    }
+
     const timeView = () => {
         if (hour !== '') {
             return (
@@ -125,6 +195,38 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
         }
     }
 
+
+    //초기 날짜 설정(현재 시간)
+    const initTime = async () => {
+
+        if (hour == '') {
+            let today = new Date();
+
+            //오전오후
+            let amPm = '';
+
+            //시
+            let hour : number|string = today.getHours();
+            if (hour > 12) {
+                hour = hour - 12;
+                amPm = '오후'
+            } else {
+                amPm = '오전'
+            }
+            hour = ('0' + hour).slice(-2);
+
+            //분
+            let minute = ('0' + today.getMinutes()).slice(-2);
+
+            setAmPm(amPm);
+            setHour(hour);
+            setMinute(minute);
+        }
+
+    }
+
+
+ 
     const pickerView = () => {
 
         if (onPicker == true) {
@@ -142,7 +244,9 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
                             </ClosePickerText>
                         </ClosePicker>
 
-                        <ClosePicker onPress={() => {setOnPicker(false)}}>
+                        <ClosePicker onPress={() => {
+                            setOnPicker(false);
+                        }}>
                             <ClosePickerText>
                                 확인
                             </ClosePickerText>
@@ -202,7 +306,7 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
             tempHour = tempHour.slice(-2)
 
             return (
-                <Picker.Item label = {tempHour} value = {tempHour}/>
+                <Picker.Item label = {tempHour} value = {tempHour} key={tempHour}/>
             )
         })
 
@@ -333,17 +437,30 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
         }
 
         if (myRecord !== null) {
+            
             let record = JSON.parse(myRecord);
-            // record.map((item :any) => {
-            //     if (item.date == selectedDate) {
-            //         let body = item.body;
-            //         setWeight(body.weight);
-            //         setMuscle(body.muscle);
-            //         setFatPercent(body.fatPercent);
-            //         setMemo(body.memo);
-            //         setUploadImage(body.img);
-            //     }
-            // })
+            record.map((item :any) => {
+                if (item.date == selectedDate) {
+
+                    let diet = item.diet;
+
+                    setScore(diet.score);
+                    setCategory(diet.category);
+                    setAmount(diet.amount);
+                    setUploadImge(diet.img);
+
+
+                    let tempAmPm = diet.time.substring(0,2);
+                    let tempHour = diet.time.substring(3,5);
+                    let tempMinute = diet.time.slice(-2);
+
+                    setAmPm(tempAmPm);
+                    setHour(tempHour);
+                    setMinute(tempMinute);
+
+                } else {
+                }
+            })
         }
     }
 
@@ -353,7 +470,12 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
         } catch (e) {
             console.log(e)
         }
-    },[])
+    },[hour])
+
+
+    useEffect(() => {
+        initTime();
+    },[hour])
 
 
 
@@ -446,8 +568,8 @@ const ImageUploadDiet = ({closeOption, goBack}: Props) => {
             <PaddingView>
                 <FinalBtn 
                     func={()=>{
-                        // save();
-                        goBack();
+                        save();
+                        closeOption();
                     }}
                     text={'저장하기'}
                     backgroundColor={'rgb(43,45,75)'}
@@ -519,6 +641,7 @@ const AddPicture = styled.TouchableOpacity`
     margin-top: 12px;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
 `
 const AddPictureIcon = styled.Image`
     width: 16px;

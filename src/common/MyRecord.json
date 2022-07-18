@@ -1,7 +1,22 @@
 [
     {
         "date" : "2022-07-01",
-        "diet" : {},
+        "diet" : [
+            {
+                "score" : 4,
+                "category" : "점심",
+                "amount" : "가볍게",
+                "time" : "오후 12:30",
+                "img" : ""
+            }, 
+            {
+                "score" : 4,
+                "category" : "점심",
+                "amount" : "가볍게",
+                "time" : "오후 12:30",
+                "img" : ""
+            }
+        ],
         "body" : 
             {
                 "date" : "2022-07-01",

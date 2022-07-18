@@ -10,26 +10,8 @@ interface Props {
 
 const TabFifthContainer = ({navigation}: Props) => {
 
-    const isFocused = useIsFocused();
 
-    const testFirstTab = async() => {
-        let record = await AsyncStorage.getItem('MyRecord');
 
-        if (record !== null) {
-            let recordValue = JSON.parse(record);
-            recordValue.map((item :any) => {
-                console.log("확인 : " + item.date)
-            })
-        }
-        
-    }
-
-    useEffect(() => {
-        if (isFocused == true) {
-            console.log('🔥 하단탭5')
-            testFirstTab()
-        }
-    },[isFocused])
 
 
     return(

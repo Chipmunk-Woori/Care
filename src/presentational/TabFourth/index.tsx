@@ -101,12 +101,140 @@ const TabFourth = () => {
                     title={`남은 시간 ${hours}:${minutes}:${seconds}`}
                 />
 
-                
-
                 <DayView>
                     {dayView()}
                 </DayView>
 
+                <VideoView>
+
+                </VideoView>
+
+                <VideoInfoView>
+                    <VideoTimeView>
+                        <VideoTime>
+                            13
+                        </VideoTime>
+                        <VideoMinut>
+                            분
+                        </VideoMinut>
+                    </VideoTimeView>
+
+                    <VideoTitleView>
+                        <VideoTitle>
+                            다이어트 스트레칭 챌린지
+                        </VideoTitle>
+                        <VideoSubTitle>
+                            스트레칭 / 하체, 전신
+                        </VideoSubTitle>
+                    </VideoTitleView>
+                </VideoInfoView>
+
+
+                <ChallengeCompleteView>
+                    <RowBetween>
+                        <ChallengeComplete>
+                            도전 완료 20 🔥
+                        </ChallengeComplete>
+                        <MoreView>
+                            <More>
+                                모두 보기
+                            </More>
+                            <MoreImg
+                                source={require('../../assets/next.png')}
+                            />     
+                        </MoreView>
+
+                    </RowBetween>
+                    <ChallengeInfoView>
+
+                    </ChallengeInfoView>
+                </ChallengeCompleteView>
+
+
+                <QuestionView>
+                    <BasicText>
+                        오늘의 운동은 무슨 기능인가요?
+                    </BasicText>
+                    <LineView/>
+
+                    <RowView>
+                        <CheckImg
+                            source={require('../../assets/check_white.png')}
+                        />
+                        <AnswerView>
+                            <AnswerText>
+                                '오늘 운동 뭐하지' 고민할 시간에 바로 시작할 수 있도록
+                                매일 새로운 운동을 보내드리는 기능이에요! {'\n'}
+                                오늘의 운동은 딱 24시간 동안만 공개되어요 ⏰
+                            </AnswerText>
+                        </AnswerView>
+                    </RowView>
+                </QuestionView>
+
+
+                <QuestionView>
+                    <BasicText>
+                        오늘의 운동은 어떻게 추천되나요?
+                    </BasicText>
+                    <LineView/>
+
+                    <RowView>
+                        <CheckImg
+                            source={require('../../assets/check_white.png')}
+                        />
+                        <AnswerView>
+                            <AnswerText>
+                                초보 다이어터도 함께 할 수 있는 초급에서 중급 난이도로
+                                매일 20분 내외의 운동을 추천합니다.{'\n'}
+                                유산소/무산소, 부위별, 요일 등의 기준에 따라 여러 크리에이터들의
+                                운동 영상을 엄선하고 있어요 🔍
+                            </AnswerText>
+                        </AnswerView>
+                    </RowView>
+                </QuestionView>
+
+
+                <QuestionView>
+                    <BasicText>
+                        오늘의 운동 인증하고, 후기도 남겨봐요!
+                    </BasicText>
+                    <LineView/>
+
+                    <RowView>
+                        <CheckImg
+                            source={require('../../assets/check_white.png')}
+                        />
+                        <AnswerView>
+                            <AnswerText>
+                                '도전 완료' 버튼을 누르고 인증 스탬프를 모아보세요.{'\n'}
+                                오늘 운동은 어땠는지 한 줄 평을 남기고 다른 유저들의 후기를 참고해봐도 좋겠죠?{'\n'}
+                                그러면 오늘부터 오늘의 운동으로 1일 1운동 시작 🔥
+                            </AnswerText>
+                        </AnswerView>
+                    </RowView>
+                </QuestionView>
+
+
+                <QuestionView>
+                    <BasicText>
+                        ⚠️ 주의사항
+                    </BasicText>
+                    <LineView/>
+
+                    <RowView>
+                        <CheckImg
+                            source={require('../../assets/check_white.png')}
+                        />
+                        <AnswerView>
+                            <AnswerText>
+                                '도전하기'로 운동하고 나서 이 페이지로 다시 돌아와{'\n'}
+                                '도전 완료' 버튼을 눌러야 내가 한 운동이 저장돼요!
+                            </AnswerText>
+                        </AnswerView>
+                    </RowView>
+                </QuestionView>
+
+                <MarginBottom />
             </PaddingView>
         </Container>
     )
@@ -145,24 +273,120 @@ const TodayView = styled.View`
     align-items: center;
     justify-content: center;
 `
-const HeaderContainer = styled.View`
-    background-color: ${CommonSetting.color.background_dark};
+const VideoView = styled.View`
     width: 100%;
-    height: 45px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    height: 200px;
+    border-top-left-radius: ${CommonSetting.btnBorderRadius}px;
+    border-top-right-radius: ${CommonSetting.btnBorderRadius}px;
+    background-color: blanchedalmond;
 `
-const Title = styled.Text`
-    color: ${CommonSetting.color.text_light};
-    font-size: 18px;
+const VideoInfoView = styled.View`
+    flex-direction: row;
+    width: 100%;
+    height: 80px;
+    border-bottom-left-radius: ${CommonSetting.btnBorderRadius}px;
+    border-bottom-right-radius: ${CommonSetting.btnBorderRadius}px;
+    background-color: ${CommonSetting.color.darkBtn};
+    margin-top: 5px;
+    align-items: center;
+    justify-content: center;
+`
+const VideoTimeView = styled.View`
+    width: 18%;
+    height: 50px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    background-color: ${CommonSetting.color.background_dark};
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+`
+const VideoTime = styled.Text`
+    color: white;
+    font-size: 20px;
     font-weight: bold;
 `
-const IconView = styled.View`
+const VideoMinut = styled.Text`
+    color: ${CommonSetting.color.gray};
+    font-size: 13px;
+    margin-left: 2px;
+`
+const VideoTitleView = styled.View`
+    width: 67%;
+    height: 50px;
+    margin-left: 20px;
+`
+const VideoTitle = styled.Text`
+    color: #e9e9e9;
+    font-size: 15px;
+    margin-bottom: 5px;
+`
+const VideoSubTitle = styled.Text`
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+`
+const ChallengeComplete = styled.Text`
+    color: white;
+    font-size: 15px;
+    margin-bottom: 5px;
+`
+const ChallengeCompleteView = styled.View`
+    margin-top: 30px;
+    margin-bottom: 30px;
+`
+const RowBetween = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+`
+const More = styled.Text`
+    color: ${CommonSetting.color.gray};
+    font-size: 13px;
+`
+const MoreImg = styled.Image`
+    width: 13px;
+    height: 13px;
+`
+const MoreView = styled.TouchableOpacity`
+    align-items: center;
+    justify-content: center;
     flex-direction: row;
 `
-const IconImg = styled.Image`
-    width: 21px;
-    height: 21px;
-    margin-left: 20px;
+const ChallengeInfoView = styled.View`
+    flex-direction: row;
+    width: 100%;
+    height: 60px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    background-color: ${CommonSetting.color.darkBtn};
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+`
+const QuestionView = styled.View`
+    margin-top: 20px;
+    margin-bottom: 23px;
+`
+const LineView = styled.View`
+    width: 100%;
+    height: 0.5px;
+    background-color: ${CommonSetting.color.borderColor};
+    margin-top: 15px;
+    margin-bottom: 15px;
+`
+const AnswerText = styled.Text`
+    color: rgb(143, 143, 167);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+`
+const CheckImg = styled.Image`
+    width: 13px;
+    height: 13px;
+`
+const AnswerView = styled.View`
+    margin-left: 10px;
+    padding-right: 12px;
+`
+const MarginBottom = styled.View`
+    height: 60px;
+    width: 100%
 `

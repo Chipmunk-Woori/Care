@@ -57,7 +57,7 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                         setOptionState(false)
                     }}
                 >
-                    <ImageUploadDiet closeOption={closeOption} goBack={goBack}/>
+                    <ImageUploadDiet closeOption={closeOption}/>
                 </Modal>
             )
         } else if (selectedOption === '신체') {
