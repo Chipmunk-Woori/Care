@@ -39,6 +39,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     const [amount, setAmount] = useState('');
     const [dietImg, setDietImg] = useState<any>('');
     const [dietTime, setDietTime] = useState('');
+    const [dietArr, setDietArr] = useState([]);
 
     //신체
     const [weight, setWeight] = useState('');
@@ -194,42 +195,50 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                     </View>
                 )
             } else {
-                return (
-                    <DietView>
-                        <DietImgView>
-
-                        </DietImgView>
-                        
-                        {
-                            dietImg !== '' && 
-                                <DietImg
-                                    source={{uri:dietImg}}
-                                />
-                        }
-
-                        <DietTextView>
-                            <BasicTextBig>
-                                {
-                                    category !== '' && category
-                                }
-                            </BasicTextBig>
-
-                            <RowView>
-                                <DetailOption>
+                if (dietArr.length > 0) {
+                    return (
+                        dietArr.map((item: any) => {
+                            console.log(item)
+                            return (
+                                <DietView>
+                                    <DietImgView>
+    
+                                    </DietImgView>
+                                    
                                     {
-                                        dietTime !== '' && dietTime
+                                        item.img !== '' && 
+                                            <DietImg
+                                                source={{uri:item.img}}
+                                            />
                                     }
-                                    {'   '}
-                                    {
-                                        amount !== '' && amount
-                                    }
-                                </DetailOption>
-                            
-                            </RowView>
-
-                        </DietTextView>
-                    </DietView>
-                )
+    
+                                    <DietTextView>
+                                        <BasicTextBig>
+                                            {
+                                                item.category !== '' && item.category
+                                            }
+                                        </BasicTextBig>
+    
+                                        <RowView>
+                                            <DetailOption>
+                                                {
+                                                    item.time !== '' && item.time
+                                                }
+                                                {'   '}
+                                                {
+                                                    item.amount !== '' && item.amount
+                                                }
+                                            </DetailOption>
+                                        
+                                        </RowView>
+    
+                                    </DietTextView>
+                                </DietView>
+                            )
+                        })
+                    )
+                }
+                
             }
             
         } else if (selectedCategory === 2) {
@@ -404,6 +413,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     const setDietData = async () => {
 
         let duplication = false;
+        let tempDietArr :any = [];
 
         record.map((item :any, index :number) => {
 
@@ -419,11 +429,13 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                     setAmount(diet.amount);
                     setDietImg(diet.img);
                     setDietTime(diet.time);
+
+                    tempDietArr.push(diet);
                 } 
-
             } 
-
         })
+
+        setDietArr(tempDietArr);
 
         if (duplication == false) {
 
