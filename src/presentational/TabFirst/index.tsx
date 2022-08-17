@@ -197,10 +197,10 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
             } else {
                 if (dietArr.length > 0) {
                     return (
-                        dietArr.map((item: any) => {
-                            console.log(item)
+                        dietArr.map((item: any, index: number) => {
+                            
                             return (
-                                <DietView>
+                                <DietView key={index.toString()}>
                                     <DietImgView>
     
                                     </DietImgView>

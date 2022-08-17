@@ -198,26 +198,27 @@ const App = () => {
             })
             console.log("MyRecord 확인🌼" + date)
         } else {
-            console.log("MyRecord == null...")
+            console.log("MyRecord == null")
         }
         
     }
-
     
     const tempSaveRecord = async() => {
         let value = JSON.stringify(MyRecord);
         await AsyncStorage.setItem('MyRecord', value)
     }
 
+    const myUserInfo = async () => {
+        let myUserInformation = {
+            "id" : "haha51015",
+            "email" : "haha51015@naver.com",
+            "nickname" : "계단의천국"
+        }
 
-    // useEffect(() => {
-    //     try {
-    //            myRecord();
-    //         // tempSaveRecord();
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // },[])
+        let value = JSON.stringify(myUserInformation);
+
+        await AsyncStorage.setItem('myUserInformation', value)
+    }
 
 
     return (
