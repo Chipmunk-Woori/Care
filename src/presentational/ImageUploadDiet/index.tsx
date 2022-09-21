@@ -436,32 +436,32 @@ const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
             console.log('selectedDate == null')
         }
 
-        if (myRecord !== null) {
+        // if (myRecord !== null) {
             
-            let record = JSON.parse(myRecord);
-            record.map((item :any) => {
-                if (item.date == selectedDate) {
+        //     let record = JSON.parse(myRecord);
+        //     record.map((item :any) => {
+        //         if (item.date == selectedDate) {
 
-                    let diet = item.diet;
+        //             let diet = item.diet;
 
-                    setScore(diet.score);
-                    setCategory(diet.category);
-                    setAmount(diet.amount);
-                    setUploadImge(diet.img);
+        //             setScore(diet.score);
+        //             setCategory(diet.category);
+        //             setAmount(diet.amount);
+        //             setUploadImge(diet.img);
 
 
-                    let tempAmPm = diet.time.substring(0,2);
-                    let tempHour = diet.time.substring(3,5);
-                    let tempMinute = diet.time.slice(-2);
+        //             let tempAmPm = diet.time.substring(0,2);
+        //             let tempHour = diet.time.substring(3,5);
+        //             let tempMinute = diet.time.slice(-2);
 
-                    setAmPm(tempAmPm);
-                    setHour(tempHour);
-                    setMinute(tempMinute);
+        //             setAmPm(tempAmPm);
+        //             setHour(tempHour);
+        //             setMinute(tempMinute);
 
-                } else {
-                }
-            })
-        }
+        //         } else {
+        //         }
+        //     })
+        // }
     }
 
     useEffect(() => {
