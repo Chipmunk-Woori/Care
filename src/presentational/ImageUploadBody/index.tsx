@@ -148,7 +148,7 @@ const ImageUploadBody = ({closeOption, modifyBodyData}: Props) => {
             //날짜 새로 생성
             let newDate = {
                 "date" : selectedDate,
-                "diet" : [0],
+                "diet" : [],
                 "body" : inputData,
                 "exercise" : {},
                 "water" : {}

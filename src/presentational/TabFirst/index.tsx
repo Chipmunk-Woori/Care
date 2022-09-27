@@ -198,7 +198,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 if (dietArr.length > 0) {
                     return (
                         dietArr.map((item: any, index: number) => {
-                            
+                            // console.log(dietArr)
                             return (
                                 <DietView key={index.toString()}>
                                     <DietImgView>
@@ -421,7 +421,11 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
                 let diet = item.diet;
                 
-                if (Object.keys(diet).length !== 0) { //{}이 아니라면
+                //수정 전
+                // if (Object.keys(diet).length !== 0) { //{}이 아니라면
+
+                //수정 후
+                if (diet.length > 0) { //diet는 배열이니까
                     duplication = true;
 
                     setScore(diet.score);
@@ -430,7 +434,11 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                     setDietImg(diet.img);
                     setDietTime(diet.time);
 
-                    tempDietArr.push(diet);
+                    //수정 전
+                    // tempDietArr.push(diet);
+
+                    //수정 후
+                    tempDietArr = diet; //diet는 배열이니까
                 } 
             } 
         })
@@ -678,7 +686,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
             let day = date.substring(8,10)
             recordDay.push(day)
         })
-        //console.log(recordDay)
     },[selectedDate, record])
 
 

@@ -188,6 +188,7 @@ const TabFifthStackScreen = ({navigation, route}: any) => {
 
 const App = () => {
 
+    //MyRecord 내용(기록된 날찌) 확인
     const myRecord = async () => {
         let myRecord = await AsyncStorage.getItem('MyRecord');
 
@@ -203,11 +204,18 @@ const App = () => {
         
     }
     
-    const tempSaveRecord = async() => {
-        let value = JSON.stringify(MyRecord);
-        await AsyncStorage.setItem('MyRecord', value)
-    }
+    //MyRecord 내용으로 초기화
+    const initRecord = async() => {
+        console.log('초기화');
 
+        let value = JSON.stringify(MyRecord);
+        await AsyncStorage.setItem('MyRecord', value);
+
+        let testInitRecord = await AsyncStorage.getItem('MyRecord');
+        console.log(testInitRecord);
+    }
+    
+    //
     const myUserInfo = async () => {
         let myUserInformation = {
             "id" : "haha51015",
@@ -219,6 +227,7 @@ const App = () => {
 
         await AsyncStorage.setItem('myUserInformation', value)
     }
+
 
 
     return (

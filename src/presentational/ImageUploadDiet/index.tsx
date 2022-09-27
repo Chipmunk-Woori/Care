@@ -119,9 +119,9 @@ const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
 
 
         //🌞 달력 - '수정' 에서 넘어온 경우. 수정한 정보 보내기.
-        if (modifyBodyData) {
-            modifyBodyData(score, category, amount, `${amPm} ${hour}:${minute}`, uploadImage)
-        }
+        // if (modifyBodyData) {
+        //     modifyBodyData(score, category, amount, `${amPm} ${hour}:${minute}`, uploadImage)
+        // }
 
 
         //입력 데이터 추가해서 setItem
@@ -142,9 +142,15 @@ const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
                     
                     duplication = true;
 
-                    //중복 있으면 해당 날짜에 body값 넣기
-                    item["diet"] = inputData;
-                
+                    //수정 전 : 중복 있으면 해당 날짜에 body값 넣기
+                    // item["diet"] = inputData;
+
+                    //수정 후 : 해당 날짜에 데이터 '교체' -> '추가'
+                    let tempValue = item["diet"];
+                    tempValue.push(inputData);
+
+                    item["diet"] = tempValue;
+                    
                 }
             })
         }
@@ -155,15 +161,16 @@ const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
             //날짜 새로 생성
             let newDate = {
                 "date" : selectedDate,
-                "diet" : inputData,
+                "diet" : [inputData],
                 "body" : {},
                 "exercise" : {},
                 "water" : {}
-            } 
+            }
 
             valueArr.push(newDate);
 
-        }
+        } 
+
 
         let newValueArr = JSON.stringify(valueArr);
         await AsyncStorage.setItem('MyRecord', newValueArr);
