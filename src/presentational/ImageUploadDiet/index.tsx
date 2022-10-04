@@ -2,14 +2,14 @@ import React, {useRef, useState, useEffect} from "react";
 import {View, Text, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
-import BasicText from '../../component/BasicText';
-import TitleText from "../../component/TitleText";
 import DetailOption from "../../component/DetailOption";
 import DetailOptionAnswer from "../../component/DetailOptionAnswer";
 import ImagePicker from 'react-native-image-crop-picker';
 import FinalBtn from '../../component/FinalBtn';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Picker} from '@react-native-picker/picker';
+import BasicText from "../../component/BasicText";
+import BasicTextBig from "../../component/BasicTextBig";
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
@@ -18,9 +18,10 @@ const ScreenWidth = Dimensions.get('window').width;
 interface Props {
     closeOption: () => any;
     modifyBodyData?: (weight: any, muscle: any, fatPercent: any, img: any, memo: any) => any;
+    type?: string; //record: 기록 확인
 }
 
-const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
+const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
     
     const [selYear, setSelYear] = useState('');
     const [selMonth, setSelMonth] = useState('');
@@ -471,6 +472,77 @@ const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
         // }
     }
 
+
+    //여기 할 차례. 기록된 이미지, 정보 가져와서 item에 넣어죵
+    const contentsView = () => {
+        if (type && type == 'checkRecord') {
+            return (
+                <DietTextView>
+                    {/* <BasicTextBig>
+                        {
+                            item.category !== '' && item.category
+                        }
+                    </BasicTextBig>
+
+                    <RowView>
+                        <DetailOption>
+                            {
+                                item.time !== '' && item.time
+                            }
+                            {'   '}
+                            {
+                                item.amount !== '' && item.amount
+                            }
+                        </DetailOption>
+                    
+                    </RowView> */}
+                </DietTextView>
+            )
+        } else {
+            return (
+                <>
+                    <View style={{marginBottom: 10}}>
+                        <DetailOption>
+                            식단 점수
+                        </DetailOption>
+                        <RowView>
+                            {scoreView()}
+                        </RowView>
+                    </View>
+
+
+                    <View style={{marginBottom: 10}}>
+                        <DetailOption>
+                            분류
+                        </DetailOption>
+                        <RowView>
+                            {categoryView()}
+                        </RowView>
+                    </View>
+
+
+                    <View style={{marginBottom: 10}}>
+                        <DetailOption>
+                            식사량
+                        </DetailOption>
+                        <RowView>
+                            {amountView()}
+                        </RowView>
+                    </View>
+
+                    <View style={{marginBottom: 10}}>
+                        <DetailOption>
+                            시간
+                        </DetailOption>
+
+                        {timeView()}
+                        {pickerView()}
+                    </View>
+                </>
+            )
+        }
+    }
+
     useEffect(() => {
         try {
             getSelectedDate();
@@ -526,43 +598,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData}: Props) => {
                 </RowView>
 
 
-                <View style={{marginBottom: 10}}>
-                    <DetailOption>
-                        식단 점수
-                    </DetailOption>
-                    <RowView>
-                        {scoreView()}
-                    </RowView>
-                </View>
-
-
-                <View style={{marginBottom: 10}}>
-                    <DetailOption>
-                        분류
-                    </DetailOption>
-                    <RowView>
-                        {categoryView()}
-                    </RowView>
-                </View>
-
-
-                <View style={{marginBottom: 10}}>
-                    <DetailOption>
-                        식사량
-                    </DetailOption>
-                    <RowView>
-                        {amountView()}
-                    </RowView>
-                </View>
-
-                <View style={{marginBottom: 10}}>
-                    <DetailOption>
-                        시간
-                    </DetailOption>
-
-                    {timeView()}
-                    {pickerView()}
-                </View>
+                
 
 
 
@@ -639,8 +675,8 @@ const AddedConditionText = styled.Text`
     font-weight: 500;
 `
 const AddPicture = styled.TouchableOpacity`
-    width: 100%;
-    height: 300px;
+    width: ${CommonSetting.recordImgWidth}px;
+    height: ${CommonSetting.recordImgHeight}px;
     border-radius: ${CommonSetting.btnBorderRadius}px;
     border-color: ${CommonSetting.color.borderColor};
     border-width: 1px;
@@ -660,8 +696,8 @@ const AddPictureText = styled.Text`
     font-size: 15px;
 `
 const UploadImg = styled.Image`
-    width: 100%;
-    height: 300px;
+    width: ${CommonSetting.recordImgWidth}px;
+    height: ${CommonSetting.recordImgHeight}px;
     border-radius: ${CommonSetting.btnBorderRadius}px;
     margin-top: 12px;
     align-items: center;
@@ -729,6 +765,10 @@ const ClosePickerText = styled.Text`
     color: white;
     margin-top: 5px;
     margin-bottom: 5px;
+`
+const DietTextView = styled.View`
+    margin-left: 20px;
+    margin-top: 10px;
 `
 
 const styles = StyleSheet.create({

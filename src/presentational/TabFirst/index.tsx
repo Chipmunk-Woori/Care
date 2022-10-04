@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImageUploadBody from "../ImageUploadBody";
 import {useIsFocused} from '@react-navigation/native';
 import DetailOption from "../../component/DetailOption";
+import ModalMore from "../../common/ModalMore";
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
@@ -50,9 +51,12 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     const [record, setRecord] = useState<any[]>([]);
     const [bodyRecord, setBodyRecord] = useState(false);
-    const [moreState, setMoreState] = useState(false);
+    const [bodyMore, setBodyMore] = useState(false); //'신체&운동' 더보기
+    const [dietMore, setDietMore] = useState(false); //'식단' 더보기
 
-    const [optionState, setOptionState] = useState(false);
+    const [bodyOptionState, setBodyOptionState] = useState(false); //'신체&운동' 기록 수정
+    const [dietOptionState, setDietOptionState] = useState(false); //'식단' 기록 수정
+
 
     const [reload, setReload] = useState(false);
     const isFocused = useIsFocused();
@@ -145,25 +149,41 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
     
 
-
-    const closeOption = () => {
-        setOptionState(false);
+    //식단 기록 내용 확인
+    const checkRecordDiet = () => {
+        // return (
+        //     <Modal
+        //         animationType="slide"
+        //         transparent={true}
+        //         visible={optionState}
+        //         onRequestClose={() => {
+        //             setOptionState(false)
+        //         }}
+        //     >
+        //         <ImageUploadDiet closeOption={closeOption}/>
+        //     </Modal>
+        // )
     }
 
 
+    const closeBodyOption = () => {
+        setBodyOptionState(false);
+    }
 
-    const ModifyScreen = () => {
+
+    //'신체&운동' 기록 수정
+    const modifyBodyView = () => {
         return (
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={optionState}
+                visible={bodyOptionState}
                 onRequestClose={() => {
-                    setOptionState(false)
+                    setBodyOptionState(false)
                 }}
             >
                 <ImageUploadBody 
-                    closeOption={closeOption} 
+                    closeOption={closeBodyOption} 
                     modifyBodyData={modifyBodyData}
                 />
             </Modal>
@@ -172,9 +192,13 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
 
 
+
+
+
+
     //카테고리 내용 보여줌
     const categoryContents = () => {
-        if (selectedCategory === 1) {
+        if (selectedCategory === 1) { //'식단' 내용
             let duplication = false; 
 
             record.map((item: any, index: number) => {
@@ -198,9 +222,12 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 if (dietArr.length > 0) {
                     return (
                         dietArr.map((item: any, index: number) => {
-                            // console.log(dietArr)
+                            
                             return (
-                                <DietView key={index.toString()}>
+                                <DietView 
+                                    onPress={()=>{checkRecordDiet()}}
+                                    key={index.toString()}
+                                >
                                     <DietImgView>
     
                                     </DietImgView>
@@ -241,7 +268,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 
             }
             
-        } else if (selectedCategory === 2) {
+        } else if (selectedCategory === 2) { //'신체&운동' 내용
 
             if (bodyRecord == true) {
 
@@ -291,11 +318,11 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
                         <RowView>
                             {
-                                moreState == true && 
+                                bodyMore == true && 
                                 
                                     <More>
                                         <MoreOption
-                                            onPress={() => { setOptionState(true) }}
+                                            onPress={() => { setBodyOptionState(true) }}
                                         >
                                             <MoreOptionText>
                                                 수정
@@ -318,7 +345,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
             
                             <TouchableOpacity
-                                onPress={() => {setMoreState(!moreState)}}
+                                onPress={() => {setBodyMore(!bodyMore)}}
                             >
                                 <Modify
                                     source={require('../../assets/more.png')}
@@ -533,7 +560,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 },
                 {
                     text: '취소',
-                    onPress: () => {setMoreState(false)}
+                    onPress: () => {setBodyMore(false)}
                 }
             ]
         )
@@ -768,7 +795,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
                 {categoryContents()}
 
-                {ModifyScreen()}
+                {modifyBodyView()}
                 
             </PaddingScrollView>
         
@@ -923,7 +950,7 @@ const DietImg = styled.Image`
     position: absolute;
     z-index: 3;
 `
-const DietView = styled.View`
+const DietView = styled.TouchableOpacity`
     flex-direction: row;
     margin-bottom: 10px;
 `

@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from "react";
-import {View, Text, Modal, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
+import {Modal, Dimensions, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import { BlurView, VibrancyView } from "@react-native-community/blur";

@@ -32,7 +32,9 @@ const CommonSetting = {
     btnBorderRadius: 8,
     screenPaddingHorizontal: '5%',
     screenHeight: Dimensions.get('window').height,
-    screenWidth: Dimensions.get('window').width
+    screenWidth: Dimensions.get('window').width,
+    recordImgWidth: Dimensions.get('window').width*0.9,
+    recordImgHeight: Dimensions.get('window').width*0.9*11/10,
 }
 
 export default CommonSetting;
