@@ -18,10 +18,11 @@ const ScreenWidth = Dimensions.get('window').width;
 interface Props {
     closeOption: () => any;
     modifyBodyData?: (weight: any, muscle: any, fatPercent: any, img: any, memo: any) => any;
-    type?: string; //record: 기록 확인
+    type?: string; //checkRecord: 기록 확인
+    recordedDiet?: any;
 }
 
-const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
+const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Props) => {
     
     const [selYear, setSelYear] = useState('');
     const [selMonth, setSelMonth] = useState('');
@@ -44,6 +45,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
     ])
 
     const [onPicker, setOnPicker] = useState(false);
+
 
 
     const imageSelector = async () => {
@@ -91,15 +93,34 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
         //     return result
         // }
 
+        if (type === "checkRecord") {
 
-        //하나 선택
-        if (typeof uploadImage !== 'undefined') {
-            return (
-                <UploadImg
-                    source={{uri: uploadImage}}
-                />
-            )
+            if (recordedDiet.img) {
+                return (
+                    <UploadImg
+                        source={{uri: recordedDiet.img}}
+                    />
+                )
+            } else {
+                return (
+                    <UploadImg
+                        source={require('../../assets/crown.png')}
+                    />
+                )
+            }
+        } else {
+
+            //하나 선택
+            if (typeof uploadImage !== 'undefined') {
+                return (
+                    <UploadImg
+                        source={{uri: uploadImage}}
+                    />
+                )
+            }
         }
+
+
     }
 
     const save = async () => {
@@ -430,7 +451,8 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
     //신체(weight, muscle, fatPercent, memo, uploadImage) 변수에 넣음
     const getSelectedDate = async () => {
         const selectedDate = await AsyncStorage.getItem('selectedDate');
-        let myRecord = await AsyncStorage.getItem('MyRecord');
+        // let myRecord = await AsyncStorage.getItem('MyRecord');
+        
 
         if (selectedDate !== null) {           
             let year = selectedDate.substring(0,4);
@@ -449,53 +471,42 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
         //     let record = JSON.parse(myRecord);
         //     record.map((item :any) => {
         //         if (item.date == selectedDate) {
-
+                    
         //             let diet = item.diet;
-
-        //             setScore(diet.score);
-        //             setCategory(diet.category);
-        //             setAmount(diet.amount);
-        //             setUploadImge(diet.img);
-
-
-        //             let tempAmPm = diet.time.substring(0,2);
-        //             let tempHour = diet.time.substring(3,5);
-        //             let tempMinute = diet.time.slice(-2);
-
-        //             setAmPm(tempAmPm);
-        //             setHour(tempHour);
-        //             setMinute(tempMinute);
+        //             console.log(diet.category);
 
         //         } else {
+
         //         }
         //     })
         // }
+        
     }
 
 
     //여기 할 차례. 기록된 이미지, 정보 가져와서 item에 넣어죵
     const contentsView = () => {
-        if (type && type == 'checkRecord') {
+        if (type && type == 'checkRecord' && recordedDiet) {
             return (
                 <DietTextView>
-                    {/* <BasicTextBig>
+                    <BasicTextBig>
                         {
-                            item.category !== '' && item.category
+                            recordedDiet.category && recordedDiet.category
                         }
                     </BasicTextBig>
 
                     <RowView>
                         <DetailOption>
                             {
-                                item.time !== '' && item.time
+                                recordedDiet.time && recordedDiet.time
                             }
                             {'   '}
                             {
-                                item.amount !== '' && item.amount
+                                recordedDiet.amount && recordedDiet.amount
                             }
                         </DetailOption>
                     
-                    </RowView> */}
+                    </RowView>
                 </DietTextView>
             )
         } else {
@@ -583,6 +594,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
 
 
                 <RowView>
+                    
                     <AddPicture
                         onPress={() => {imageSelector()}}
                     >
@@ -597,10 +609,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type}: Props) => {
                     {showImage()}
                 </RowView>
 
-
-                
-
-
+                {contentsView()}
 
                 <View style={{height:100}} />
 

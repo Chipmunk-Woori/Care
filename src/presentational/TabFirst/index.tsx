@@ -11,6 +11,7 @@ import ImageUploadBody from "../ImageUploadBody";
 import {useIsFocused} from '@react-navigation/native';
 import DetailOption from "../../component/DetailOption";
 import ModalMore from "../../common/ModalMore";
+import ImageUploadDiet from "../../presentational/ImageUploadDiet";
 // import ImagePicker from 'react-native-image-crop-picker';
 
 
@@ -149,20 +150,28 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
     
 
+    const closeDietOption = () => {
+        setDietOptionState(false);
+    }
+
     //식단 기록 내용 확인
-    const checkRecordDiet = () => {
-        // return (
-        //     <Modal
-        //         animationType="slide"
-        //         transparent={true}
-        //         visible={optionState}
-        //         onRequestClose={() => {
-        //             setOptionState(false)
-        //         }}
-        //     >
-        //         <ImageUploadDiet closeOption={closeOption}/>
-        //     </Modal>
-        // )
+    const checkRecordDiet = (item: any) => {
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={dietOptionState}
+                onRequestClose={() => {
+                    setDietOptionState(false)
+                }}
+            >
+                <ImageUploadDiet 
+                    closeOption={closeDietOption}
+                    type={"checkRecord"}
+                    recordedDiet={item}
+                />
+            </Modal>
+        )
     }
 
 
@@ -225,7 +234,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                             
                             return (
                                 <DietView 
-                                    onPress={()=>{checkRecordDiet()}}
+                                    onPress={()=>{setDietOptionState(true)}}
                                     key={index.toString()}
                                 >
                                     <DietImgView>
@@ -260,9 +269,12 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                                         </RowView>
     
                                     </DietTextView>
+
+                                    {checkRecordDiet(item)}
                                 </DietView>
                             )
                         })
+                        
                     )
                 }
                 
