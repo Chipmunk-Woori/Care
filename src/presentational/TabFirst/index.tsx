@@ -57,7 +57,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     const [bodyOptionState, setBodyOptionState] = useState(false); //'신체&운동' 기록 수정
     const [dietOptionState, setDietOptionState] = useState(false); //'식단' 기록 수정
-
+    const [recordedDiet, setRecordedDiet] = useState<any>();
 
     const [reload, setReload] = useState(false);
     const isFocused = useIsFocused();
@@ -67,15 +67,15 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         {
             img: require('../../assets/upload.png'),
             func: () => {}
-        },
-        {
-            img: require('../../assets/files.png'),
-            func: () => {}
-        },
-        {
-            img: require('../../assets/palette.png'),
-            func: () => {}
         }
+        // {
+        //     img: require('../../assets/files.png'),
+        //     func: () => {}
+        // },
+        // {
+        //     img: require('../../assets/palette.png'),
+        //     func: () => {}
+        // }
     ]
 
     //'식단' 내용
@@ -155,7 +155,8 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
     //식단 기록 내용 확인
-    const checkRecordDiet = (item: any) => {
+    const checkRecordDiet = () => {
+       
         return (
             <Modal
                 animationType="slide"
@@ -168,7 +169,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                 <ImageUploadDiet 
                     closeOption={closeDietOption}
                     type={"checkRecord"}
-                    recordedDiet={item}
+                    recordedDiet={recordedDiet}
                 />
             </Modal>
         )
@@ -202,9 +203,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
 
 
-
-
-
     //카테고리 내용 보여줌
     const categoryContents = () => {
         if (selectedCategory === 1) { //'식단' 내용
@@ -234,7 +232,10 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                             
                             return (
                                 <DietView 
-                                    onPress={()=>{setDietOptionState(true)}}
+                                    onPress={()=>{
+                                        setRecordedDiet(item)
+                                        setDietOptionState(true)
+                                    }}
                                     key={index.toString()}
                                 >
                                     <DietImgView>
@@ -242,27 +243,32 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                                     </DietImgView>
                                     
                                     {
-                                        item.img !== '' && 
+                                        item.img 
+                                        ?
                                             <DietImg
                                                 source={{uri:item.img}}
                                             />
+
+                                        : 
+                                            <DietNoImg/>
+
                                     }
     
                                     <DietTextView>
                                         <BasicTextBig>
                                             {
-                                                item.category !== '' && item.category
+                                                item.category && item.category
                                             }
                                         </BasicTextBig>
     
                                         <RowView>
                                             <DetailOption>
                                                 {
-                                                    item.time !== '' && item.time
+                                                    item.time && item.time
                                                 }
                                                 {'   '}
                                                 {
-                                                    item.amount !== '' && item.amount
+                                                    item.amount && item.amount
                                                 }
                                             </DetailOption>
                                         
@@ -270,7 +276,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     
                                     </DietTextView>
 
-                                    {checkRecordDiet(item)}
+                                    {checkRecordDiet()}
                                 </DietView>
                             )
                         })
@@ -961,6 +967,14 @@ const DietImg = styled.Image`
     border-radius: ${CommonSetting.btnBorderRadius}px;
     position: absolute;
     z-index: 3;
+`
+const DietNoImg = styled.View`
+    width: ${dietImgWidth}px;
+    height: ${dietImgWidth}px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    position: absolute;
+    z-index: 3;
+    backgroundColor: ${CommonSetting.color.temp300};
 `
 const DietView = styled.TouchableOpacity`
     flex-direction: row;

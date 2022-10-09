@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from "react";
-import {View, Text, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
+import {View, Text, SafeAreaView, Modal, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import DetailOption from "../../component/DetailOption";
@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Picker} from '@react-native-picker/picker';
 import BasicText from "../../component/BasicText";
 import BasicTextBig from "../../component/BasicTextBig";
+import OptionModal from "../../component/OptionModal";
 
 const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
@@ -29,7 +30,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     const [selDay, setSelDay] = useState('');
 
 
-    const [uploadImage, setUploadImge] = useState<any>();
+    const [uploadImage, setUploadImge] = useState('');
     const [amPm, setAmPm] = useState('');
     const [hour, setHour] = useState('');
     const [minute, setMinute] = useState('');
@@ -45,6 +46,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     ])
 
     const [onPicker, setOnPicker] = useState(false);
+    const [moreModalState, setMoreModalState] = useState(false);
 
 
 
@@ -79,6 +81,33 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     }
 
     const showImage = () => {
+
+        if (type === "checkRecord") {
+            console.log(recordedDiet)
+
+            if (recordedDiet.img) {
+                return (
+                    <UploadImg
+                        source={{uri: recordedDiet.img}}
+                    />
+                )
+            } else {
+                return (
+                    <NoUploadImg />
+                )
+            }
+        } else {
+
+            //하나 선택
+            if (uploadImage) {
+                return (
+                    <UploadImg
+                        source={{uri: uploadImage}}
+                    />
+                )
+            } 
+        }
+
         //여러 개 선택
         // if (uploadImages.length > 0) {
         //     let result = uploadImages.map((item :any, index :number) => {
@@ -92,34 +121,6 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
 
         //     return result
         // }
-
-        if (type === "checkRecord") {
-
-            if (recordedDiet.img) {
-                return (
-                    <UploadImg
-                        source={{uri: recordedDiet.img}}
-                    />
-                )
-            } else {
-                return (
-                    <UploadImg
-                        source={require('../../assets/crown.png')}
-                    />
-                )
-            }
-        } else {
-
-            //하나 선택
-            if (typeof uploadImage !== 'undefined') {
-                return (
-                    <UploadImg
-                        source={{uri: uploadImage}}
-                    />
-                )
-            }
-        }
-
 
     }
 
@@ -371,7 +372,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
             scoreOption.map((item:any, index:any) => {
                 return (
                     <ScoreOptionView 
-                        onPress={()=>{slectScore(item)}}
+                        onPress={()=>{selectScore(item)}}
                         key={index.toString()}
                         style={{backgroundColor : score === item ? CommonSetting.color.borderColor : CommonSetting.color.background_dark}}
                     >
@@ -384,7 +385,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
         )
     }
 
-    const slectScore = (item: any) => {
+    const selectScore = (item: any) => {
         if (score === item) {
             setScore('');
         } else {
@@ -484,7 +485,32 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     }
 
 
-    //여기 할 차례. 기록된 이미지, 정보 가져와서 item에 넣어죵
+    //수정, 공유, 날짜변경, 삭제
+    const moreModal = () => {
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={moreModalState}
+                onRequestClose={() => {
+                    setMoreModalState(false)
+                }}
+            >
+                <ImageUploadDiet 
+                    closeOption={closeMoreModal}
+                    type={"checkRecord"}
+                    recordedDiet={recordedDiet}
+                />
+            </Modal>
+        )
+    }
+
+
+    const closeMoreModal = () => {
+        setMoreModalState(false)
+    }
+
+
     const contentsView = () => {
         if (type && type == 'checkRecord' && recordedDiet) {
             return (
@@ -580,6 +606,14 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
                     <HeaderText>
                         {selYear}년 {selMonth}월 {selDay}일 식단
                     </HeaderText>
+
+                    <MoreView
+                        onPress={() => {setMoreModalState(true)}}
+                    >
+                        <MoreImg
+                            source={require('../../assets/more_row.png')}
+                        />
+                    </MoreView>
                 </HeaderView>
 
 
@@ -627,6 +661,9 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
                     backgroundColor={'rgb(43,45,75)'}
                 />
             </PaddingView>
+
+            <OptionModal/>
+
 
             
         </Container>
@@ -713,6 +750,16 @@ const UploadImg = styled.Image`
     justify-content: center;
     position: absolute;
 `
+const NoUploadImg = styled.View`
+    width: ${CommonSetting.recordImgWidth}px;
+    height: ${CommonSetting.recordImgHeight}px;
+    border-radius: ${CommonSetting.btnBorderRadius}px;
+    margin-top: 12px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    backgroundColor: ${CommonSetting.color.temp300};
+`
 const Line = styled.View`
     width: 100%;
     height: 0.5px;
@@ -776,8 +823,18 @@ const ClosePickerText = styled.Text`
     margin-bottom: 5px;
 `
 const DietTextView = styled.View`
-    margin-left: 20px;
+    // margin-left: 20px;
     margin-top: 10px;
+`
+const MoreView = styled.TouchableOpacity`
+    align-items: center;
+    justify-conten: center;
+    position: absolute;
+    right: 0;
+`
+const MoreImg = styled.Image`
+    width: 17px;
+    height: 17px;
 `
 
 const styles = StyleSheet.create({
