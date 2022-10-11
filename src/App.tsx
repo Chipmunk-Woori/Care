@@ -228,6 +228,10 @@ const App = () => {
         await AsyncStorage.setItem('myUserInformation', value)
     }
 
+    //초기화
+    // useEffect(()=>{
+    //     initRecord()
+    // },[])
 
 
     return (

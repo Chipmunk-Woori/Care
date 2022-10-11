@@ -17,10 +17,11 @@ interface Props {
     goBack: () => any;
     imageSelector: () => any;
     uploadImages: any;
+    moveTo: (screenName: string, value?: any) => any;
 }
 
 
-const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
+const ImageUpload = ({goBack, imageSelector, uploadImages, moveTo}: Props) => {
 
     const [optionState, setOptionState] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
@@ -57,7 +58,10 @@ const ImageUpload = ({goBack, imageSelector, uploadImages}: Props) => {
                         setOptionState(false)
                     }}
                 >
-                    <ImageUploadDiet closeOption={closeOption}/>
+                    <ImageUploadDiet 
+                        closeOption={closeOption}
+                        moveTo={moveTo}
+                    />
                 </Modal>
             )
         } else if (selectedOption === '신체') {

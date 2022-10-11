@@ -42,6 +42,14 @@ const ImageUploadContainer = ({navigation}: Props) => {
         })
     }
 
+    const moveTo = (screenName: string, value?: any) => {
+        if (value) {
+            navigation.navigate(screenName, value)
+        } else {
+            navigation.navigate(screenName)
+        }
+    }
+
   
 
     return (
@@ -49,6 +57,7 @@ const ImageUploadContainer = ({navigation}: Props) => {
             goBack={goBack}
             imageSelector={imageSelector}
             uploadImages={uploadImages}
+            moveTo={moveTo}
         />
     )
 

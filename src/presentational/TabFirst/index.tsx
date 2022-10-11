@@ -140,17 +140,23 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
    //내 데이터 가져오기
    const getMyRecord = async () => {
 
-        let myRecord = await AsyncStorage.getItem('MyRecord');
-
-        if (myRecord !== null) {
-            let myRecordArr = JSON.parse(myRecord);
-            setRecord(myRecordArr);
+        try {
+            console.log('-3-');
+            let myRecord = await AsyncStorage.getItem('MyRecord');
+    
+            if (myRecord !== null) {
+                let myRecordArr = JSON.parse(myRecord);
+                setRecord(myRecordArr);
+            }
+        } catch (e: any) {
+            console.log(e)
         }
 
     }
     
 
-    const closeDietOption = () => {
+    const closeDietOption = async() => {
+        await getMyRecord();
         setDietOptionState(false);
     }
 
@@ -170,6 +176,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                     closeOption={closeDietOption}
                     type={"checkRecord"}
                     recordedDiet={recordedDiet}
+                    moveTo={moveTo}
                 />
             </Modal>
         )
@@ -233,7 +240,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                             return (
                                 <DietView 
                                     onPress={()=>{
-                                        setRecordedDiet(item)
+                                        setRecordedDiet({item: item, index: index})
                                         setDietOptionState(true)
                                     }}
                                     key={index.toString()}
@@ -455,6 +462,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
 
+    //여기 할 차례. 식단 데이터 수정 후 기록이 바로 안 바뀜. 다른 화면 다녀와야 바뀜.
     const setDietData = async () => {
 
         let duplication = false;
@@ -491,7 +499,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         setDietArr(tempDietArr);
 
         if (duplication == false) {
-
             setScore('');
             setCategory('');
             setAmount('');
@@ -717,6 +724,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     useEffect(() => {
         try {
             if (selectedDate !== '') {
+                console.log('-2-')
                 setDietData();
                 setBodyData();
             }

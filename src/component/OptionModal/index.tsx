@@ -7,56 +7,35 @@ const ScreenHeight = Dimensions.get('window').height;
 const ScreenWidth = Dimensions.get('window').width;
 
 interface Props {
-    options?: Array<string>; //타이틀, 기능
+    options: any; //타이틀, 기능
 }
 
 const OptionModal = ({options}: Props) => {
 
-    const optionView = () => {
-        // return (
-
-        // )
-    }
-
+    const optionView = () => (
+        options.map((item: any) => {
+            return (
+                <OptionView 
+                    key={item.title}
+                    onPress={() => {item.func()}}
+                >
+                    <OptionText>
+                        {item.title}
+                    </OptionText>
+                </OptionView>
+            )
+        })
+    )
+        
 
     return (
         // <Background>
             <Container>
 
-            
-                <OptionView>
-                    <OptionText>
-                        공유
-                    </OptionText>
-                </OptionView>
-
-                <OptionView>
-                    <OptionText>
-                        수정
-                    </OptionText>
-                </OptionView>
-
-                <OptionView>
-                    <OptionText>
-                        날짜 변경
-                    </OptionText>
-                </OptionView>
-
-                <OptionView>
-                    <OptionText>
-                        삭제
-                    </OptionText>
-                </OptionView>
-
-                <OptionView>
-                    <OptionText>
-                        취소
-                    </OptionText>
-                </OptionView>
+                {optionView()}
 
             </Container>
         // </Background>
-
     )
 
 }

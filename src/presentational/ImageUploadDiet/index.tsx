@@ -21,14 +21,14 @@ interface Props {
     modifyBodyData?: (weight: any, muscle: any, fatPercent: any, img: any, memo: any) => any;
     type?: string; //checkRecord: 기록 확인
     recordedDiet?: any;
+    moveTo: (screenName: string, value?: any) => any;
 }
 
-const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Props) => {
+const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveTo}: Props) => {
     
     const [selYear, setSelYear] = useState('');
     const [selMonth, setSelMonth] = useState('');
     const [selDay, setSelDay] = useState('');
-
 
     const [uploadImage, setUploadImge] = useState('');
     const [amPm, setAmPm] = useState('');
@@ -46,7 +46,8 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     ])
 
     const [onPicker, setOnPicker] = useState(false);
-    const [moreModalState, setMoreModalState] = useState(false);
+    const [moreModalState, setMoreModalState] = useState(false); //더보기 모달 모드
+    const [modifyState, setModifyState] = useState(false); //기존 기록 수정 모드
 
 
 
@@ -69,8 +70,6 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
 
 
         //하나 선택
-        let tempList :any = null;
-
         await ImagePicker.openPicker({
             multiple: false,
             mediaType: 'photo'
@@ -82,13 +81,13 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
 
     const showImage = () => {
 
+        
         if (type === "checkRecord") {
-            console.log(recordedDiet)
 
-            if (recordedDiet.img) {
+            if (recordedDiet.item.img) {
                 return (
                     <UploadImg
-                        source={{uri: recordedDiet.img}}
+                        source={{uri: recordedDiet.item.img}}
                     />
                 )
             } else {
@@ -136,7 +135,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
             "score" : score,
             "category" : category,
             "amount" : amount,
-            "time" : (hour !== '') && `${amPm} ${hour}:${minute}`,
+            "time" : (hour !== '') ? `${amPm} ${hour}:${minute}` : '',
             "img" : uploadImage
         }
 
@@ -158,46 +157,56 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
         }
 
 
-        //중복 체크
-        if (valueArr.length > 0) {
-            valueArr.map( (item :any) => {
-                if (item.date == selectedDate) {
-                    
-                    duplication = true;
-
-                    //수정 전 : 중복 있으면 해당 날짜에 body값 넣기
-                    // item["diet"] = inputData;
-
-                    //수정 후 : 해당 날짜에 데이터 '교체' -> '추가'
-                    let tempValue = item["diet"];
-                    tempValue.push(inputData);
-
-                    item["diet"] = tempValue;
-                    
-                }
-            })
-        }
-
-
-        if (duplication == false) {
-
-            //날짜 새로 생성
-            let newDate = {
-                "date" : selectedDate,
-                "diet" : [inputData],
-                "body" : {},
-                "exercise" : {},
-                "water" : {}
+        //기존 기록 수정 모드
+        if (type && type == 'checkRecord' && recordedDiet && modifyState) {
+            if (valueArr.length > 0) {
+                valueArr.map( (item:any) => {
+                    if (item.date == selectedDate) {
+                        item.diet[recordedDiet.index] = inputData;
+                    }
+                })
             }
-
-            valueArr.push(newDate);
-
-        } 
+        } else { //새로운 기록 추가 모드
+            //중복 체크
+            if (valueArr.length > 0) {
+                valueArr.map( (item :any) => {
+                    if (item.date == selectedDate) {
+                        
+                        duplication = true;
+    
+                        //수정 전 : 중복 있으면 해당 날짜에 body값 넣기
+                        // item["diet"] = inputData;
+    
+                        //수정 후 : 해당 날짜에 데이터 '교체' -> '추가'
+                        let tempValue = item["diet"];
+                        tempValue.push(inputData);
+    
+                        item["diet"] = tempValue;
+                        
+                    }
+                })
+            }
+    
+    
+            if (duplication == false) {
+    
+                //날짜 새로 생성
+                let newDate = {
+                    "date" : selectedDate,
+                    "diet" : [inputData],
+                    "body" : {},
+                    "exercise" : {},
+                    "water" : {}
+                }
+    
+                valueArr.push(newDate);
+    
+            } 
+        }
 
 
         let newValueArr = JSON.stringify(valueArr);
         await AsyncStorage.setItem('MyRecord', newValueArr);
-
 
     }
 
@@ -336,7 +345,11 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
             tempHour = tempHour.slice(-2)
 
             return (
-                <Picker.Item label = {tempHour} value = {tempHour} key={tempHour}/>
+                <Picker.Item 
+                    label = {tempHour}
+                    value = {tempHour} 
+                    key={tempHour}
+                />
             )
         })
 
@@ -357,7 +370,11 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
             tempMinute = tempMinute.slice(-2);
             
             return (
-                <Picker.Item label = {tempMinute} value = {tempMinute}/>
+                <Picker.Item 
+                    label = {tempMinute} 
+                    value = {tempMinute}
+                    key = {tempMinute}
+                />
             )
         })
 
@@ -485,6 +502,52 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     }
 
 
+    const moreModalContents = [
+        {
+            title: '공유',
+            func: closeMoreModal
+        },
+        {
+            title: '수정',
+            func: modifyView
+        },
+        {
+            title: '날짜 변경',
+            func: closeMoreModal
+        },
+        {
+            title: '삭제',
+            func: closeMoreModal
+        },
+        {
+            title: '취소',
+            func: closeMoreModal
+        },
+    ]
+
+
+    //취소
+    function closeMoreModal () {
+        setMoreModalState(false);
+    }
+
+    //수정
+    function modifyView () {
+        setModifyState(true);
+        // console.log(recordedDiet)
+
+        if (recordedDiet) {
+            setScore(recordedDiet.item.score);
+            setCategory(recordedDiet.item.category);
+            setAmount(recordedDiet.item.amount);
+            // setTimeout(recordedDiet.time);
+            setUploadImge(recordedDiet.item.img);
+        }
+
+        setMoreModalState(false);
+    }
+
+
     //수정, 공유, 날짜변경, 삭제
     const moreModal = () => {
         return (
@@ -496,39 +559,33 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
                     setMoreModalState(false)
                 }}
             >
-                <ImageUploadDiet 
-                    closeOption={closeMoreModal}
-                    type={"checkRecord"}
-                    recordedDiet={recordedDiet}
+                <OptionModal
+                    options = {moreModalContents}
                 />
             </Modal>
         )
     }
 
 
-    const closeMoreModal = () => {
-        setMoreModalState(false)
-    }
-
 
     const contentsView = () => {
-        if (type && type == 'checkRecord' && recordedDiet) {
+        if (type && type == 'checkRecord' && recordedDiet && !modifyState) {
             return (
                 <DietTextView>
                     <BasicTextBig>
                         {
-                            recordedDiet.category && recordedDiet.category
+                            recordedDiet.item.category && recordedDiet.item.category
                         }
                     </BasicTextBig>
 
                     <RowView>
                         <DetailOption>
                             {
-                                recordedDiet.time && recordedDiet.time
+                                recordedDiet.item.time && recordedDiet.item.time
                             }
                             {'   '}
                             {
-                                recordedDiet.amount && recordedDiet.amount
+                                recordedDiet.item.amount && recordedDiet.item.amount
                             }
                         </DetailOption>
                     
@@ -583,10 +640,11 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
     useEffect(() => {
         try {
             getSelectedDate();
+            // console.log(recordedDiet)
         } catch (e) {
             console.log(e)
         }
-    },[hour])
+    },[])
 
 
     useEffect(() => {
@@ -662,7 +720,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet}: Prop
                 />
             </PaddingView>
 
-            <OptionModal/>
+            {moreModal()}
 
 
             
