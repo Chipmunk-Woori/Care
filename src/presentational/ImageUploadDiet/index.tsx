@@ -207,6 +207,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveT
 
         let newValueArr = JSON.stringify(valueArr);
         await AsyncStorage.setItem('MyRecord', newValueArr);
+        //질문. AsyncStorage의 setItem 타이밍과 getItem 타이밍이 안 맞아서 그럴 수도 있는지..?
 
     }
 
@@ -468,36 +469,40 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveT
     //데이터 갖고와서 날짜(year, month, day), 
     //신체(weight, muscle, fatPercent, memo, uploadImage) 변수에 넣음
     const getSelectedDate = async () => {
-        const selectedDate = await AsyncStorage.getItem('selectedDate');
-        // let myRecord = await AsyncStorage.getItem('MyRecord');
-        
-
-        if (selectedDate !== null) {           
-            let year = selectedDate.substring(0,4);
-            let month = selectedDate.substring(5,7);
-            let day = selectedDate.substring(8,10);
-
-            setSelYear(year);
-            setSelMonth(month);
-            setSelDay(day);
-        } else {
-            console.log('selectedDate == null')
-        }
-
-        // if (myRecord !== null) {
+        try {
+            const selectedDate = await AsyncStorage.getItem('selectedDate');
+            // let myRecord = await AsyncStorage.getItem('MyRecord');
             
-        //     let record = JSON.parse(myRecord);
-        //     record.map((item :any) => {
-        //         if (item.date == selectedDate) {
-                    
-        //             let diet = item.diet;
-        //             console.log(diet.category);
 
-        //         } else {
+            if (selectedDate !== null) {           
+                let year = selectedDate.substring(0,4);
+                let month = selectedDate.substring(5,7);
+                let day = selectedDate.substring(8,10);
 
-        //         }
-        //     })
-        // }
+                setSelYear(year);
+                setSelMonth(month);
+                setSelDay(day);
+            } else {
+                console.log('selectedDate == null')
+            }
+
+            // if (myRecord !== null) {
+                
+            //     let record = JSON.parse(myRecord);
+            //     record.map((item :any) => {
+            //         if (item.date == selectedDate) {
+                        
+            //             let diet = item.diet;
+            //             console.log(diet.category);
+
+            //         } else {
+
+            //         }
+            //     })
+            // }
+        } catch (e: any) {
+            console.log(e)
+        }
         
     }
 

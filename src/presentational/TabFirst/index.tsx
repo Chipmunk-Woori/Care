@@ -141,7 +141,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
    const getMyRecord = async () => {
 
         try {
-            console.log('-3-');
+            console.log('-2-');
             let myRecord = await AsyncStorage.getItem('MyRecord');
     
             if (myRecord !== null) {
@@ -461,9 +461,11 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     }
 
-
+    //질문. AsyncStorage의 setItem 타이밍과 getItem 타이밍이 안 맞아서 그럴 수도 있는지..?
     //여기 할 차례. 식단 데이터 수정 후 기록이 바로 안 바뀜. 다른 화면 다녀와야 바뀜.
     const setDietData = async () => {
+
+        console.log('-3-')
 
         let duplication = false;
         let tempDietArr :any = [];
@@ -473,6 +475,8 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
             if (item.date == selectedDate) {
 
                 let diet = item.diet;
+
+                console.log(diet)
                 
                 //수정 전
                 // if (Object.keys(diet).length !== 0) { //{}이 아니라면
@@ -669,6 +673,8 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     const initSelectedDate = async () => {
 
+        console.log('-1-')
+
         //초기 날짜 설정(오늘)
         let today: (Date) = new Date();
         let year: (number | string) = today.getFullYear();
@@ -724,7 +730,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     useEffect(() => {
         try {
             if (selectedDate !== '') {
-                console.log('-2-')
                 setDietData();
                 setBodyData();
             }
@@ -744,7 +749,8 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     useEffect(() => {
         if (isFocused == true) {
-            getMyRecord()
+            getMyRecord();
+            setDietData();
         }
     },[isFocused])
 
