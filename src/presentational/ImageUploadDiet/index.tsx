@@ -22,9 +22,10 @@ interface Props {
     type?: string; //checkRecord: 기록 확인
     recordedDiet?: any;
     moveTo: (screenName: string, value?: any) => any;
+    saveMyRecord: (value: any) => any;
 }
 
-const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveTo}: Props) => {
+const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveTo, saveMyRecord}: Props) => {
     
     const [selYear, setSelYear] = useState('');
     const [selMonth, setSelMonth] = useState('');
@@ -206,8 +207,11 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveT
 
 
         let newValueArr = JSON.stringify(valueArr);
-        await AsyncStorage.setItem('MyRecord', newValueArr);
-        //질문. AsyncStorage의 setItem 타이밍과 getItem 타이밍이 안 맞아서 그럴 수도 있는지..?
+
+
+
+        // await AsyncStorage.setItem('MyRecord', newValueArr);
+        saveMyRecord(newValueArr)
 
     }
 

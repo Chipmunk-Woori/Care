@@ -36,11 +36,6 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     const [selectedDate, setSelectedDate] = useState('');
 
     //식단
-    const [score, setScore] = useState<any>();
-    const [category, setCategory] = useState('');
-    const [amount, setAmount] = useState('');
-    const [dietImg, setDietImg] = useState<any>('');
-    const [dietTime, setDietTime] = useState('');
     const [dietArr, setDietArr] = useState([]);
 
     //신체
@@ -61,6 +56,8 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     const [reload, setReload] = useState(false);
     const isFocused = useIsFocused();
+
+    const [changeMyRecord, setChangeMyRecord] = useState(false);
     
     //상단 아이콘
     const topTitleIcon = [
@@ -141,11 +138,23 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
    const getMyRecord = async () => {
 
         try {
-            console.log('-2-');
+            console.log('--getMyRecord--');
             let myRecord = await AsyncStorage.getItem('MyRecord');
+
     
             if (myRecord !== null) {
                 let myRecordArr = JSON.parse(myRecord);
+
+
+                //--식단 기록 테스트
+                // myRecordArr.map((item: any) => {
+                //     if (item.date == selectedDate) {
+                //         console.log('getMyRecord의 식단 기록')
+                //         console.log(item.diet)
+                //     }
+                // })
+                //--
+
                 setRecord(myRecordArr);
             }
         } catch (e: any) {
@@ -177,6 +186,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
                     type={"checkRecord"}
                     recordedDiet={recordedDiet}
                     moveTo={moveTo}
+                    saveMyRecord={saveMyRecord}
                 />
             </Modal>
         )
@@ -425,7 +435,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
 
 
-    const setBodyData = async () => {
+    const setBodyData = () => {
         
         let duplication = false;
 
@@ -461,59 +471,33 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     }
 
-    //질문. AsyncStorage의 setItem 타이밍과 getItem 타이밍이 안 맞아서 그럴 수도 있는지..?
     //여기 할 차례. 식단 데이터 수정 후 기록이 바로 안 바뀜. 다른 화면 다녀와야 바뀜.
-    const setDietData = async () => {
+    //새 데이터 저장은 바로 바뀜. 무슨 차이인지 살펴보기.
+    const setDietData = () => {
 
-        console.log('-3-')
+        console.log('--setDietData--')
 
-        let duplication = false;
         let tempDietArr :any = [];
 
-        record.map((item :any, index :number) => {
+        record.map((item :any) => {
 
             if (item.date == selectedDate) {
 
                 let diet = item.diet;
-
-                console.log(diet)
-                
-                //수정 전
-                // if (Object.keys(diet).length !== 0) { //{}이 아니라면
-
-                //수정 후
-                if (diet.length > 0) { //diet는 배열이니까
-                    duplication = true;
-
-                    setScore(diet.score);
-                    setCategory(diet.category);
-                    setAmount(diet.amount);
-                    setDietImg(diet.img);
-                    setDietTime(diet.time);
-
-                    //수정 전
-                    // tempDietArr.push(diet);
-
-                    //수정 후
-                    tempDietArr = diet; //diet는 배열이니까
+              
+                if (diet.length > 0) { //diet는 배열
+                    tempDietArr = diet; 
                 } 
             } 
         })
 
         setDietArr(tempDietArr);
 
-        if (duplication == false) {
-            setScore('');
-            setCategory('');
-            setAmount('');
-            setDietImg('');
-            setDietTime('');
-        }
     }
 
 
 
-    //🌞 수정
+    
     //AsyncStorage setItem이 완료됐을 때 getItem이 실행돼야하는데,
     //이 타이밍을 맞출 수가 없어서 state를 사용함.
 
@@ -572,7 +556,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
 
-    //🌞
+  
     const deleteBtn = () => {
         Alert.alert(
             '삭제하시겠습니까?', '',
@@ -596,7 +580,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
 
-    //🌞
+    
     const deleteBodyData = async () => {
 
         setBodyRecord(false);
@@ -639,7 +623,7 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
 
-    //🌞 
+    
     const onPressDay = (day: any) => {
 
         let temp = {
@@ -673,14 +657,12 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
 
     const initSelectedDate = async () => {
 
-        console.log('-1-')
-
         //초기 날짜 설정(오늘)
         let today: (Date) = new Date();
         let year: (number | string) = today.getFullYear();
         let month: (number | string) =  ("0" + (1 + today.getMonth())).slice(-2);
         let day: (number | string) = ("0" + today.getDate()).slice(-2);
-        
+        saveMyRecord
         let todayString = `${year}-${month}-${day}`;
         
         
@@ -712,8 +694,16 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
     }
 
 
+
+    //'저장' 버튼 누름
+    const saveMyRecord = async (value: any) => {
+        await AsyncStorage.setItem('MyRecord', value);
+        setChangeMyRecord(!changeMyRecord)
+    }
+
+
+    //처음 데이터
     useEffect( () => {
-   
         try {
             initSelectedDate();
             getMyRecord();
@@ -722,37 +712,33 @@ const TabFirst = ({moveTo, goBack, route} :Props) => {
         } catch (e) {
             console.log(e)
         }
-
     },[])
 
 
     //선택한 날짜에 맞는 데이터 보여주기
     useEffect(() => {
-        try {
-            if (selectedDate !== '') {
-                setDietData();
-                setBodyData();
-            }
-        } catch (e) {
-            console.log(e)
+        if (selectedDate !== '') {
+            setDietData();
+            setBodyData();
         }
-
-        //record day 확인
-        let recordDay :any[] = [];
-        record.map((item) => {
-            let date = item.date;
-            let day = date.substring(8,10)
-            recordDay.push(day)
-        })
     },[selectedDate, record])
 
 
+
+    //isFocused 될 때마다 기록 가져오기
     useEffect(() => {
-        if (isFocused == true) {
+        if (isFocused) {
             getMyRecord();
-            setDietData();
         }
     },[isFocused])
+
+
+
+    //myRecord를 새로 저장할 때마다 실행
+    useEffect(() => {
+        getMyRecord();
+    },[changeMyRecord])
+
 
 
 
