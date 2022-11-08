@@ -26,6 +26,12 @@ const ImageUpload = ({goBack, imageSelector, uploadImages, moveTo}: Props) => {
     const [optionState, setOptionState] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 
+
+    //'저장' 버튼 누름
+    const saveMyRecord = async (value: any) => {
+        await AsyncStorage.setItem('MyRecord', value);
+    }
+
     const Images = () => {
         if (uploadImages.length > 0) {
             let result = uploadImages.map((item :any, index :number) => {
@@ -61,6 +67,7 @@ const ImageUpload = ({goBack, imageSelector, uploadImages, moveTo}: Props) => {
                     <ImageUploadDiet 
                         closeOption={closeOption}
                         moveTo={moveTo}
+                        saveMyRecord={saveMyRecord}
                     />
                 </Modal>
             )

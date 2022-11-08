@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from "react";
-import {View, Text, SafeAreaView, Modal, TouchableOpacity, ScrollView, Dimensions, Image, FlatList, StyleSheet} from "react-native";
+import {View, Modal, TouchableOpacity, Dimensions, Image, StyleSheet} from "react-native";
 import styled from 'styled-components/native';
 import CommonSetting from '../../common/CommonSetting';
 import DetailOption from "../../component/DetailOption";
@@ -418,7 +418,7 @@ const ImageUploadDiet = ({closeOption, modifyBodyData, type, recordedDiet, moveT
 
     const categoryView = () => {
         return (
-            categoryOption.map((item:any, index:any) => {
+            categoryOption.map((item: any, index: number) => {
                 return (
                     <OptionView 
                         onPress={()=>{selectCategory(item)}}
@@ -825,7 +825,7 @@ const NoUploadImg = styled.View`
     align-items: center;
     justify-content: center;
     position: absolute;
-    backgroundColor: ${CommonSetting.color.temp300};
+    background-color: ${CommonSetting.color.temp300};
 `
 const Line = styled.View`
     width: 100%;
@@ -895,7 +895,7 @@ const DietTextView = styled.View`
 `
 const MoreView = styled.TouchableOpacity`
     align-items: center;
-    justify-conten: center;
+    justify-content: center;
     position: absolute;
     right: 0;
 `
